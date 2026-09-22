@@ -1,0 +1,109 @@
+# ============================
+#  COMPILACIÓN C (gcc/clang)
+# ============================
+*.o
+*.a
+*.so
+*.out
+*.exe
+*.dll
+*.lib
+*.obj
+*.pdb
+
+# Ejecutables generados
+a.out
+main
+program
+
+# ============================
+#  DIRECTORIOS DE BUILD
+# ============================
+/build/
+/bin/
+/dist/
+/target/
+/Debug/
+/Release/
+
+# ============================
+#  CORE DUMPS Y DEBUGGING
+# ============================
+core
+core.*
+*.core
+*.stackdump
+
+# gdb history
+.gdb_history
+
+# Sanitizers
+*.lsan
+*.tsan
+*.asan
+
+# ============================
+#  VALGRIND
+# ============================
+valgrind.log
+vgcore.*
+
+# ============================
+#  LOGS Y TEMPORALES
+# ============================
+*.log
+*.tmp
+*.temp
+*.swp
+*.swo
+
+# ============================
+#  WINDOWS / MINGW / MSVC
+# ============================
+*.exe
+*.dll
+*.pdb
+*.ilk
+*.idb
+*.manifest
+*.obj
+*.lib
+
+# ============================
+#  EDITORES Y ENTORNOS
+# ============================
+
+# VSCode
+.vscode/
+*.code-workspace
+
+# CLion / JetBrains
+.idea/
+cmake-build-*/
+
+# ============================
+#  CMAKE
+# ============================
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+
+# ============================
+#  PYTHON (si hay scripts auxiliares)
+# ============================
+__pycache__/
+*.pyc
+
+# ============================
+#  DOCUMENTACIÓN
+# ============================
+*.pdf
+*.docx
+*.pptx
+
+# ============================
+#  OTROS
+# ============================
+*.bak
+*.old

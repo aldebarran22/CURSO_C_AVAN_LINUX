@@ -21,7 +21,7 @@ void serialize_header( uint8_t buffer[HEADER_SIZE],  const message_header_t *hea
     memcpy(buffer + 4,&identifier, sizeof(identifier));
 }
 
-void deserialize_header(message_header_t *header,  const uint8_t buffer[HEAD*R_SIZE]){
+void deserialize_header(message_header_t *header,  const uint8_t buffer[HEADER_SIZE]){
     uint16_t length;
     uint32_t identifier;
 

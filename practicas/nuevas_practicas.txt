@@ -1,0 +1,75 @@
+PRÁCTICA: PATRÓN STATE CON CALLBACKS EN C
+
+ENUNCIADO
+
+Desarrollar en C una aplicación que simule un gestor de descargas mediante una máquina de estados y el patrón de diseño State.
+
+La descarga podrá encontrarse en uno de los siguientes estados:
+
+- PREPARADA
+- DESCARGANDO
+- PAUSADA
+- FINALIZADA
+- ERROR
+
+La aplicación deberá procesar los siguientes eventos:
+
+- INICIAR
+- AVANZAR
+- PAUSAR
+- REANUDAR
+- FALLAR
+- CANCELAR
+- REINICIAR
+
+COMPORTAMIENTO
+
+- PREPARADA: permite iniciar o cancelar la descarga.
+- DESCARGANDO: permite avanzar, pausar, cancelar o provocar un error.
+- PAUSADA: permite reanudar o cancelar. El evento AVANZAR deberá ignorarse.
+- FINALIZADA: estado terminal alcanzado cuando el progreso llega al 100 %.
+- ERROR: permite reiniciar la descarga desde cero.
+
+Cada evento AVANZAR incrementará el progreso de la descarga en un 25 %.
+
+REQUISITOS TÉCNICOS
+
+La solución deberá utilizar:
+
+- Enumeraciones para representar los estados y los eventos.
+- Una estructura de contexto con el estado actual, el porcentaje descargado y el código de error.
+- Una estructura común para representar el comportamiento de los estados.
+- Callbacks on_enter, on_event y on_exit.
+- Punteros a función para implementar los callbacks.
+- Una función para despachar eventos.
+- Una función común para realizar las transiciones entre estados.
+
+No se permite concentrar toda la lógica de la máquina de estados en un único switch.
+
+SECUENCIA DE PRUEBA
+
+La aplicación deberá procesar la siguiente secuencia:
+
+INICIAR
+AVANZAR
+AVANZAR
+PAUSAR
+AVANZAR
+REANUDAR
+AVANZAR
+AVANZAR
+
+El evento AVANZAR recibido mientras la descarga está en estado PAUSADA deberá ignorarse.
+
+RESULTADO ESPERADO
+
+La aplicación deberá mostrar:
+
+- El estado actual.
+- El evento recibido.
+- Las transiciones realizadas.
+- La ejecución de los callbacks de entrada y salida.
+- El porcentaje descargado.
+- Los eventos ignorados o no permitidos.
+
+La ejecución deberá terminar cuando la descarga alcance el estado FINALIZADA.

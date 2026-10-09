@@ -30,8 +30,14 @@ void configuracion_establecer_incremento(int incremento){
 }
 
 void configuracion_aplicar_incremento(void){
+    contador_global = incremento_configurado;
+
+}
+
+void configuracion_mostrar(){
     // Contador global definido en contador.c
     // y declarado como extern en contador.h
     printf("\nIncremento configuracion: %d\n", incremento_configurado);
     printf("\nCambios configuracion: %d", cambios_configuracion);
 }
+

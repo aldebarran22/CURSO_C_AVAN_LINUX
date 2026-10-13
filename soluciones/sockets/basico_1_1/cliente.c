@@ -38,9 +38,8 @@ static int send_all(int socket_fd, const void *buffer, size_t length){
     return 0;
 }
 
-int main(void)
-{
-    int socket_fd = socket( AF_INET, SOCK_STREAM, 0);
+int main(void){
+    int socket_fd = socket(AF_INET, SOCK_STREAM, 0);
 
     if (socket_fd < 0) {
         perror("socket");
@@ -48,7 +47,6 @@ int main(void)
     }
 
     struct sockaddr_in server_address;
-
     memset(&server_address, 0, sizeof(server_address));
 
     server_address.sin_family = AF_INET;
@@ -75,7 +73,6 @@ int main(void)
     }
 
     printf("Conectado al servidor %s:%d\n", SERVER_IP, SERVER_PORT);
-
     const char message[] = "Hola desde el cliente";
 
     if (send_all(socket_fd, message, sizeof(message) - 1) < 0) {
@@ -85,9 +82,7 @@ int main(void)
     }
 
     printf("Mensaje enviado: %s\n", message);
-
     char buffer[BUFFER_SIZE];
-
     ssize_t received = recv(socket_fd, buffer, sizeof(buffer) - 1, 0);
 
     if (received < 0) {

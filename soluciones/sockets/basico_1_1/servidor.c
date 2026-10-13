@@ -118,11 +118,8 @@ int main(void){
 
     } else {
         buffer[received] = '\0';
-
         printf("Mensaje recibido: %s\n", buffer);
-
-        const char response[] =
-            "Mensaje recibido correctamente";
+        const char response[] = "Mensaje recibido correctamente";
 
         if (send_all(client_fd, response, sizeof(response) - 1) < 0) {
             perror("send");

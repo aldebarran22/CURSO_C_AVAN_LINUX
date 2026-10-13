@@ -38,8 +38,7 @@ static int send_all(int socket_fd,  const void *buffer, size_t length) {
     return 0;
 }
 
-int main(void)
-{
+int main(void){
     int server_fd = -1;
     int client_fd = -1;
 

@@ -86,6 +86,7 @@ static void collect_children(int signal_number){
 
 
 static  int configure_sigchld(void){
+    // Asocia la funcion collect_children con la señal: SIGCHLD
     struct sigaction action;
 
     // Inicializar a cero la estructura:
@@ -93,13 +94,25 @@ static  int configure_sigchld(void){
 
     // Configurar el action:
     action.sa_handler = collect_children;
+
+    // SA_RESTART: ace reiniciables determinadas llamadas al sistema cuando son interrumpidas por señales, 
+    // aunque no garantiza el reinicio de absolutamente todas las llamadas
+    // SA_NOCLDSTOP: el proceso padre recibe la notificacion que interesa: el fin del proceso hijo
     action.sa_flags = SA_RESTART | SA_NOCLDSTOP;
 
+    // action.sa_mask: conjunto de señales que se bloquearan mientras se ejecuta la funcion
+    // del manejador!
+
+    // sigemptyset: Hace reiniciables determinadas llamadas al sistema cuando son interrumpidas 
+    // por señales, aunque no garantiza el reinicio de absolutamente todas las llamadas
     if (sigemptyset(&action.sa_mask) < 0){
         return -1;
     }
 
-
+    // SIGCHLD la señal que queremos configurar
+    // action la configuracionde la señal
+    // NULL indica que no queremos recuperar la configuracion anterior
+    // si valor devuelto es 0, la configuracion es correcta!
     if (sigaction(SIGCHLD, &action, NULL) < 0){
         return -1;
     }
@@ -242,7 +255,7 @@ int main(){
 
         puts("\nServidor a la espera de clientes ...");
         
-        if ((sock_client = accept(sock_client, (struct sockaddr *) &dir_Cliente, &sin_size))== -1){
+        if ((sock_client = accept(sock, (struct sockaddr *) &dir_Cliente, &sin_size))== -1){
             
             if (errno == EINTR){
                 continue;

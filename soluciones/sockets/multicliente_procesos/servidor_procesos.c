@@ -181,7 +181,7 @@ static void attend_client(int client_fd, const char* client_ip, unsigned int cli
         return;
     }
 
-    puts("Respuesta enviada al cliente ...");
+    puts("\nRespuesta enviada al cliente ...");
 }
 
 
@@ -297,7 +297,7 @@ int main(){
             close(sock_client);
 
             // Termina el proceso hijo:
-            exit(EXIT_SUCCESS);
+            _exit(EXIT_SUCCESS);
         }
 
         // El proceso padre:

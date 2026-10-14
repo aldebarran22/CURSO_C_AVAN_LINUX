@@ -156,11 +156,8 @@ int main(void){
 
     while (1) {
         struct sockaddr_in client_address;
-
         socklen_t client_address_length = sizeof(client_address);
-
         puts("\nServidor a la espera de clientes ...");
-
         int client_fd = accept(server_fd, (struct sockaddr *)&client_address, &client_address_length);
 
         if (client_fd < 0) {
@@ -191,11 +188,9 @@ int main(void){
         }
 
         client_data->client_port = (unsigned int)ntohs(client_address.sin_port);
-
         printf("Nueva conexión desde %s:%u\n", client_data->client_ip, client_data->client_port);
 
         pthread_t thread;
-
         int error = pthread_create(&thread, NULL, client_thread,  client_data );
 
         if (error != 0) {

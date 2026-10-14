@@ -13,9 +13,11 @@ Por cada cliente que se conecta se crea un  hilo
 #include <sys/socket.h>
 #include <unistd.h>
 
+
 #define SERVER_PORT 8080
 #define BUFFER_SIZE 1024
 #define LISTEN_BACKLOG 10
+
 
 typedef struct {
     int client_fd;
@@ -65,14 +67,11 @@ static void attend_client(int client_fd, const char *client_ip,  unsigned int cl
 
     if (received == 0) {
         puts("El cliente cerró la conexión sin enviar datos.");
-
         return;
     }
 
     buffer[received] = '\0';
-
     printf("Datos recibidos de %s:%u: %s\n", client_ip, client_port, buffer);
-
     const char response[] = "Mensaje recibido correctamente ...";
 
     if (send_all(client_fd, response, sizeof(response) - 1) < 0) {

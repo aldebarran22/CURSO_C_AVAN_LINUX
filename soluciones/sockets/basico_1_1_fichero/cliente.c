@@ -122,43 +122,54 @@ static int send_file(const char* path_file, int socket_fd){
     printf("\nSe envia el size del fichero: %zu bytes\n", file_size);
 
 
-
-
-    // Cuarto: hay que enviar el contenido del fichero:
-
-
-    fclose(f);
-    return 0;
-
+    // Cuarto: hay que enviar el contenido del fichero: 
+    // el fichero ya esta abierto; usar con byte: unsigned char
+    unsigned char buffer[BUFFER_SIZE];
+    uint64_t bytes_a_leer = file_size;
     
-    /*
-    const char message[] = "Hola desde el cliente";
+    while (bytes_a_leer > 0){
+        size_t bytes_buffer = sizeof(buffer);
 
-    if (send_all(socket_fd, message, sizeof(message) - 1) < 0) {
-        perror("send");
-        close(socket_fd);
+        if (bytes_a_leer < (uint64_t) bytes_buffer){
+            // Por si quedan menos bytes a leer que el size del buffer
+            bytes_buffer = (size_t) bytes_a_leer;
+        }
+
+        // Leer del fichero: tamaño a leer: 1 byte y cuantos: bytes_buffer        
+        uint64_t bytes_leidos = fread(buffer, 1, bytes_buffer, f);
+
+        if (bytes_leidos == 0){
+            if (ferror(f)){
+                perror("fread");
+
+            } else {
+                fprintf(stderr, "El fichero termino antes del size indicado");
+                fclose(f);
+                return EXIT_FAILURE;
+            }
+        }
+
+        // Se envian los bytes leidos:
+        if (send_all(socket_fd, buffer, bytes_leidos) < 0){
+            perror("send_all contenido fichero");
+            return EXIT_FAILURE;
+        }
+
+        printf("\nSe han enviado %zu", bytes_leidos);
+
+        // Actualizar los bytes pendientes de leer:
+        bytes_a_leer -= (uint64_t) bytes_leidos;
+    }
+
+
+    if (fclose(f) != 0){
+        perror("fclose");
         return EXIT_FAILURE;
     }
 
-    printf("Mensaje enviado: %s\n", message);
-    char buffer[BUFFER_SIZE];
-    ssize_t received = recv(socket_fd, buffer, sizeof(buffer) - 1, 0);
+    puts("\nFichero enviado correctamente ...");
 
-    if (received < 0) {
-        perror("recv");
-        close(socket_fd);
-        return EXIT_FAILURE;
-    }
-
-    if (received == 0) {
-        puts("El servidor cerró la conexión sin enviar una respuesta.");
-        close(socket_fd);
-        return EXIT_SUCCESS;
-    }
-
-    buffer[received] = '\0';
-
-    printf("Respuesta del servidor: %s\n", buffer);*/
+    return 0;
 }
 
 

@@ -24,7 +24,7 @@ Cliente envía                       Servidor recibe
 #define BUFFER_SIZE 1024
 
 
-
+/*
 static int send_all(int socket_fd,  const void *buffer, size_t length) {
     const unsigned char *cursor = buffer;
     size_t total_sent = 0;
@@ -49,7 +49,7 @@ static int send_all(int socket_fd,  const void *buffer, size_t length) {
     }
 
     return 0;
-}
+}*/
 
 
 static int recv_all(int socket_fd, void* buffer, size_t length){
@@ -175,8 +175,62 @@ int receive_file(int socket_fd){
         return EXIT_FAILURE;
     }
 
+    unsigned char buffer[BUFFER_SIZE];
+    uint64_t bytes_a_escribir = file_size;
+
     
-    fclose(f);
+    while (bytes_a_escribir > 0){
+        size_t bytes_buffer = sizeof(buffer);
+
+        if (bytes_a_escribir < (uint64_t) bytes_buffer){
+            // Por si quedan menos bytes a escribir que el size del buffer
+            bytes_buffer = (size_t) bytes_a_escribir;
+        }
+
+        // Recibir el contenido del fichero (un bloque)
+        int result = recv_all(socket_fd, buffer, bytes_buffer);
+
+        if (result < 0) {
+            perror("recv_all contenido");
+            fclose(f);
+            return -1;
+        }
+
+        if (result == 0) {
+            fprintf(stderr,  "El cliente cerró la conexión antes de completar el fichero\n");
+            fclose(f);
+            return -1;
+        }
+
+        printf("\nSe han recibido %zu", bytes_buffer);
+
+
+        // Escribir en el fichero: tamaño a escribir: 1 byte y cuantos: bytes_buffer        
+        size_t bytes_escritos = fwrite(buffer, 1, bytes_buffer, f);
+
+        if (bytes_escritos != bytes_buffer){
+
+             if (ferror(f)) {
+                perror("fwrite");
+
+            } else {
+                fprintf(stderr, "No se pudo escribir el bloque completo\n");
+            }
+
+            fclose(f);
+            return -1;
+        }
+
+        // Actualizar los bytes pendientes de escribir:
+        bytes_a_escribir -= (uint64_t) bytes_escritos;
+       
+    }
+
+    
+    if (fclose(f) != 0){
+        perror("fclose");
+        return EXIT_FAILURE;
+    }
     return 0;
 }
 

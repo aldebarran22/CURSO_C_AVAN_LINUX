@@ -111,9 +111,9 @@ static int receive_file_name(int socket_fd, char* file_name, int file_name_size)
     }
 
     // Si la longitud esta bien, tenemos que recibir el nombre del fichero:
-    char buffer[BUFFER_SIZE];
+   
 
-    resul = recv_all(socket_fd, buffer, name_length);
+    resul = recv_all(socket_fd, file_name, (size_t) name_length);
     if (resul < 0){
         perror("recv nombre del fichero");
         return -1;
@@ -125,16 +125,15 @@ static int receive_file_name(int socket_fd, char* file_name, int file_name_size)
     } 
 
     // Tenemos el nombre del fichero:
-    buffer[name_length] = '\0';
-    strcpy(file_name, buffer);
+    file_name[name_length] = '\0';
 
     return 0;
 }
 
 
 int receive_file(int socket_fd){
-    char file_name[BUFFER_SIZE];
-    uint64_t file_size;
+    char file_name[BUFFER_SIZE];    
+    uint64_t network_file_size;
 
     if (receive_file_name(socket_fd, file_name, sizeof(file_name)) < 0){
         return -1;
@@ -142,7 +141,29 @@ int receive_file(int socket_fd){
 
     printf("\nNombre del fichero recibido: %s\n", file_name);
 
-    //if (receive_file_size(socket_fd, &file_))
+
+    // Ya tenemos el nombre del fichero, ahora se puede recibir el tamaño del fichero:    
+    int resul = recv_all(socket_fd, &network_file_size, sizeof(network_file_size));
+    if (resul < 0){
+        perror("recv longitud del fichero");
+        return -1;
+    }
+
+    if (resul == 0){
+        fprintf(stderr, "\nProbablemente el cliente cerro la conexion antes de enviar el size del nombre\n");
+        return -1;
+    }
+
+    // Se ha recibido el tamaño del nombre y hay que ordenarlo segun los bytes de la maquina
+    uint64_t file_size = ntohl((uint64_t) network_file_size);
+
+
+    if (file_size == 0){
+        fprintf(stderr, "Se ha recibido un size a cero");
+        return -1;
+    }
+
+    printf("\nEl numero de bytes recibidos del fichero es: %zu\n", file_size);
 
     return 0;
 }
@@ -227,39 +248,3 @@ int main(void){
 
     return EXIT_SUCCESS;
 }
-
-
-
-
-/*
-
-
-
-    char buffer[BUFFER_SIZE];
-
-    ssize_t received = recv(client_fd, buffer, sizeof(buffer) - 1, 0);
-
-    if (received < 0) {
-        perror("recv");
-        close(client_fd);
-        close(server_fd);
-        return EXIT_FAILURE;
-    }
-
-    if (received == 0) {
-        puts("El cliente cerró la conexión sin enviar datos.");
-
-    } else {
-        buffer[received] = '\0';
-        printf("Mensaje recibido: %s\n", buffer);
-        const char response[] = "Mensaje recibido correctamente";
-
-        if (send_all(client_fd, response, sizeof(response) - 1) < 0) {
-            perror("send");
-            close(client_fd);
-            close(server_fd);
-            return EXIT_FAILURE;
-        }
-    }
-
-*/

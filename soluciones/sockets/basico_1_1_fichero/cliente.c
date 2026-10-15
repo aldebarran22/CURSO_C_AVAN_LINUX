@@ -7,13 +7,14 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/socket.h>
+#include <sys/stat.h>
 #include <unistd.h>
 
 
 #define SERVER_IP "127.0.0.1"
 #define SERVER_PORT 8080
 #define BUFFER_SIZE 1024
-#define PATH_FILE "ficheros_cliente/pedidos_final.csv"
+#define PATH_FILE "pedidos_final.csv"
 
 
 static int send_all(int socket_fd, const void *buffer, size_t length){
@@ -43,7 +44,6 @@ static int send_all(int socket_fd, const void *buffer, size_t length){
 
 
 static int send_file(const char* path_file, int socket_fd){
-   
 
     // Validar el path del fichero:
     if (path_file == NULL){
@@ -67,16 +67,65 @@ static int send_file(const char* path_file, int socket_fd){
         perror("send longitud del nombre del fichero");
         return EXIT_FAILURE;
     } 
-
     printf("\nSe envia la longitud del nombre del fichero: %zu chars\n", path_length);
 
 
     // Segundo: se transmite el path del fichero:
+    if (send_all(socket_fd,  path_file, path_length) < 0){
+        perror("send nombre del fichero");
+        return EXIT_FAILURE;
+    }
 
-    
+    printf("\nSe ha enviado el nombre del fichero: %s\n", path_file);
 
-    // Despues se envian los caracteres del path del fichero, sin el nulo final
-    //if (send_all(socket_fd, path_file, ))
+
+    // Tercero: hay que enviar el tamaño del fichero:
+    FILE *f;
+    char path_dir_file[BUFFER_SIZE] = "ficheros_cliente/";
+    strcat(path_dir_file, path_file);
+
+    // El fichero se abre en modo binario;
+    if ((f = fopen(path_dir_file, "rb"))== NULL){
+        perror("No se encuentra el path  del fichero a enviar");
+        return EXIT_FAILURE;
+    }
+
+    // Definir una estructura stat para recuperar el tamaño del fichero:
+    struct stat informacion_fichero;
+
+    if (stat(path_dir_file, &informacion_fichero) < 0){
+        perror("stat");
+        return EXIT_FAILURE;
+    }
+
+    if (!S_ISREG(informacion_fichero.st_mode)){
+        fprintf(stderr, "\nLa ruta no pertenece a un fichero regular ...\n");
+        return EXIT_FAILURE;
+    }
+
+
+    if (informacion_fichero.st_size < 0){
+        fprintf(stderr, "\nEl size del fichero no es valido ...\n");
+        return EXIT_FAILURE;
+    }
+
+    // Preparamos en formato de red el tamaño en bytes del fichero a transmitir:
+    uint64_t file_size = informacion_fichero.st_size;
+    uint64_t red_file_size = htonl((uint64_t) file_size);
+
+
+    // Enviar el size del  fichero:
+    if (send_all(socket_fd, &red_file_size, sizeof(red_file_size)) < 0){
+        perror("send size del fichero");
+        return EXIT_FAILURE;
+    } 
+    printf("\nSe envia el size del fichero: %zu bytes\n", file_size);
+
+
+
+
+    // Cuarto: hay que enviar el contenido del fichero:
+
 
     return 0;
 

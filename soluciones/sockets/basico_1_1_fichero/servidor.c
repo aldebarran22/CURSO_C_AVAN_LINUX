@@ -1,5 +1,16 @@
 // Servidor basico de 1 a 1:
 // Solo se conecta un cliente
+// En este caso el cliente va a enviar el nombre y contenido 
+// de un fichero.
+
+/*
+Cliente envía                       Servidor recibe
+
+1. Longitud del nombre      ->      1. Longitud del nombre
+2. Nombre del fichero       ->      2. Nombre del fichero
+3. Tamaño del fichero       ->      3. Tamaño del fichero
+4. Contenido del fichero    ->      4. Contenido del fichero
+*/
 
 #include <arpa/inet.h>
 #include <errno.h>
@@ -11,6 +22,8 @@
 
 #define SERVER_PORT 8080
 #define BUFFER_SIZE 1024
+
+
 
 static int send_all(int socket_fd,  const void *buffer, size_t length) {
     const unsigned char *cursor = buffer;
@@ -37,6 +50,103 @@ static int send_all(int socket_fd,  const void *buffer, size_t length) {
 
     return 0;
 }
+
+
+static int recv_all(int socket_fd, void* buffer, size_t length){
+    unsigned  char *cursor = buffer;
+    size_t total_received = 0;
+
+    while (total_received < length){
+        ssize_t received = recv(socket_fd, cursor + total_received, length - total_received, 0);
+
+        if (received < 0){
+
+            if (errno == EINTR){
+                continue;
+            }
+
+            return -1;
+        }
+
+        if  (received == 0){
+            return 0;
+        }
+
+        total_received += (size_t) received;
+    }
+
+    return 1;
+
+}
+
+
+static int receive_file_name(int socket_fd, char* file_name, int file_name_size){
+
+    uint32_t network_name_length;
+
+    if (file_name == NULL || file_name_size == 0){
+        fprintf(stderr, "Nombre del fichero o size vacios ...");
+        return -1;
+    }
+
+    // Primero recibimos el size del nombre del fichero:
+    int resul = recv_all(socket_fd, &network_name_length, sizeof(network_name_length));
+    if (resul < 0){
+        perror("recv longitud del nombre");
+        return -1;
+    }
+
+    if (resul == 0){
+        fprintf(stderr, "\nProbablemente el cliente cerro la conexion antes de enviar el size del nombre\n");
+        return -1;
+    }
+
+    // Se ha recibido la longitud del nombre y hay que ordenarlo segun los bytes de la maquina
+    uint32_t name_length = ntohl((uint32_t) network_name_length);
+
+
+    if (name_length == 0){
+        fprintf(stderr, "Se ha recibido una longitud vacia");
+        return -1;
+    }
+
+    // Si la longitud esta bien, tenemos que recibir el nombre del fichero:
+    char buffer[BUFFER_SIZE];
+
+    resul = recv_all(socket_fd, buffer, name_length);
+    if (resul < 0){
+        perror("recv nombre del fichero");
+        return -1;
+    }
+
+    if (resul == 0){
+        fprintf(stderr, "\nProbablemente el cliente cerro la conexion antes de enviar el path del fichero\n");
+        return -1;
+    } 
+
+    // Tenemos el nombre del fichero:
+    buffer[name_length] = '\0';
+    strcpy(file_name, buffer);
+
+    return 0;
+}
+
+
+int receive_file(int socket_fd){
+    char file_name[BUFFER_SIZE];
+    uint64_t file_size;
+
+    if (receive_file_name(socket_fd, file_name, sizeof(file_name)) < 0){
+        return -1;
+    }
+
+    printf("\nNombre del fichero recibido: %s\n", file_name);
+
+    //if (receive_file_size(socket_fd, &file_))
+
+    return 0;
+}
+
 
 int main(void){
     int server_fd = -1;
@@ -73,7 +183,7 @@ int main(void){
         return EXIT_FAILURE;
     }
 
-    // Solo un cliente en cola: backlog
+    // Cola de conexiones pendientes, solo se ejecuta una vez: accept
     if (listen(server_fd, 1) < 0) {
         perror("listen");
         close(server_fd);
@@ -102,6 +212,29 @@ int main(void){
 
     printf("Cliente conectado desde %s:%u\n", client_ip, (unsigned int)ntohs(client_address.sin_port));
 
+    // El cliente esta conectado, podemos empezar a recibir los datos del fichero:
+
+    if (receive_file(client_fd) < 0){
+        fprintf(stderr, "No se pudo recibir el fichero\n");
+
+    } else {
+        puts("\nFichero recibido correctamente ...");
+    }
+    
+
+    close(client_fd);
+    close(server_fd);
+
+    return EXIT_SUCCESS;
+}
+
+
+
+
+/*
+
+
+
     char buffer[BUFFER_SIZE];
 
     ssize_t received = recv(client_fd, buffer, sizeof(buffer) - 1, 0);
@@ -129,8 +262,4 @@ int main(void){
         }
     }
 
-    close(client_fd);
-    close(server_fd);
-
-    return EXIT_SUCCESS;
-}
+*/

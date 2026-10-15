@@ -163,8 +163,20 @@ int receive_file(int socket_fd){
         return -1;
     }
 
-    printf("\nEl numero de bytes recibidos del fichero es: %zu\n", file_size);
+    printf("\nEl numero de bytes a recibir del fichero es: %zu\n", file_size);
 
+    // Ahora hay que abrir en modo escritura el fichero:
+    FILE *f;
+    char path_dir_file[BUFFER_SIZE] = "ficheros_servidor/";
+    strcat(path_dir_file, file_name);
+
+    if ((f = fopen(path_dir_file, "wb"))== NULL){
+        perror("Error al crear el fichero en el servidor");
+        return EXIT_FAILURE;
+    }
+
+    
+    fclose(f);
     return 0;
 }
 

@@ -127,6 +127,7 @@ static int send_file(const char* path_file, int socket_fd){
     // Cuarto: hay que enviar el contenido del fichero:
 
 
+    fclose(f);
     return 0;
 
     

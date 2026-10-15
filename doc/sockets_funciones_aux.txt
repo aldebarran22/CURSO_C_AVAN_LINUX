@@ -1,0 +1,50 @@
+
+Funciones auxiliares de los sockets:
+#include <arpa/inet.h>
+
+
+
+Little-endian: byte menos significativo primero
+Big-endian: bytes mas significativo primero
+
+
+
+
+El orden de red es big-endian. 
+Las funciones htonl(), htons(), ntohl() y ntohs() convierten enteros entre el orden de la máquina y el orden de red.
+
+Siglas:
+h = host, máquina
+n = network, red
+s = short, 16 bits
+l = long, 32 bits
+
+
+uint16_t htons(uint16_t hostshort);
+
+Convierte un entero de 16 bits desde el orden de la máquina al orden de red.
+
+Se utiliza principalmente para enviar o configurar puertos:
+server_address.sin_port = htons(8080);
+
+Conversiones de maquina a red
+
+---------------------------------------------
+
+uint16_t ntohs(uint16_t netshort);
+Convierte un entero de 16 bits desde el orden de red al orden de la máquina
+
+Mostrar el puerto de un cliente:
+  unsigned int client_port = (unsigned int)ntohs(client_address.sin_port);
+  printf("Puerto del cliente: %u\n", client_port);
+  
+  De red a maquina
+  
+---------------------------------------------
+
+uint32_t htonl(uint32_t hostlong);
+Convierte un entero de 32 bits desde el orden de la máquina al orden de red.
+
+Se usa  para preparar una  direccion especial:
+server_address.sin_addr.s_addr = htonl(INADDR_ANY); o transmitir loongitudes  de 32 bits
+  

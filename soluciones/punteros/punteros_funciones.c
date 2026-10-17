@@ -1,10 +1,13 @@
-// Punteros a función
+// Punteros a funcion
 
 #include <stdio.h>
+#include <stdlib.h>
+
 
 #define SUMA 0
 #define RESTA 1
 #define MUL 2
+
 
 int sumar(int a, int b){
 	return a+b;
@@ -18,8 +21,9 @@ int mul(int a, int b){
 	return a*b;
 }
 
+
 int (*seleccionarOperacion(int op))(int,int){
-  	// Devuelve el pto. a función a partir de un parámetro.
+  	// Devuelve el pto. a funcion a partir de un parametro.
   	switch(op){
   		case SUMA:
   			return sumar;
@@ -61,7 +65,7 @@ void ordenacionBurbuja(double *array, int size){
 }
 
 void ordenacionInsertDirecta(double *array, int size){
-	// inserción directa
+	// insercion directa
 	int i, j, min;
 	double str;
 
@@ -107,21 +111,23 @@ void ordenacionBurbujaPF(double *array, int size, int (*criterio)(int,int) ){
 }
 
 void testPunterosFuncion(){
-	// Definición de un puntero a la función sumar:
+	// Definicion de un puntero a la funcion sumar:
 	int (*psumar)(int, int);
 	
-	// se inicializan al nombre de la función:
+	// se inicializan al nombre de la funciï¿½n:
 	psumar = sumar;
 	
-	// Llamada a la función a través del puntero:
+	// Llamada a la funciï¿½n a travï¿½s del puntero:
 	printf("sumar: %d", psumar(55,77));
 	
-	// Definir un puntero para la función operacion:
+	// Definir un puntero para la funciï¿½n operacion:
 	char *(*ptr)(const char *, int);
 	
 	ptr = operacion;
 	ptr("hola",4);
+	puts("");
 }
+
 
 void imprimir(double *array, int n){
 	int i;
@@ -131,6 +137,7 @@ void imprimir(double *array, int n){
 	puts("");
 	
 }
+
 
 void testSeleccionarOperacion(){
 	int (*ptr)(int,int);
@@ -144,7 +151,10 @@ void testSeleccionarOperacion(){
 	
 	ptr = seleccionarOperacion(MUL);
 	printf("\nMul: %d", ptr(a,b));
+
+	puts("");
 }
+
 
 void testOrdenacion(){
 	double arr[] = {5.7, 1.999, 0.7, -4.6, 2.33};
@@ -157,14 +167,18 @@ void testOrdenacion(){
 	
 	ordenacionBurbujaPF(arr, 5, desc);
 	imprimir(arr, 5);
+
+	puts("");
 }
+
 
 void ordenarArray(double *arr, int size, void(*metodo)(double *, int) ){
 	metodo(arr, size);
 }
 
+
 void testMetodosOrdenacion(){
-	// Implementar una funcion que reciba el array, size y el método de ordenación que tiene que aplicar
+	// Implementar una funcion que reciba el array, size y el mï¿½todo de ordenaciï¿½n que tiene que aplicar
 	double arr[] = {5.7, 1.999, 0.7, -4.6, 2.33};
 	
 	ordenarArray(arr, 5, ordenacionBurbuja);
@@ -173,19 +187,46 @@ void testMetodosOrdenacion(){
 	ordenarArray(arr, 5, ordenacionInsertDirecta);
 	imprimir(arr, 5);
 	
+	puts("");
+}
+
+
+int compare(const void *p1, const void *p2){
+	// Retornar 0, -1, o +1
+	double d1 = *(double *)p1;
+	double d2 = *(double *)p2;
+
+	if (d1 == d2){
+		return 0;
+
+	} else if (d1 < d2){
+		return -1;
+
+	} else {
+		return 1;
+	}
+
+}
+
+
+void test_qsort(){
+	double arr[] = {5.7, 1.999, 0.7, -4.6, 2.33};
+	int n = sizeof(arr) / sizeof(double);
+
+	imprimir(arr, n);
+	qsort(arr, n, sizeof(double), compare);
+	imprimir(arr, n);
+	puts("");
 }
 
 
 int main(){
-	
+	test_qsort();	
 	testSeleccionarOperacion();
+	testPunterosFuncion();
+	testOrdenacion();
+	testMetodosOrdenacion();
+	test_qsort();
 	return 0;
 }
-
-
-
-
-
-
-
 

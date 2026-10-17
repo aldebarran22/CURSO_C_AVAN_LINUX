@@ -1,4 +1,4 @@
-// Operadores de los punteros, paso de parámetros ...
+// Operadores de los punteros, paso de parï¿½metros ...
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -70,15 +70,13 @@ void testOperadores(){
 	
 	imprimir(ptrA, 4);
 	imprimir(ptrB, 4);
-}
 
-void testPasoParametros(){
-	
+	puts("");
 }
 
 
 
 int main(){
 	testOperadores();
-	//testPasoParametros();
+	return 0;
 }

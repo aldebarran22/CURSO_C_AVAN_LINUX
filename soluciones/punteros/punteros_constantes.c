@@ -13,8 +13,8 @@ void testPunterosCtes(){
 	
 	printf("\nx = %d, px = %p\n\n", x, px);
 	
-	// Cambiar el puntero, cambiar la dirección a la que apunta:
-	//px = &y; No podemos cambiar la dirección
+	// Cambiar el puntero, cambiar la direccion a la que apunta:
+	//px = &y; No podemos cambiar la direccion
 }
 
 

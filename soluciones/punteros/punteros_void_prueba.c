@@ -28,7 +28,7 @@ void prueba2(void *p){
 
 void recorrerBytes(const void *buf, size_t n){
     // Recorre en little endian
-    unsigned char *p = buf;
+    const unsigned char *p = buf;
     puts("\nRecorrer bytes:");
     for (int i = n-1 ; i >= 0 ; i--){
         printf("%02X", p[i]);

@@ -16,6 +16,10 @@ static void alineamientos(void){
     printf("Valor decimal: %" PRId32 "\n", value);
     printf("Valor hexadecimal: 0x%08" PRIx32 "\n",(uint32_t)value);
 
+    // Los muestra Valor hexadecimal: 0x35343332
+    // Es little endian
+
+
     printf("Cadena: %s\n", buffer + 1);
     printf("Primer carácter: %c\n", buffer[1]);
 

@@ -7,7 +7,7 @@ void aliasing(){
     int* a = &x;
     int* b = &x;
     *b = 10;
-    printf("%d\n", *a);
+    printf("Aliasing tipos compatibles: %d\n", *a);
 }
 
 void aliasing_incompatibles(){
@@ -18,17 +18,17 @@ void aliasing_incompatibles(){
     float *b = (float *)&x;
 
     *b = 10.0f;
-    printf("%d\n", *a);
+    printf("Aliasing tipos incompatibles: %d\n", *a);
 }
 
 void aliasing_restrict(int *restrict a, int *restrict b){
     // Con restrict le decimos al compilador que
     // no lo vamos a utilizar con las mismas direcciones
-    // Violamos la promesa   
+    // Violamos la promesa:
     *a = 5;
     *b = 10;
 
-    printf("%d\n", *a);
+    printf("Restrict: %d\n", *a);
 }
 
 int main(){
@@ -40,5 +40,6 @@ int main(){
 
     int x;
     aliasing_restrict(&x, &x);
+    puts("");
     return 0;
 }

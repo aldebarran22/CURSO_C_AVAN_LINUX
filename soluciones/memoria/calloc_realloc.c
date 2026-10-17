@@ -23,6 +23,7 @@ void testRealloc(){
 	char linea[MAX_LINEA];
 	int n, i;
 	char **ptr = NULL;	
+	char **aux = NULL;
 	int total = 0;
 	
 	if ((f = fopen("calloc_realloc.c","rt"))!=NULL){
@@ -32,12 +33,19 @@ void testRealloc(){
 			linea[n-1] = '\0';
 			
 			if (n-1 >= 1){
-				ptr = (char **) realloc(ptr, (total+1) * sizeof(char *));
-				ptr[total] = (char *) calloc(n, sizeof(char)); // n ya incluye strlen(linea)+\0
-				strcpy(ptr[total], linea);
-				total++;
-				
-				//printf("%s %d\n", linea, strlen(linea));
+				// Esta linea es peligrosa si realloc devuelve NULL, usar un aux
+				//ptr = (char **) realloc(ptr, (total+1) * sizeof(char *));
+				aux = (char **) realloc(ptr, (total+1) * sizeof(char *));
+
+				if (aux != NULL){
+					ptr =  aux;
+					ptr[total] = (char *) calloc(n, sizeof(char)); // n ya incluye strlen(linea)+\0
+					strcpy(ptr[total], linea);
+					total++;		
+
+				} else {
+					break;
+				}						
 			}
 				
 		}
@@ -61,7 +69,7 @@ void testRealloc(){
 
 
 int main(){
-	//testCalloc();
+	testCalloc();
 	testRealloc();
 	return 0;
 }

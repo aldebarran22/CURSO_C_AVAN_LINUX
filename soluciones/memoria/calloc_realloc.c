@@ -46,8 +46,7 @@ void testRealloc(){
 				} else {
 					break;
 				}						
-			}
-				
+			}				
 		}
 		
 		fclose(f);

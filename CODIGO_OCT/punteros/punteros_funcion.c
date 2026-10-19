@@ -10,6 +10,12 @@
 #define RESTA 1
 #define MUL 2
 
+// ejemplo
+typedef unsigned char TByte;
+
+// Alias de tipo para un puntero a funcion: OJO nombre de tipo, no una declaracion de ptr.fun.
+typedef int (*operacion_t)(int, int);
+
 
 int suma(int a, int b){
     // Prototipo: int suma(int, int);
@@ -24,6 +30,23 @@ int restar(int a, int b){
 int mul(int a, int b){
     // Prototipo: int mul(int, int);
     return a*b;
+}
+
+operacion_t seleccionarOperacionV2(int op){
+    switch(op){
+        case SUMA:
+            return suma;
+
+        case RESTA:
+            return restar;
+
+        case MUL:
+            return mul;
+
+        default:
+            return NULL;
+
+    }
 }
 
 
@@ -48,18 +71,18 @@ int (*seleccionarOperacion(int op))(int, int){
 void testSeleccionarOperacion(){
     int (*pf)(int, int);
 
-    pf = seleccionarOperacion(SUMA);
+    pf = seleccionarOperacionV2(SUMA);
     printf("\nSuma: %d", pf(5,7));
 
-    pf = seleccionarOperacion(RESTA);
+    pf = seleccionarOperacionV2(RESTA);
     printf("\nResta: %d", pf(5,7));
 
-    pf = seleccionarOperacion(MUL);
+    pf = seleccionarOperacionV2(MUL);
     printf("\nMultiplicar: %d", pf(5,7));
 
-    pf = seleccionarOperacion(8);
+    pf = seleccionarOperacionV2(8);
     if (pf == NULL){
-        puts("Operacion no valida");
+        puts("\nOperacion no valida");
     }
 
 }
@@ -177,7 +200,9 @@ int main(){
     //ordenarArray_qsort();
 
     //asignarPtrFunc_mal();
-    ordenarConCriterio();
+    //ordenarConCriterio();
+
+    testSeleccionarOperacion();
 
     puts("");
     return 0;

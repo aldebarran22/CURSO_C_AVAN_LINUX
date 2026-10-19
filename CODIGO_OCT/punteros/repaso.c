@@ -61,19 +61,33 @@ void arrays(){
     imprimir(num, n);
 }
 
+int *meses_mal(){
+    // Error, devuelve la dir de una variable local, que se destruye cuando termina
+    // la ejecucion de la funcion.
+
+    // OJO, el array se crea  en la stack no el heap.
+    int dias[] = {31,28,31,30,31,30,31,31,30,31,30,31};
+
+    return dias;
+}
+
 
 int main(){
     //operadores();
     //arrays();
 
+    /*
     int num = 10;
     modifica(&num);
     printf("\nnum = %d", num);
 
-    int num[] = {1,2,3,4,5};
-    modifica_arr(num, 5); // tipo de num: int *
-    //modifica_arr(&num, 5);// tipo de num: int **
-    imprimir(num, 5);
+    int numeros[] = {1,2,3,4,5};
+    modifica_arr(numeros, 5); // tipo de num: int *
+    //modifica_arr(&numeros, 5);// tipo de num: int **
+    imprimir(numeros, 5);
+    */
+
+    //imprimir(meses(), 12); // error de ejecucion.
 
     puts("");
     return 0;

@@ -1,6 +1,7 @@
 
 
 #include <stdio.h>
+#include <stdlib.h>
 
 
 int suma(int a, int b){
@@ -23,8 +24,25 @@ void definirPtrFuncion(){
 }
 
 
+void imprimir(double *ptr, int n){
+
+    printf("\n\nIMPRIMIR: ptr ocupa %d bytes", sizeof(ptr));
+    for (int i = 0 ; i < n ; i++){
+        printf("\n %d - %g - %g", i, *(ptr+i), ptr+i);
+    }
+}
+
+void ordenarArray_qsort(){
+    double numeros[] = {5.7, 8.88, -9.9, 0.0, 123.6};
+
+    int n = sizeof(numeros) / sizeof(double);
+
+}
+
+
 int main(){
-    definirPtrFuncion();
+    //definirPtrFuncion();
+    ordenarArray_qsort();
 
     puts("");
     return 0;

@@ -62,7 +62,7 @@ state_t handle_running(fsm_t *fsm, event_t event){
             return STATE_IDLE;
 
         case EVENT_FAIL:
-         puts("En RUNNING con FAIL pasamos a ERROR");
+            puts("En RUNNING con FAIL pasamos a ERROR");
             return STATE_ERROR;
         
         default:
@@ -86,22 +86,27 @@ state_t handle_error(fsm_t *fsm, event_t event){
 
 
 event_t generarEvento(){
+    /*
     event_t eventos[EVENT_COUNT] = 
     {
         EVENT_START, 
         EVENT_STOP,
         EVENT_FAIL
     };
-    
+    */
     int pos = rand() % EVENT_COUNT;
-    return eventos[pos];
+    return pos;
+    //return eventos[pos];
 }
+
+
 
 
 int main(){
     // Inicializar semilla: num aleatorios
     srand(time(NULL));
 
+    /*
     // Definir un arrays con todas las funciones manejadoras
     state_handle_t handlers[STATE_COUNT] = {
         handle_idle, handle_running, handle_error
@@ -113,7 +118,7 @@ int main(){
     for (int i = 0 ; i < 5 ; i++){
         st = handlers[st]();
     }
-
+    */
     puts("");
     return 0;
 }

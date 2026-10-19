@@ -48,7 +48,12 @@ int main(){
         handle_idle, handle_running, handle_error
     };
 
-    
+    // Definir el estado inicial:
+    state_t st = STATE_IDLE;
+
+    for (int i = 0 ; i < 5 ; i++){
+        st = handlers[st]();
+    }
 
     puts("");
     return 0;

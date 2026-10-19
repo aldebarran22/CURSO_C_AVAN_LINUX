@@ -73,7 +73,7 @@ state_t handle_running(fsm_t *fsm, event_t event){
 
 state_t handle_error(fsm_t *fsm, event_t event){
 
-     switch (event){
+    switch (event){
         case EVENT_START:
             puts("En ERROR con START pasamos a RUNNING");
             return STATE_RUNNING;

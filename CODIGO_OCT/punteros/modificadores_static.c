@@ -17,6 +17,20 @@ void inc2(){
     printf("\ni = %d", i);
 }
 
+void imprimir(int *ptr, int n){
+
+    printf("\n\nIMPRIMIR: ptr ocupa %d bytes", sizeof(ptr));
+    for (int i = 0 ; i < n ; i++){
+        printf("\n %d - %d - %p", i, *(ptr+i), ptr+i);
+    }
+}
+
+int *meses(){
+    static int dias[] = {1,2,3,4, 5};
+
+    return dias;
+}
+
 
 int main(){
     for (int i = 0 ; i < 3 ;  i++){
@@ -26,6 +40,9 @@ int main(){
     for (int i = 0 ; i < 3 ;  i++){
         inc2();
     }
+
+    int *dias = meses();
+    imprimir(dias, 5);
 
     puts("");
     return 0;

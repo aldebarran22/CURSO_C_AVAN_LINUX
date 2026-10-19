@@ -32,6 +32,17 @@ void imprimir(int *ptr, int n){
     }
 }
 
+void modifica(int *p){
+    printf("\nmodifica dir %p", p);
+    *p += 100;
+}
+
+void modifica_arr(int *ptr, int n){
+    for (int i = 0 ; i < n ; i++){
+        modifica(&ptr[i]);
+    }
+}
+
 void arrays(){
     int num[] = {1,2,3,4,5};
 
@@ -53,7 +64,16 @@ void arrays(){
 
 int main(){
     //operadores();
-    arrays();
+    //arrays();
+
+    int num = 10;
+    modifica(&num);
+    printf("\nnum = %d", num);
+
+    int num[] = {1,2,3,4,5};
+    modifica_arr(num, 5); // tipo de num: int *
+    //modifica_arr(&num, 5);// tipo de num: int **
+    imprimir(num, 5);
 
     puts("");
     return 0;

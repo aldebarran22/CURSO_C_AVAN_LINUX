@@ -71,6 +71,14 @@ int *meses_mal(){
     return dias;
 }
 
+int *dir_local_mal(){
+    // Error, devuelve la dir de una variable local, que se destruye cuando termina
+    // la ejecucion de la funcion.
+    int numero = 100;
+
+    return &numero;
+}
+
 
 int main(){
     //operadores();

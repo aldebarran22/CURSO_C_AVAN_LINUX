@@ -85,40 +85,34 @@ state_t handle_error(fsm_t *fsm, event_t event){
 }
 
 
-event_t generarEvento(){
-    /*
-    event_t eventos[EVENT_COUNT] = 
-    {
-        EVENT_START, 
-        EVENT_STOP,
-        EVENT_FAIL
-    };
-    */
-    int pos = rand() % EVENT_COUNT;
-    return pos;
-    //return eventos[pos];
+event_t generarEvento(){   
+    // Generar un evento aleatorio!
+    return rand() % EVENT_COUNT;  
 }
-
-
 
 
 int main(){
     // Inicializar semilla: num aleatorios
     srand(time(NULL));
 
-    /*
-    // Definir un arrays con todas las funciones manejadoras
+    event_t ev; // El evento que se produce ...
+
+    // Las funciones manejadoras:
     state_handle_t handlers[STATE_COUNT] = {
         handle_idle, handle_running, handle_error
     };
 
-    // Definir el estado inicial:
-    state_t st = STATE_ERROR;
+    // La maquina  con el estado inicial:
+    fsm_t fsm = {
+        .state = STATE_IDLE
+    };
 
-    for (int i = 0 ; i < 5 ; i++){
-        st = handlers[st]();
+    // Bucle de transiciones hasta que se produzca un error!
+    while (fsm.state != STATE_ERROR){
+        ev = generarEvento();
+        fsm.state = handlers[fsm.state](&fsm, ev);
     }
-    */
+
     puts("");
     return 0;
 }

@@ -19,11 +19,14 @@ void arrays(){
     int *ptr2 = &num[0];
 
     printf("\n %d - %d", *ptr, *num);
+    printf("\n %d - %d", *(ptr+2), num[2]);
 }
 
 
 int main(){
-    operadores();
+    //operadores();
+    arrays();
 
+    puts("");
     return 0;
 }

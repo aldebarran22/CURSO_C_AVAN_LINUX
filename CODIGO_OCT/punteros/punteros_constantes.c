@@ -2,6 +2,7 @@
 // Punteros constantes y punteros a  constantes!
 
 #include <stdio.h>
+#include <string.h>
 
 
 void punterosCtes(){
@@ -32,11 +33,28 @@ void punterosACtes(){
     ptr = &y;
     printf("\n*ptr = %d", *ptr);
 }
+
+void punterosCtesACtes(){
+    const int x = 25;
+    const int y = 25;
+
+    // Es cte el puntero y el contenido del puntero:
+    const int* const p = &x;
+
+    // *p =  0; // Error cambiar el contenido
+    // p = &y; // Error cambiar el puntero.
+}
+
+void leerFichero(const char *path){
+    //path[0] = 'x';
+}
  
 
 int main(){
     punterosCtes();
     punterosACtes();
+    punterosCtesACtes();
+    leerFichero("/home/fichero");
 
     puts("");
     return 0;

@@ -39,9 +39,9 @@ typedef struct {
 typedef state_t (*state_handle_t)(fsm_t *, event_t);
 
 // Una funcion para cada estado ...
-state_t handle_idle(fsm_t *fsm, event_t event){
-    // logica de este estado ...
 
+state_t handle_idle(fsm_t *fsm, event_t event){
+    
     switch (event){
         case EVENT_START:
             puts("En IDLE con START pasamos a RUNNING");
@@ -56,23 +56,51 @@ state_t handle_idle(fsm_t *fsm, event_t event){
 
 
 state_t handle_running(fsm_t *fsm, event_t event){
-    // logica de este estado ...
-    puts("RUNNING: pasando a IDLE");
+      switch (event){
+        case EVENT_STOP:
+            puts("En RUNNING con STOP pasamos a IDLE");
+            return STATE_IDLE;
 
-    // Al siguiente estado que transita!
-    return STATE_IDLE;
+        case EVENT_FAIL:
+         puts("En RUNNING con FAIL pasamos a ERROR");
+            return STATE_ERROR;
+        
+        default:
+            puts("RUNNING: con otro evento");
+            return STATE_RUNNING;
+    }
 }
 
 state_t handle_error(fsm_t *fsm, event_t event){
-    // logica de este estado ...
-    puts("ERROR: pasando a IDLE");
 
-    // Al siguiente estado que transita!
-    return STATE_IDLE;
+     switch (event){
+        case EVENT_START:
+            puts("En ERROR con START pasamos a RUNNING");
+            return STATE_RUNNING;
+        
+        default:
+            puts("ERROR: con otro evento");
+            return STATE_ERROR;
+    }
+}
+
+
+event_t generarEvento(){
+    event_t eventos[EVENT_COUNT] = 
+    {
+        EVENT_START, 
+        EVENT_STOP,
+        EVENT_FAIL
+    };
+    
+    int pos = rand() % EVENT_COUNT;
+    return eventos[pos];
 }
 
 
 int main(){
+    // Inicializar semilla: num aleatorios
+    srand(time(NULL));
 
     // Definir un arrays con todas las funciones manejadoras
     state_handle_t handlers[STATE_COUNT] = {

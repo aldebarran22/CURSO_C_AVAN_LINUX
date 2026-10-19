@@ -36,8 +36,9 @@ void imprimir(double *ptr, int n){
 
     printf("\n\nIMPRIMIR: ptr ocupa %zu bytes", sizeof(ptr));
     for (int i = 0 ; i < n ; i++){
-        printf("\n %d - %g - %p", i, *(ptr+i), ptr+i);
+        printf("%g\t", ptr[i]);
     }
+    puts("");
 }
 
 int criterio(const void *p1, const void *p2){
@@ -75,6 +76,7 @@ void asignarPtrFunc_mal(){
     printf("\npsuma = %d", psuma(3,4));
 }
 
+
 void ordenacionBurbuja(double *array, int size){
 	// burbuja
 	int i;
@@ -95,12 +97,25 @@ void ordenacionBurbuja(double *array, int size){
 	}
 }
 
+void ordenarConCriterio(){
+    double numeros[] = {5.7, 8.88, -9.9, 0.0, 123.6};
+
+    imprimir(numeros, 5);
+
+    ordenacionBurbuja(numeros, 5, asc);
+    imprimir(numeros, 5);
+    
+    ordenacionBurbuja(numeros, 5, desc);
+    imprimir(numeros, 5);
+}
+
 
 int main(){
     //definirPtrFuncion();
     //ordenarArray_qsort();
 
-    asignarPtrFunc_mal();
+    //asignarPtrFunc_mal();
+    ordenarConCriterio();
 
     puts("");
     return 0;

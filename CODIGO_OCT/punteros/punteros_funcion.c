@@ -29,9 +29,9 @@ void definirPtrFuncion(){
 
 void imprimir(double *ptr, int n){
 
-    printf("\n\nIMPRIMIR: ptr ocupa %d bytes", sizeof(ptr));
+    printf("\n\nIMPRIMIR: ptr ocupa %zu bytes", sizeof(ptr));
     for (int i = 0 ; i < n ; i++){
-        printf("\n %d - %g - %g", i, *(ptr+i), ptr+i);
+        printf("\n %d - %g - %p", i, *(ptr+i), ptr+i);
     }
 }
 
@@ -45,7 +45,7 @@ int criterio(const void *p1, const void *p2){
 
     } else if (d1 < d2){
         return -1;
-        
+
     } else if (d1 > d2){
         return 1;
     }

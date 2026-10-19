@@ -68,9 +68,11 @@ void ordenarArray_qsort(){
 }
 
 void asignarPtrFunc_mal(){
+    // OJO asignamos una funcion al puntero que no cumple el prototipo.
     int (*psuma)(int, int);
 
     psuma =  funcion;
+    printf("\npsuma = %d", psuma(3,4));
 }
 
 

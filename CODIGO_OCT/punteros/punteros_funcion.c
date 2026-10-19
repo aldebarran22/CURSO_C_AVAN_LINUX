@@ -13,6 +13,11 @@ int suma(int a, int b){
 }
 
 
+double funcion(const char *s){
+    return 0.0;
+}
+
+
 void definirPtrFuncion(){
     printf("\nFuncion suma: %p", suma);
 
@@ -44,10 +49,10 @@ int criterio(const void *p1, const void *p2){
         return 0;
 
     } else if (d1 < d2){
-        return -1;
+        return 1;
 
     } else if (d1 > d2){
-        return 1;
+        return -1;
     }
 }
 
@@ -62,10 +67,18 @@ void ordenarArray_qsort(){
     imprimir(numeros, n);
 }
 
+void asignarPtrFunc_mal(){
+    int (*psuma)(int, int);
+
+    psuma =  funcion;
+}
+
 
 int main(){
     //definirPtrFuncion();
-    ordenarArray_qsort();
+    //ordenarArray_qsort();
+
+    asignarPtrFunc_mal();
 
     puts("");
     return 0;

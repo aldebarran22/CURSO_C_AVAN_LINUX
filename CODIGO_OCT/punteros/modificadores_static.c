@@ -26,6 +26,7 @@ void imprimir(int *ptr, int n){
 }
 
 int *meses(){
+    // OJO no se destruye el array:
     static int dias[] = {1,2,3,4, 5};
 
     return dias;

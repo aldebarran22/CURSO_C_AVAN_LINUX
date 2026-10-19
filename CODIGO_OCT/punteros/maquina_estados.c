@@ -13,7 +13,7 @@ typedef enum {
 } state_t;
 
 
-
+typedef state_t (*state_handle_t)(void);
 
 // Una funcion para cada estado ...
 state_t handle_idle(void){
@@ -42,11 +42,13 @@ state_t handle_error(void){
 }
 
 
-
-
-
 int main(){
+    // Definir un arrays con todas las funciones manejadoras
+    state_handle_t handlers[STATE_COUNT] = {
+        handle_idle, handle_running, handle_error
+    };
 
+    
 
     puts("");
     return 0;

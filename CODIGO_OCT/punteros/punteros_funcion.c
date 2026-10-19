@@ -6,11 +6,45 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define SUMA 0
+#define RESTA 1
+#define MUL 2
+
 
 int suma(int a, int b){
     // Prototipo: int suma(int, int);
     return a+b;
 }
+
+int restar(int a, int b){
+    // Prototipo: int restar(int, int);
+    return a-b;
+}
+
+int mul(int a, int b){
+    // Prototipo: int mul(int, int);
+    return a*b;
+}
+
+
+int (*seleccionarOperacion(int op))(int, int){
+    // Devuelve un puntero a funcion a partir del parametro:
+    switch(op){
+        case SUMA:
+            return suma;
+
+        case RESTA:
+            return restar;
+
+        case MUL:
+            return mul;
+
+        default:
+            return NULL;
+
+    }
+}
+
 
 
 double funcion(const char *s){

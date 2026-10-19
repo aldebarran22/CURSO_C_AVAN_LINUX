@@ -12,8 +12,19 @@ void operadores(){
     printf("\n %u bytes y el int %u: ", sizeof(int*), sizeof(int));
 }
 
-void imprimir(int *ptr){
+void imprimir_mal(int *ptr){
+    // Esta mal porque el puntero ocupa 8bytes al div por sizeof de int solo accede a los dos primeros
+    // elementos del array:
     int n = sizeof(ptr) / sizeof(int);
+
+    printf("\n\nIMPRIMIR: ptr ocupa %d bytes", sizeof(ptr));
+    for (int i = 0 ; i < n ; i++){
+        printf("\n %d - %d - %p", i, *(ptr+i), ptr+i);
+    }
+}
+
+
+void imprimir(int *ptr, int n){
 
     printf("\n\nIMPRIMIR: ptr ocupa %d bytes", sizeof(ptr));
     for (int i = 0 ; i < n ; i++){
@@ -36,7 +47,7 @@ void arrays(){
         printf("\n %d - %d - %p - %d - %p", i, *(ptr+i), ptr+i, *(num+i), num+i);
     }
 
-    imprimir(num);
+    imprimir(num, n);
 }
 
 

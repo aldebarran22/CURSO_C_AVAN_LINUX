@@ -45,6 +45,25 @@ int (*seleccionarOperacion(int op))(int, int){
     }
 }
 
+void testSeleccionarOperacion(){
+    int (*pf)(int, int);
+
+    pf = seleccionarOperacion(SUMA);
+    printf("\nSuma: %d", pf(5,7));
+
+    pf = seleccionarOperacion(RESTA);
+    printf("\nResta: %d", pf(5,7));
+
+    pf = seleccionarOperacion(MUL);
+    printf("\nMultiplicar: %d", pf(5,7));
+
+    pf = seleccionarOperacion(8);
+    if (pf == NULL){
+        puts("Operacion no valida");
+    }
+
+}
+
 
 
 double funcion(const char *s){

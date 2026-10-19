@@ -34,7 +34,7 @@ void definirPtrFuncion(){
 
 void imprimir(double *ptr, int n){
 
-    printf("\n\nIMPRIMIR: ptr ocupa %zu bytes", sizeof(ptr));
+    printf("\n\nIMPRIMIR:\n");
     for (int i = 0 ; i < n ; i++){
         printf("%g\t", ptr[i]);
     }
@@ -72,8 +72,8 @@ void asignarPtrFunc_mal(){
     // OJO asignamos una funcion al puntero que no cumple el prototipo.
     int (*psuma)(int, int);
 
-    psuma =  funcion;
-    printf("\npsuma = %d", psuma(3,4));
+    //psuma =  funcion; // OJO esta mal, no coinciden en prototipo: la func y el ptr.
+    //printf("\npsuma = %d", psuma(3,4));
 }
 
 

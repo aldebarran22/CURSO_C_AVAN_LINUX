@@ -25,7 +25,7 @@ void alineamientos(void){
      * Todos los caracteres están almacenados consecutivamente,
      * sin bytes de relleno entre ellos.
      */
-    char buffer[8 + 1] = "12345678";
+    char buffer[8 + 1] = "12345678"; // '\0'
 
     /*
      * p es un puntero a int32_t.
@@ -99,7 +99,8 @@ void alineamientos(void){
 
 
 int main(){
-    acceso_desalineado();
+    //acceso_desalineado();
+    alineamientos();
 
     puts("");
     return 0;

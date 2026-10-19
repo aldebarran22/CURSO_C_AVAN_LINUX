@@ -77,7 +77,16 @@ void asignarPtrFunc_mal(){
 }
 
 
-void ordenacionBurbuja(double *array, int size){
+int asc(double  a, double b){
+    return a > b;
+}
+
+
+int desc(double a, double b){
+    return a < b;
+}
+
+void ordenacionBurbuja(double *array, int size, int (*crit)(double, double)){
 	// burbuja
 	int i;
 	int j;
@@ -87,7 +96,7 @@ void ordenacionBurbuja(double *array, int size){
 	
 		for (j = i+1; j < size; j++){
 		
-			if (array[i] > array[j]){
+			if (crit(array[i], array[j])){
 			
 				aux_elem = array[i];
 				array[i] = array[j];
@@ -104,7 +113,7 @@ void ordenarConCriterio(){
 
     ordenacionBurbuja(numeros, 5, asc);
     imprimir(numeros, 5);
-    
+
     ordenacionBurbuja(numeros, 5, desc);
     imprimir(numeros, 5);
 }

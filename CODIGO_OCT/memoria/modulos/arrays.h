@@ -2,7 +2,8 @@
 
 // Prototipos:
 int *inicializar(int);
-//void inicializar2(int **);
+void inicializar2(int **, int);
+void inicializar3(int **, int);
 
 void imprimir(int *, int);
 

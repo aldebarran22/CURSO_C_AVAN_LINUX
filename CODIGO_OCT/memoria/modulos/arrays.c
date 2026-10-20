@@ -20,6 +20,28 @@ int *inicializar(int n){
     return p;
 }
 
+void inicializar2(int **p, int n){
+    *p = malloc(n * sizeof(int));
+
+    printf("\ndir de  p en inicializar: %p\n", *p);
+
+    for (int i = 0 ; i < n ; i++){
+        (*p)[i] = rand() % 100;
+    }
+
+}
+
+void inicializar3(int **p, int n){
+    int *aux = malloc(n * sizeof(int));
+
+    printf("\ndir de  p en inicializar: %p\n", aux);
+    
+    for (int i = 0 ; i < n ; i++){
+        aux[i] = rand() % 100;
+    }
+    *p = aux;
+}
+
 void imprimir(int *p, int n){
     // imprimir:
     for (int i = 0 ; i < n ; i++){

@@ -29,6 +29,12 @@ int main(){
     // liberar:
     free(p);
     p = NULL;
+    
+    free(p);
+   
+
+
+   
 
     return 0;
 }

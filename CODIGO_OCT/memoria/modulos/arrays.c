@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
+#include "arrays.h"
 
 int *inicializar(int n){
     // Inicializar:
@@ -33,5 +33,13 @@ void liberar(int *p){
     free(p);
 
     // ¿Realmente cambia el puntero de main?
+    // NO CAMBIA EL  PUNTERO DE MAIN!
     p = NULL;
+}
+
+void liberar2(int **p){
+    free(*p);
+
+    // Si cambia el puntero de main!
+    *p = NULL;
 }

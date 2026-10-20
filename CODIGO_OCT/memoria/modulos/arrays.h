@@ -7,4 +7,4 @@ int *inicializar(int);
 void imprimir(int *, int);
 
 void liberar(int *);
-//void liberar2(int **);
+void liberar2(int **);

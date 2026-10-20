@@ -19,7 +19,8 @@ int main(){
 
     imprimir(p, N);
 
-    liberar(p);
+    //liberar(p);
+    liberar2(&p);
     printf("\ndir de  p despues de liberar: %p\n", p);
 
     puts("");

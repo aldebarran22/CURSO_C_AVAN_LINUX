@@ -21,7 +21,20 @@ void accesoAlContenido(){
 
 
 void rutina(void *p){
-    int *ptr = (int *) p;
+    float *ptr = (float *) p;
 
+    printf("\nValor de *ptr: %f", *ptr);
     
+}
+
+
+int main(){
+    accesoAlContenido();
+    puts("");
+
+    int x = 100;
+    rutina(&x);
+    puts("");
+
+    return 0;
 }

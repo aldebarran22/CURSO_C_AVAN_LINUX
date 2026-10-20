@@ -28,6 +28,10 @@ int main(){
     printf("\nAcceso desde main: contador_global = %d\n", contador_global);
     printf("\nAcceso desde main: incremento_configurado = %d\n", incremento_configurado);
 
+    // Intento de acceso a una variable static definida en el modulo de contador
+    //numero_operaciones = 20;
+    printf("\ncontador_global = %d de contador.c\n", contador_global);
+
     /*
      * Estas operaciones no seran posibles:
      *

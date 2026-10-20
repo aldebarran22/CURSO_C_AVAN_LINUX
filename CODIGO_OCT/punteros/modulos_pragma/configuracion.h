@@ -1,6 +1,4 @@
-#ifndef CONFIGURACION_H
-
-#define CONFIGURACION_H
+#pragma once
 
 // Variable definida en configuracion.C
 // Si se declara con extern permite acceder
@@ -12,6 +10,3 @@ extern int incremento_configurado;
 void configuracion_establecer_incremento(int incremento);
 void configuracion_aplicar_incremento(void);
 void configuracion_mostrar();
-
-
-#endif

@@ -14,7 +14,9 @@ int main(){
     srand(time(NULL));
 
     // Llamar a las funciones:
-    p = inicializar(N);
+    //p = inicializar(N);
+    inicializar2(&p, N);
+    
     printf("\ndir de  p en main: %p\n", p);
 
     imprimir(p, N);

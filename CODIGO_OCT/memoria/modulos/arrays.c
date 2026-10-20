@@ -60,6 +60,8 @@ void liberar(int *p){
 }
 
 void liberar2(int **p){
+    printf("\nliberar2: dir p: %p\n", *p);
+    printf("\nliberar2: puntero recibido: %p\n", p);
     free(*p);
 
     // Si cambia el puntero de main!

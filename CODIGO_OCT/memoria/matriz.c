@@ -11,9 +11,6 @@ typedef struct {
     double **ptr;
 } matriz_t;
 
-matriz_t inicializar(int f, int c){
-
-}
 
 void inicializar2(matriz_t *m, int f, int c){
     m->filas = f;
@@ -43,7 +40,7 @@ void imprimir(matriz_t m){
     }
 }
 
-/*
+
 void liberar(matriz_t *m){
 
     // Liberar cada fila:
@@ -59,11 +56,11 @@ void liberar(matriz_t *m){
     // Poner a cero los contadores:
     m->filas = 0;
     m->cols = 0;
-}*/
+}
 
-void liberar(matriz_t *m){
+void liberar_MAL(matriz_t *m){
 
-    // Liberar el puntero exterior:
+    // Liberar el puntero exterior: perdemos las ref. a las filas!
     free(m->ptr);
     m->ptr = NULL;
 

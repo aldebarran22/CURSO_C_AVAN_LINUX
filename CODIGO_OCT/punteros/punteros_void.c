@@ -20,11 +20,22 @@ void accesoAlContenido(){
 }
 
 
-void rutina(void *p){
+void rutina_mal(void *p){
+    // Ciudado con un error de casting a un tipo que no era el original!
     float *ptr = (float *) p;
 
     printf("\nValor de *ptr: %f", *ptr);
     
+}
+
+void recorrerBytes(const void *buf, size_t n){
+    // Recorrer en little endian: primero el byte menos significativo
+    const unsigned char *p = buf;
+
+    for (int i = n - 1 ; i >= 0 ; i--){
+        printf("%02X ", p[i]);
+    }
+    puts("");
 }
 
 
@@ -33,8 +44,12 @@ int main(){
     puts("");
 
     int x = 100;
-    rutina(&x);
+    rutina_mal(&x);
     puts("");
+
+    int num = 123;
+    recorrerBytes(&num, sizeof(num));
+    printf("\nnum: %d %X", num, num);
 
     return 0;
 }

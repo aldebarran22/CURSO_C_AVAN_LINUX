@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <string.h>
 
 typedef struct {
     int filas;
@@ -42,6 +43,7 @@ void imprimir(matriz_t m){
     }
 }
 
+/*
 void liberar(matriz_t *m){
 
     // Liberar cada fila:
@@ -57,10 +59,36 @@ void liberar(matriz_t *m){
     // Poner a cero los contadores:
     m->filas = 0;
     m->cols = 0;
+}*/
+
+void liberar(matriz_t *m){
+
+    // Liberar el puntero exterior:
+    free(m->ptr);
+    m->ptr = NULL;
+
+    // Liberar cada fila:
+    for (int  i = 0 ; i < m->filas ; i++){
+        free(m->ptr[i]);
+        m->ptr[i] = NULL;
+    }
+
+ 
+    // Poner a cero los contadores:
+    m->filas = 0;
+    m->cols = 0;
 }
 
 
 int main(){
+
+    /* OJO NO HEMOS RESERVADO EN DESTINO, NO HAY SITIO PARA COPIAR LA CADENA!
+    char *s;
+    char nombre[] = {"Gema"};
+    strcpy(s, nombre);
+    */
+   
+
     int m2[3][3] = {{1,2,3}, {4,5,6}, {7,8,9}};
 
     matriz_t m = {0, 0, NULL};

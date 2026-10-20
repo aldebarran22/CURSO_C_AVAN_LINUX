@@ -3,32 +3,35 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
 
-#define N 10
 
-int main(){
-    int *p;
 
-    srand(time(NULL));
-
+int *inicializar(int n){
     // Inicializar:
-    p = malloc(N * sizeof(int));
-    printf("\ndir de  p: %p\n", p);
+    int *p = malloc(n * sizeof(int));
 
-    for (int i = 0 ; i < N ; i++){
+    printf("\ndir de  p en inicializar: %p\n", p);
+
+    for (int i = 0 ; i < n ; i++){
         p[i] = rand() % 100;
     }
 
+    // Es correcto: es una dir. del HEAP!
+    return p;
+}
+
+void imprimir(int *p, int n){
     // imprimir:
-    for (int i = 0 ; i < N ; i++){
+    for (int i = 0 ; i < n ; i++){
         printf("%d ", p[i]);
     }
     puts("");
+}
 
+void liberar(int *p){
     // liberar:
     free(p);
-    p = NULL;
 
-    return 0;
+    // ¿Realmente cambia el puntero de main?
+    p = NULL;
 }

@@ -14,6 +14,13 @@ int main(){
     srand(time(NULL));
 
     // Llamar a las funciones:
+    p = inicializar(N);
+    printf("\ndir de  p en main: %p\n", p);
+
+    imprimir(p, N);
+
+    liberar(p);
+    printf("\ndir de  p despues de liberar: %p\n", p);
 
     puts("");
     return 0;

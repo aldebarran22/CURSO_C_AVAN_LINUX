@@ -67,11 +67,10 @@ int main(){
 
     srand(time(NULL));
 
+    inicializar2(&m, 8, 5);
+    imprimir(m);
+    liberar(&m);
+
     puts("");
     return 0;
 }
-
-
-
-
-

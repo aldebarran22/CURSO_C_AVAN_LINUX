@@ -31,8 +31,33 @@ void inicializar2(matriz_t *m, int f, int c){
     }
 }
 
-imprimir();
-liberar();
+void imprimir(matriz_t m){
+
+    for (int  i = 0 ; i < m.filas ; i++){
+
+        for (int j = 0 ; j < m.cols ; j++){
+            printf("%02g\t", m.ptr[i][j]);
+        }
+        puts("");
+    }
+}
+
+void liberar(matriz_t *m){
+
+    // Liberar cada fila:
+    for (int  i = 0 ; i < m->filas ; i++){
+        free(m->ptr[i]);
+        m->ptr[i] = NULL;
+    }
+
+    // Liberar el puntero exterior:
+    free(m->ptr);
+    m->ptr = NULL;
+
+    // Poner a cero los contadores:
+    m->filas = 0;
+    m->cols = 0;
+}
 
 
 int main(){

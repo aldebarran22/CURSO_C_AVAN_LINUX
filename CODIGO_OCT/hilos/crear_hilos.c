@@ -7,10 +7,26 @@
 #include <unistd.h>
 
 void *mensajes(void *p){
+    int *n = (int *)p;
 
+    printf("\nID hilo mensajes: %ld", pthread_self());
+    for (int i = 0 ; i < *n ; i++){
+        printf("\nMensaje %d", (i+1));
+        sleep(rand()%2);
+    }
+    puts("\nmensajes: termina");
+   
 }
 
 void *aleatorios(void *p){
+    int *n = (int *)p;
+
+    printf("\nID hilo aleatorios: %ld", pthread_self());
+    for (int i = 0 ; i < *n ; i++){
+        printf("\nNumero %d = %d", (i+1), rand()%100);
+        sleep(rand()%3);
+    }
+    puts("\naleatorios: termina");
 
 }
 

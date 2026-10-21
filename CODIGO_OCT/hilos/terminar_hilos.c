@@ -5,6 +5,7 @@
 void *worker(void *p){
     puts("Durmiendo 10 sg");
     sleep(10);
+    puts("\nTermina: worker");
 }
 
 int main(void){
@@ -14,5 +15,5 @@ int main(void){
 
     puts("\nmain va a ejecutar exit()");
     pthread_exit(NULL); // Termina el hilo que lo ejecuta
-    
+    puts("\nFin main");
 }

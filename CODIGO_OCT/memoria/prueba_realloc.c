@@ -78,6 +78,8 @@ void cargaFichero(const char *path){
         perror("file");
     }
 
+    fclose(f);
+
     // Imprimir las filas y vamos liberando:
     printf("\nFilas del fichero: %zu\n", total);
 
@@ -89,8 +91,7 @@ void cargaFichero(const char *path){
 
     // Liberar el doble puntero:
     free(lineas);
-    lineas = NULL;
-    fclose(f);
+    lineas = NULL;   
 }
 
 

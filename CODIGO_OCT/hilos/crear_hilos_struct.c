@@ -12,6 +12,12 @@ typedef struct {
     int sg;
 } datos_t;
 
+typedef struct {
+    int n;
+    int suma;
+} datos_out_t;
+
+
 
 void *mensajes(void *p){
     datos_t *datos = (datos_t *) p;
@@ -26,11 +32,16 @@ void *mensajes(void *p){
 }
 
 void *aleatorios(void *p){
-    int *n = (int *)p;
+    datos_out_t *datos = (datos_out_t *)p;
+
+    datos->suma = 0;
 
     printf("\nID hilo aleatorios: %ld", pthread_self());
-    for (int i = 0 ; i < *n ; i++){
-        printf("\nNumero %d = %d", (i+1), rand()%100);
+    for (int i = 0 ; i < datos->n ; i++){
+        int num = rand() % 100;
+        datos->suma  += num;
+
+        printf("\nNumero %d = %d", (i+1), num);
         sleep(rand()%3);
     }
     puts("\naleatorios: termina");
@@ -44,6 +55,8 @@ int main(){
     pthread_t idNums;
 
     datos_t datos = {10, 3};
+    datos_out_t datos2 = {8, 0};
+
     int nNum = 7;
 
     // Crear  los hilos:
@@ -64,6 +77,7 @@ int main(){
     pthread_join(idMensaje, 0);
     pthread_join(idNums, 0);
 
+    printf("\nSuma total de los numeros: %d", datos2.suma);
 
     puts("Thread main termina ...");
     exit(EXIT_SUCCESS);

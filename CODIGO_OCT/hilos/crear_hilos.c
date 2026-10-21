@@ -53,8 +53,8 @@ int main(){
     }
 
     // Esperar a que terminen los hilos:
-    pthread_join(idMensaje, 0);
-    pthread_join(idNums, 0);
+    //pthread_join(idMensaje, 0);
+    //pthread_join(idNums, 0);
 
 
     puts("Thread main termina ...");

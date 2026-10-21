@@ -45,6 +45,7 @@ void cargaFichero(const char *path){
         // Comprobar si tenemos que ampliar el bloque:
         if (total == capacidad){
             size_t nueva_capacidad = capacidad * 2; // doblar el bloque
+            printf("\nReserva para %zu filas", nueva_capacidad);
 
             char **aux = realloc(lineas, nueva_capacidad * sizeof(*lineas));
             if (aux == NULL){
@@ -81,7 +82,7 @@ void cargaFichero(const char *path){
     printf("\nFilas del fichero: %zu\n", total);
 
     for (size_t i = 0 ; i < total ; i++){
-        puts(lineas[i]);
+        //puts(lineas[i]);
         free(lineas[i]);
         lineas[i] = NULL;
     }

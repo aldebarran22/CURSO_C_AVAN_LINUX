@@ -42,6 +42,7 @@ valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes \
 */
 
 // Error 1: liberar dos veces el mismo bloque!
+/*
 static void test_doble_free(void){
     int *numeros = malloc(10 * sizeof(int));
 
@@ -53,8 +54,10 @@ static void test_doble_free(void){
     free(numeros);
     free(numeros);
 }
+*/
 
 // Error 2: acceso a una  posicion de un array despues de liberar:
+/*
 static void test_acceso_despues_free(void){
     int *numeros = calloc(10, sizeof(int));
 
@@ -68,8 +71,10 @@ static void test_acceso_despues_free(void){
 
     printf("\nPosicion 0: %d", *numeros);
 }
+*/
 
 // Error 3: Devolver la direccion de una variable local:
+/*
 static int *getPunteroLocal(void){
     int numero = 100;
 
@@ -82,8 +87,10 @@ static void test_dir_variable_local(void){
 
     printf("\nContenido de ptr: %d", *ptr);
 }
+*/
 
-// Error 4: overflow, escribir fuera de los limites de un bloque:
+// Error 4: overflow / underflow, escribir fuera de los limites de un bloque:
+/*
 static void test_overflow_heap(void){
     int *numeros = calloc(10, sizeof(int));
 
@@ -94,13 +101,28 @@ static void test_overflow_heap(void){
 
     printf("\nAcceso al elemento 12: %d", numeros[11]);
     free(numeros);
+}*/
+
+static void test_underflow_heap(void){
+    int *numeros = calloc(10, sizeof(int));
+
+    if (numeros  == NULL){
+        perror("calloc");
+        return;
+    }
+
+    printf("\nAcceso al elemento -1: %d", numeros[-1]);
+    free(numeros);
 }
 
+// No lo detecta valgrind
+/*
 static void test_overflow_stack(void){
     int numeros[] = {1,2,3,4,5};
    
     printf("\nAcceso al elemento 12: %d", numeros[11]);   
 }
+*/
 
 
 int main(){
@@ -108,9 +130,10 @@ int main(){
     //test_acceso_despues_free();
     //test_dir_variable_local();
 
-    test_overflow_heap();
-    test_overflow_stack();
-    
+    //test_overflow_heap();
+    //test_overflow_stack();
+    test_underflow_heap();
+
     puts("");
     return 0;
 }

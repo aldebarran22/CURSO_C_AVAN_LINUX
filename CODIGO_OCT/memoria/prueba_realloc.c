@@ -71,17 +71,30 @@ void cargaFichero(const char *path){
 
         // Avanzar a  la siguiente:
         total++;
-
     }
 
+    if (ferror(f)){
+        perror("file");
+    }
+
+    // Imprimir las filas y vamos liberando:
+    printf("\nFilas del fichero: %zu\n", total);
+
+    for (size_t i = 0 ; i < total ; i++){
+        puts(lineas[i]);
+        free(lineas[i]);
+        lineas[i] = NULL;
+    }
+
+    // Liberar el doble puntero:
     free(lineas);
     lineas = NULL;
     fclose(f);
-
 }
 
 
 int main(){
     cargaFichero("pedidos_final.csv");
+    puts("");
     return 0;
 }

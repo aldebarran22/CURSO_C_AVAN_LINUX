@@ -67,7 +67,7 @@ int main(){
     }
 
    
-    if (pthread_create(&idNums, 0, aleatorios, &nNum)){
+    if (pthread_create(&idNums, 0, aleatorios, &datos2)){
         puts("\nError al crear el hilo 2 ...");
         exit(EXIT_FAILURE);
 

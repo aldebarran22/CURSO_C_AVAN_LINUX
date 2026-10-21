@@ -39,10 +39,16 @@ VALGRIND:
 valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes \
 ./errores_memoria2
 
+
+gcc -std=c11 -g \
+-fsanitize=address,undefined \
+-fno-omit-frame-pointer \
+programa.c -o programa
+
 */
 
 // Error 1: liberar dos veces el mismo bloque!
-/*
+
 static void test_doble_free(void){
     int *numeros = malloc(10 * sizeof(int));
 
@@ -54,10 +60,10 @@ static void test_doble_free(void){
     free(numeros);
     free(numeros);
 }
-*/
+
 
 // Error 2: acceso a una  posicion de un array despues de liberar:
-/*
+
 static void test_acceso_despues_free(void){
     int *numeros = calloc(10, sizeof(int));
 
@@ -71,10 +77,10 @@ static void test_acceso_despues_free(void){
 
     printf("\nPosicion 0: %d", *numeros);
 }
-*/
+
 
 // Error 3: Devolver la direccion de una variable local:
-/*
+
 static int *getPunteroLocal(void){
     int numero = 100;
 
@@ -87,10 +93,10 @@ static void test_dir_variable_local(void){
 
     printf("\nContenido de ptr: %d", *ptr);
 }
-*/
+
 
 // Error 4: overflow / underflow, escribir fuera de los limites de un bloque:
-/*
+
 static void test_overflow_heap(void){
     int *numeros = calloc(10, sizeof(int));
 
@@ -101,9 +107,9 @@ static void test_overflow_heap(void){
 
     printf("\nAcceso al elemento 12: %d", numeros[11]);
     free(numeros);
-}*/
+}
 
-/*
+
 static void test_underflow_heap(void){
     // Lo detecta valgrind como una lectura invalida del tamaño de sizeof(tipo)
     int *numeros = calloc(10, sizeof(int));
@@ -115,19 +121,19 @@ static void test_underflow_heap(void){
 
     printf("\nAcceso al elemento -1: %d", numeros[-1]);
     free(numeros);
-}*/
+}
 
 // No lo detecta valgrind
-/*
+
 static void test_overflow_stack(void){
     int numeros[] = {1,2,3,4,5};
    
     printf("\nAcceso al elemento 12: %d", numeros[11]);   
 }
-*/
+
 
 // Error 5: Laguna de memoria (memory leak):
-/*
+
 static void test_laguna_memoria(void){
     // Lo detecta valgrind como: definitely lost: 40 bytes in 1 blocks
 
@@ -139,10 +145,10 @@ static void test_laguna_memoria(void){
     }
 
     // NO hacemos free!
-}*/
+}
 
 // Error 6: Perder el bloque original al ampliar el tamaño con realloc:
-/*
+
 static void test_fallo_realloc(void){
     // Valgrind: avisa con: Warning: set address range perms: large range
     // Reservar un bloque inicial con malloc:
@@ -163,10 +169,10 @@ static void test_fallo_realloc(void){
 
     free(numeros);
 }
-*/
+
 
 // Error 7: Reservar para copiar un string, pero la cadena origen es mas grande
-/*
+
 static void test_string_overflow(void){    
 
     char *ptr = malloc(5 * sizeof(char));
@@ -182,10 +188,10 @@ static void test_string_overflow(void){
     free(ptr);
     ptr  = NULL;
 }
-*/
+
 
 // Error 8: intentar liberar memoria que no fue reservada:
-/*
+
 static void test_free_no_reservada(void){
     int x = 100;
 
@@ -193,7 +199,7 @@ static void test_free_no_reservada(void){
 
     // Ojo, la variable se ha creando en el STACK no esta en el HEAP
     free(ptr);
-}*/
+}
 
 // Error 9: Acceso a una posicion no inicializada:
 static void test_posicion_no_inicializada(void){

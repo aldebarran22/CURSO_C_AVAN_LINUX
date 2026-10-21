@@ -185,6 +185,7 @@ static void test_string_overflow(void){
 */
 
 // Error 8: intentar liberar memoria que no fue reservada:
+/*
 static void test_free_no_reservada(void){
     int x = 100;
 
@@ -192,6 +193,23 @@ static void test_free_no_reservada(void){
 
     // Ojo, la variable se ha creando en el STACK no esta en el HEAP
     free(ptr);
+}*/
+
+// Error 9: Acceso a una posicion no inicializada:
+static void test_posicion_no_inicializada(void){
+
+    int *numeros = malloc(5 * sizeof(int));
+    if (numeros == NULL){
+        perror("malloc");
+        return;
+    }
+
+    numeros[0] = 999;
+
+    printf("\nAcceso a una posicion no inicializada: %d", numeros[1]);
+
+    free(numeros);
+    numeros = NULL;
 }
 
 int main(){
@@ -207,7 +225,9 @@ int main(){
     //test_fallo_realloc();
 
     //test_string_overflow();
-    test_free_no_reservada();
+    //test_free_no_reservada();
+
+    test_posicion_no_inicializada();
 
     puts("");
     return 0;

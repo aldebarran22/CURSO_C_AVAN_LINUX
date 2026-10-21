@@ -165,8 +165,9 @@ static void test_fallo_realloc(void){
 }
 */
 
-static void test_string_overflow(void){
-    // Reservar para copiar un string, pero la cadena origen es mas grande
+// Error 7: Reservar para copiar un string, pero la cadena origen es mas grande
+/*
+static void test_string_overflow(void){    
 
     char *ptr = malloc(5 * sizeof(char));
 
@@ -181,7 +182,17 @@ static void test_string_overflow(void){
     free(ptr);
     ptr  = NULL;
 }
+*/
 
+// Error 8: intentar liberar memoria que no fue reservada:
+static void test_free_no_reservada(void){
+    int x = 100;
+
+    int *ptr = &x;
+
+    // Ojo, la variable se ha creando en el STACK no esta en el HEAP
+    free(ptr);
+}
 
 int main(){
     //test_doble_free();
@@ -195,7 +206,8 @@ int main(){
     //test_laguna_memoria();
     //test_fallo_realloc();
 
-    test_string_overflow();
+    //test_string_overflow();
+    test_free_no_reservada();
 
     puts("");
     return 0;

@@ -54,10 +54,27 @@ static void test_doble_free(void){
     free(numeros);
 }
 
+// Error 2: acceso a una  posicion de un array despues de liberar:
+static void test_acceso_despues_free(void){
+    int *numeros = calloc(10, sizeof(int));
+
+    if (numeros  == NULL){
+        perror("calloc");
+        return;
+    }
+
+    *numeros = 100;
+    free(numeros);
+
+    printf("\nPosicion 0: %d", *numeros);
+}
+
 
 
 int main(){
     test_doble_free();
+    test_acceso_despues_free();
+    
     puts("");
     return 0;
 }

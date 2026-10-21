@@ -104,6 +104,7 @@ static void test_overflow_heap(void){
 }*/
 
 static void test_underflow_heap(void){
+    // Lo detecta valgrind como na lectura invalida del tamaño de sizeof(tipo)
     int *numeros = calloc(10, sizeof(int));
 
     if (numeros  == NULL){

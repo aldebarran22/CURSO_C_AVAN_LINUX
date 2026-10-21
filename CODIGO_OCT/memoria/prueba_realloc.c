@@ -30,6 +30,16 @@ void cargaFichero(const char *path){
     }
 
     while (fgets(linea, sizeof(linea), f)){
+        size_t longitud = strlen(linea);
+
+        if (longitud > 0 && linea[longitud-1]=='\n'){
+            linea[--longitud] = '\0'; // machacar el \n del final de la linea
+        }
+
+        if (longitud == 0){
+            continue;
+        }
+
         puts(linea);
     }
 

@@ -32,7 +32,7 @@ static void test_doble_free(void){
 }*/
 
 
-/*
+
 static void test_overflow_heap(void){
     int *numeros = calloc(10, sizeof(int));
 
@@ -49,7 +49,7 @@ static void test_overflow_heap(void){
     free(numeros);
 }
 
-
+/*
 static void test_underflow_heap(void){
     // Lo detecta valgrind como una lectura invalida del tamaño de sizeof(tipo)
     int *numeros = calloc(10, sizeof(int));
@@ -73,6 +73,7 @@ static void test_overflow_stack(void){
 */
 
 
+/*
 static void test_laguna_memoria(void){
     // Lo detecta valgrind como: definitely lost: 40 bytes in 1 blocks
 
@@ -85,12 +86,13 @@ static void test_laguna_memoria(void){
 
     // NO hacemos free!
 }
-
+*/
 
 int main(){
     //test_doble_free();
-    test_laguna_memoria();
-    //test_overflow_heap();
+    //test_laguna_memoria();
+    
+    test_overflow_heap();
     //test_overflow_stack();
     //test_underflow_heap();
     return 0;

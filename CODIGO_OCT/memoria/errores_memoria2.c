@@ -40,3 +40,24 @@ valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes \
 ./errores_memoria2
 
 */
+
+// Error 1: liberar dos veces el mismo bloque!
+static void test_doble_free(void){
+    int *numeros = malloc(10 * sizeof(int));
+
+    if  (numeros  == NULL){
+        perror("malloc");
+        return;
+    }
+
+    free(numeros);
+    free(numeros);
+}
+
+
+
+int main(){
+    test_doble_free();
+    puts("");
+    return 0;
+}

@@ -10,6 +10,8 @@ gcc -std=c11 \
 memoria_address_sanitizer.c \
 -o memoria_address_sanitizer
 
+-fsanitize=address,undefined  -fsanitize-recover=address
+
 */
 
 #include <stdio.h>
@@ -30,7 +32,7 @@ static void test_doble_free(void){
 }*/
 
 
-
+/*
 static void test_overflow_heap(void){
     int *numeros = calloc(10, sizeof(int));
 
@@ -68,7 +70,7 @@ static void test_overflow_stack(void){
    
     printf("\nAcceso al elemento 12: %d", numeros[11]);   
 }
-
+*/
 
 
 static void test_laguna_memoria(void){
@@ -88,8 +90,8 @@ static void test_laguna_memoria(void){
 int main(){
     //test_doble_free();
     test_laguna_memoria();
-    test_overflow_heap();
-    test_overflow_stack();
-    test_underflow_heap();
+    //test_overflow_heap();
+    //test_overflow_stack();
+    //test_underflow_heap();
     return 0;
 }

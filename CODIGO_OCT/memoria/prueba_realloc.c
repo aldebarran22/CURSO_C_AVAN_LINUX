@@ -40,7 +40,38 @@ void cargaFichero(const char *path){
             continue;
         }
 
-        puts(linea);
+        //puts(linea);
+
+        // Comprobar si tenemos que ampliar el bloque:
+        if (total == capacidad){
+            size_t nueva_capacidad = capacidad * 2; // doblar el bloque
+
+            char **aux = realloc(lineas, nueva_capacidad * sizeof(*lineas));
+            if (aux == NULL){
+                perror("realloc");
+                break;
+            }
+
+            // Va todo bien, reasignar el puntero
+            lineas = aux;
+            capacidad = nueva_capacidad;
+        }
+
+        // Reservar para la linea leida: guardar los chars de la  linea:
+        lineas[total] = malloc((longitud+1) * sizeof(char)); // +1 para el \0 del final de la str.
+
+        if (lineas[total] == NULL){
+            perror("malloc");
+            break;
+        }
+
+        // Copiar los chars de la linea leida al puntero:
+        // memcpy(destino, origen, n_chars)
+        memcpy(lineas[total], linea, longitud+1);
+
+        // Avanzar a  la siguiente:
+        total++;
+
     }
 
     free(lineas);

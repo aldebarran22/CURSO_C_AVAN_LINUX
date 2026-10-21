@@ -43,7 +43,7 @@ valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes \
 gcc -std=c11 -g \
 -fsanitize=address,undefined \
 -fno-omit-frame-pointer \
-programa.c -o programa
+errores_memoria2.c -o errores_memoria2
 
 */
 

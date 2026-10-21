@@ -26,7 +26,6 @@ void *aleatorios(void *p){
     int suma = 0;
     int num;
 
-
     printf("\nID hilo aleatorios: %ld", pthread_self());
     for (int i = 0 ; i < *n ; i++){
         num = rand()%100;
@@ -41,7 +40,6 @@ void *aleatorios(void *p){
     resul = (int *) malloc(sizeof(int));
     *resul = suma;
     return (void *) resul;
-
 }
 
 

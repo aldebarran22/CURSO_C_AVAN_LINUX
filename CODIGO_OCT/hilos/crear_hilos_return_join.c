@@ -35,8 +35,8 @@ void *aleatorios(void *p){
         printf("\nNumero %d = %d", (i+1), num);
         sleep(rand()%3);
     }
-    puts("\naleatorios: termina");
-
+    printf("\naleatorios: termina con suma = %d", suma);
+ printf("\naleatorios: termina con suma = %d", suma);
     // Reservar para devolver un resultado:
     resul = (int *) malloc(sizeof(int));
     *resul = suma;
@@ -49,6 +49,7 @@ int main(){
     // Un id por cada hilo
     pthread_t idMensaje;
     pthread_t idNums;
+    int *resultado;
 
     int nMen = 10;
     int nNum = 7;
@@ -69,8 +70,11 @@ int main(){
 
     // Esperar a que terminen los hilos:
     pthread_join(idMensaje, 0);
-    pthread_join(idNums, 0);
+    pthread_join(idNums, (void **) &resultado);
 
+    printf("\nResultado en main: %d", *resultado);
+    free(resultado);
+    resultado = NULL;
 
     puts("Thread main termina ...");
     exit(EXIT_SUCCESS);

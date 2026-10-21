@@ -103,8 +103,9 @@ static void test_overflow_heap(void){
     free(numeros);
 }*/
 
+/*
 static void test_underflow_heap(void){
-    // Lo detecta valgrind como na lectura invalida del tamaño de sizeof(tipo)
+    // Lo detecta valgrind como una lectura invalida del tamaño de sizeof(tipo)
     int *numeros = calloc(10, sizeof(int));
 
     if (numeros  == NULL){
@@ -114,7 +115,7 @@ static void test_underflow_heap(void){
 
     printf("\nAcceso al elemento -1: %d", numeros[-1]);
     free(numeros);
-}
+}*/
 
 // No lo detecta valgrind
 /*
@@ -125,6 +126,18 @@ static void test_overflow_stack(void){
 }
 */
 
+// Error 5: Laguna de memoria (memory leak):
+static void test_laguna_memoria(void){
+    int *numeros = calloc(10, sizeof(int));
+
+    if (numeros  == NULL){
+        perror("calloc");
+        return;
+    }
+
+    // NO hacemos free!
+}
+
 
 int main(){
     //test_doble_free();
@@ -133,7 +146,9 @@ int main(){
 
     //test_overflow_heap();
     //test_overflow_stack();
-    test_underflow_heap();
+    //test_underflow_heap();
+
+    test_laguna_memoria();
 
     puts("");
     return 0;

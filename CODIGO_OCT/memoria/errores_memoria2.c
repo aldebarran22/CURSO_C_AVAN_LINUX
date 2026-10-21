@@ -142,8 +142,9 @@ static void test_laguna_memoria(void){
 }*/
 
 // Error 6: Perder el bloque original al ampliar el tamaño con realloc:
+/*
 static void test_fallo_realloc(void){
-
+    // Valgrind: avisa con: Warning: set address range perms: large range
     // Reservar un bloque inicial con malloc:
     int *numeros = malloc(10 * sizeof(int));
 
@@ -162,6 +163,24 @@ static void test_fallo_realloc(void){
 
     free(numeros);
 }
+*/
+
+static void test_string_overflow(void){
+    // Reservar para copiar un string, pero la cadena origen es mas grande
+
+    char *ptr = malloc(5 * sizeof(char));
+
+    if (ptr == NULL){
+        perror("malloc");
+        return;
+    }
+    
+    strcpy(ptr, "hola que tal estas");
+    puts(ptr);
+
+    free(ptr);
+    ptr  = NULL;
+}
 
 
 int main(){
@@ -174,7 +193,9 @@ int main(){
     //test_underflow_heap();
 
     //test_laguna_memoria();
-    test_fallo_realloc();
+    //test_fallo_realloc();
+
+    test_string_overflow();
 
     puts("");
     return 0;

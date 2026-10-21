@@ -83,12 +83,33 @@ static void test_dir_variable_local(void){
     printf("\nContenido de ptr: %d", *ptr);
 }
 
+// Error 4: overflow, escribir fuera de los limites de un bloque:
+static void test_overflow_heap(void){
+    int *numeros = calloc(10, sizeof(int));
+
+    if (numeros  == NULL){
+        perror("calloc");
+        return;
+    }
+
+    printf("\nAcceso al elemento 12: %d", numeros[11]);
+    free(numeros);
+}
+
+static void test_overflow_stack(void){
+    int numeros[] = {1,2,3,4,5};
+   
+    printf("\nAcceso al elemento 12: %d", numeros[11]);   
+}
 
 
 int main(){
     //test_doble_free();
     //test_acceso_despues_free();
-    test_dir_variable_local();
+    //test_dir_variable_local();
+
+    test_overflow_heap();
+    test_overflow_stack();
     
     puts("");
     return 0;

@@ -16,7 +16,7 @@ memoria_address_sanitizer.c \
 #include <stdlib.h>
 #include <string.h>
 
-
+/*
 static void test_doble_free(void){
     int *numeros = malloc(10 * sizeof(int));
 
@@ -27,7 +27,7 @@ static void test_doble_free(void){
 
     free(numeros);
     free(numeros);
-}
+}*/
 
 
 
@@ -37,6 +37,10 @@ static void test_overflow_heap(void){
     if (numeros  == NULL){
         perror("calloc");
         return;
+    }
+
+    for (int i = 0 ; i < 10 ; i++){
+        numeros[i] = i+1;
     }
 
     printf("\nAcceso al elemento 12: %d", numeros[11]);
@@ -82,7 +86,7 @@ static void test_laguna_memoria(void){
 
 
 int main(){
-    test_doble_free();
+    //test_doble_free();
     test_laguna_memoria();
     test_overflow_heap();
     test_overflow_stack();

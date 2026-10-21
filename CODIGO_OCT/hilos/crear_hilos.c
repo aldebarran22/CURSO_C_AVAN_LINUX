@@ -46,6 +46,7 @@ int main(){
 
     }
 
+   
     if (pthread_create(&idNums, 0, aleatorios, &nNum)){
         puts("\nError al crear el hilo 2 ...");
         exit(EXIT_FAILURE);
@@ -53,8 +54,8 @@ int main(){
     }
 
     // Esperar a que terminen los hilos:
-    //pthread_join(idMensaje, 0);
-    //pthread_join(idNums, 0);
+    pthread_join(idMensaje, 0);
+    pthread_join(idNums, 0);
 
 
     puts("Thread main termina ...");

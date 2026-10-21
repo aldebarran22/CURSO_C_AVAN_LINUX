@@ -69,11 +69,26 @@ static void test_acceso_despues_free(void){
     printf("\nPosicion 0: %d", *numeros);
 }
 
+// Error 3: Devolver la direccion de una variable local:
+static int *getPunteroLocal(void){
+    int numero = 100;
+
+    // Devolver la dir de numero: ojo es local!
+    return &numero;
+}
+
+static void test_dir_variable_local(void){
+    int *ptr = getPunteroLocal();
+
+    printf("\nContenido de ptr: %d", *ptr);
+}
+
 
 
 int main(){
-    test_doble_free();
-    test_acceso_despues_free();
+    //test_doble_free();
+    //test_acceso_despues_free();
+    test_dir_variable_local();
     
     puts("");
     return 0;

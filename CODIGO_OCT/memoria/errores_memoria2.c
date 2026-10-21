@@ -127,7 +127,10 @@ static void test_overflow_stack(void){
 */
 
 // Error 5: Laguna de memoria (memory leak):
+/*
 static void test_laguna_memoria(void){
+    // Lo detecta valgrind como: definitely lost: 40 bytes in 1 blocks
+
     int *numeros = calloc(10, sizeof(int));
 
     if (numeros  == NULL){
@@ -136,6 +139,28 @@ static void test_laguna_memoria(void){
     }
 
     // NO hacemos free!
+}*/
+
+// Error 6: Perder el bloque original al ampliar el tamaño con realloc:
+static void test_fallo_realloc(void){
+
+    // Reservar un bloque inicial con malloc:
+    int *numeros = malloc(10 * sizeof(int));
+
+    if (numeros  == NULL){
+        perror("malloc");
+        return;
+    }
+
+    // Intentar coger un bloque muy grande con realloc, pero soble el
+    // mismo puntero:
+    numeros = realloc(numeros, 1000000000ULL * sizeof(*numeros));
+    if (numeros == NULL){
+        puts("ha fallado realloc");
+        return;
+    }
+
+    free(numeros);
 }
 
 
@@ -148,7 +173,8 @@ int main(){
     //test_overflow_stack();
     //test_underflow_heap();
 
-    test_laguna_memoria();
+    //test_laguna_memoria();
+    test_fallo_realloc();
 
     puts("");
     return 0;

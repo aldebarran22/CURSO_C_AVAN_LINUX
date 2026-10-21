@@ -36,7 +36,7 @@ void *aleatorios(void *p){
         sleep(rand()%3);
     }
     printf("\naleatorios: termina con suma = %d", suma);
- printf("\naleatorios: termina con suma = %d", suma);
+ 
     // Reservar para devolver un resultado:
     resul = (int *) malloc(sizeof(int));
     *resul = suma;
@@ -72,10 +72,10 @@ int main(){
     pthread_join(idMensaje, 0);
     pthread_join(idNums, (void **) &resultado);
 
-    printf("\nResultado en main: %d", *resultado);
+    printf("\nResultado en main: %d\n", *resultado);
     free(resultado);
     resultado = NULL;
 
-    puts("Thread main termina ...");
+    puts("\nThread main termina ...");
     exit(EXIT_SUCCESS);
 }

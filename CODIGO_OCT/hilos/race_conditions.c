@@ -1,6 +1,7 @@
 // Para compilar:
 /*
 gcc -std=c11 -Wall -Wextra -Wpedantic \
+    -fsanitize=thread \
     race_conditions.c -o race_conditions -pthread
 */
 

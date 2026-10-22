@@ -6,6 +6,14 @@
 #include <pthread.h>
 #include <stdio.h>
 
+/*
+
+gcc -std=c11 -Wall -Wextra -Wpedantic \
+    -fsanitize=thread \
+    condicion_carrera.c -o condicion_carrera -pthread
+
+*/
+
 
 #define N_ITER 10000000
 
@@ -51,20 +59,20 @@ int main(){
     pthread_mutex_init(&mutex, 0);
 
     // Crear los hilos:
-    pthread_create(&h1, 0, sumar, 0);
-    pthread_create(&h2, 0, restar, 0);
+    //pthread_create(&h1, 0, sumar, 0);
+    //pthread_create(&h2, 0, restar, 0);
     pthread_create(&h3, 0, sumar2, 0);
     pthread_create(&h4, 0, restar2, 0);
 
-    pthread_join(h1, 0);
-    pthread_join(h2, 0);
+    //pthread_join(h1, 0);
+    //pthread_join(h2, 0);
     pthread_join(h3, 0);
     pthread_join(h4, 0);
 
     // Destruir el mutex:
     pthread_mutex_destroy(&mutex);
 
-    printf("\nContador: %d", contador);
+    //printf("\nContador: %d", contador);
     printf("\nContador_mtx: %d", contador_mtx);
     puts("");
     return 0;

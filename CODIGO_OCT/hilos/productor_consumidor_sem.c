@@ -9,10 +9,10 @@
 #include <semaphore.h>
 #include <string.h>
 
-#define N_PROD 1
-#define N_CON 1
+#define N_PROD 2
+#define N_CON 2
 #define TAM_BUFFER 6
-#define NUM_MUESTRAS 30
+#define NUM_MUESTRAS 20
 
 
 typedef struct {
@@ -56,7 +56,7 @@ void *productor(void *p){
         // Avisar de que se ha colocado un item en el buffer:
         sem_post(&d->sem_items);
 
-        sleep(rand()%4);
+        sleep(rand()%5);
 
     }
 }
@@ -93,7 +93,7 @@ void *consumidor(void *p){
         // Avisar de que se ha quitado un item en el buffer:
         sem_post(&d->sem_huecos);
 
-        sleep(rand()%4);
+        sleep(rand()%5);
     }
 }
 

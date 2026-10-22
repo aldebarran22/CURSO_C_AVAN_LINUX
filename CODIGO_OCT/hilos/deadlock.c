@@ -3,6 +3,13 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+/*
+
+gcc -std=c11 -g -O0 deadlock.c -o deadlock -pthread
+valgrind --tool=helgrind ./deadlock
+
+*/
+
 static pthread_mutex_t mutex_a = PTHREAD_MUTEX_INITIALIZER;
  
 static pthread_mutex_t mutex_b = PTHREAD_MUTEX_INITIALIZER;
@@ -63,8 +70,11 @@ int main(){
         return EXIT_FAILURE;
     }
 
+    pthread_join(thread_a, 0);
+    pthread_join(thread_b, 0);
+
     pthread_mutex_destroy(&mutex_a);
     pthread_mutex_destroy(&mutex_b);
-    
+
     return EXIT_SUCCESS;
 }

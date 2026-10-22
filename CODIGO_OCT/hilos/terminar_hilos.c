@@ -17,7 +17,7 @@ int main(void){
     detach() tiene sentido cuando el programa principal 
     seguirá ejecutándose y no necesitas:
 
-    - esperar expresamente al hilo;
+    - esperar expresamente al hilo; JOIN
     - obtener su valor de retorno;
     - conocer exactamente cuándo finalizó.
 
@@ -28,7 +28,7 @@ int main(void){
     */
     pthread_detach(thread);
 
-    //while(1);
+    while(1);
         
     puts("\nFin main");
 }

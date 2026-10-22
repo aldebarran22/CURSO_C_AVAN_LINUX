@@ -10,6 +10,8 @@ valgrind --tool=helgrind ./deadlock
 
 */
 
+typedef void *(*rutina_t)(void *);
+
 static pthread_mutex_t mutex_a = PTHREAD_MUTEX_INITIALIZER;
  
 static pthread_mutex_t mutex_b = PTHREAD_MUTEX_INITIALIZER;
@@ -54,7 +56,7 @@ static void *thread_b(void *argument)
 int main(){
     pthread_t h1, h2;
 
-    if (pthread_create(&h1, 0, thread_a, 0)){
+    if (pthread_create(&h1, 0, (rutina_t) thread_a, 0)){
         puts("Error al crear el hilo1");
         pthread_mutex_destroy(&mutex_a);
         pthread_mutex_destroy(&mutex_b);
@@ -62,7 +64,7 @@ int main(){
         return EXIT_FAILURE;
     }
 
-    if (pthread_create(&h2, 0, thread_b, 0)){
+    if (pthread_create(&h2, 0, (rutina_t) thread_b, 0)){
         puts("Error al crear el hilo2");
         pthread_mutex_destroy(&mutex_a);
         pthread_mutex_destroy(&mutex_b);
@@ -70,8 +72,8 @@ int main(){
         return EXIT_FAILURE;
     }
 
-    pthread_join(thread_a, 0);
-    pthread_join(thread_b, 0);
+    pthread_join(h1, 0);
+    pthread_join(h2, 0);
 
     pthread_mutex_destroy(&mutex_a);
     pthread_mutex_destroy(&mutex_b);

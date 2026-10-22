@@ -21,5 +21,39 @@ typedef struct {
     pthread_mutex_t mutex;
     sem_t sem_items;
     sem_t sem_huecos;
+    int muestras_p;
+    int muestras_c;
 } data_t;
 
+
+void *productor(void *p){
+
+}
+
+void consumidor(void *p){
+
+}
+
+int main(){
+    if (NUM_MUESTRAS % N_PROD != 0 || NUM_MUESTRAS % N_CON != 0){
+        puts("Valores incorrectos ");
+        return 1;
+    }
+
+    pthread_t productores[N_PROD];
+    pthread_t consumidores[N_PROD];
+
+    // Inicializar la estructura:
+    data_t d;
+    d.index_c = 0;
+    d.index_p = 0;
+    d.muestras_c = NUM_MUESTRAS / N_CON;
+    d.muestras_p = NUM_MUESTRAS / N_PROD;
+    strcpy(d.buffer, "------");
+    pthread_mutex_init(&d.mutex, 0);
+    sem_init(&d.sem_huecos, 0, TAM_BUFFER);
+    sem_init(&d.sem_items, 0, 0);
+
+
+    return 0;
+}

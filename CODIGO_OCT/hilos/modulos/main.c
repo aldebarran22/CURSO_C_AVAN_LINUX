@@ -4,6 +4,7 @@
 #include <pthread.h>
 #include <semaphore.h>
 #include <string.h>
+#include <stdio.h>
 
 #include "datos.h"
 #include "productor.h"

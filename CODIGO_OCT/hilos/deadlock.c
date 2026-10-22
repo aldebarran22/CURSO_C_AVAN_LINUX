@@ -25,6 +25,7 @@ static void *thread_a(void *argument)
     puts("Hilo A: mutex_a adquirido");
 
     sleep(1);
+    puts("\nHilo A intenta coger el mutex_b");
 
     pthread_mutex_lock(&mutex_b);
     puts("Hilo A: mutex_b adquirido");
@@ -43,6 +44,7 @@ static void *thread_b(void *argument)
     puts("Hilo B: mutex_b adquirido");
 
     sleep(1);
+    puts("\nHilo B intenta coger el mutex_a");
 
     pthread_mutex_lock(&mutex_a);
     puts("Hilo B: mutex_a adquirido");

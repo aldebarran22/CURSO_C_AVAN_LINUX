@@ -9,7 +9,7 @@
 #include <semaphore.h>
 #include <string.h>
 
-#define N_PROD 1
+#define N_PROD 2
 #define N_CON 1
 #define TAM_BUFFER 6
 #define NUM_MUESTRAS 30

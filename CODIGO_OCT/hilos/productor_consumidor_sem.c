@@ -9,7 +9,7 @@
 #include <semaphore.h>
 #include <string.h>
 
-#define N_PROD 2
+#define N_PROD 1
 #define N_CON 1
 #define TAM_BUFFER 6
 #define NUM_MUESTRAS 30
@@ -76,10 +76,13 @@ void *consumidor(void *p){
         // Extraer el item:
         c = d->buffer[d->index_c];
 
+        printf("\nC%ld obtiene %c", pthread_self(), c);
+
+        d->buffer[d->index_c] = '-';
+
         // Mover el indice:
         d->index_c = (d->index_c + 1) % TAM_BUFFER;
 
-        printf("\nC%ld obtiene %c", pthread_self(), c);
 
         // Imprimir el buffer:
         printf("\nBUFFER: %s\n", d->buffer);

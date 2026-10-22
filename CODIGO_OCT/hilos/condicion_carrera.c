@@ -24,36 +24,45 @@ pthread_mutex_t mutex;
 
 
 void *sumar(void *p){
+
+    (void)p;
     for (int i = 0 ; i < N_ITER ; i++){
         contador++;
     }
+    return NULL;
 }
 
 void *restar(void *p){
+    (void)p;
     for (int i = 0 ; i < N_ITER ; i++){
         contador--;
     }
+    return NULL;
 }
 
 void *sumar2(void *p){
+    (void)p;
     for (int i = 0 ; i < N_ITER ; i++){
          pthread_mutex_lock(&mutex);
         contador_mtx++;
         pthread_mutex_unlock(&mutex);
     }
+    return NULL;
 }
 
 void *restar2(void *p){
+    (void)p;
     for (int i = 0 ; i < N_ITER ; i++){
         pthread_mutex_lock(&mutex);
         contador_mtx--;
         pthread_mutex_unlock(&mutex);
     }
+    return NULL;
 }
 
 
 int main(){
-    pthread_t h1, h2, h3, h4;
+    pthread_t h3, h4; // h1, h2,
 
     // Crear el mutex: ANTES de crear los hilos!
     pthread_mutex_init(&mutex, 0);

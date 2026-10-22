@@ -7,6 +7,7 @@
 #include <time.h>
 #include <unistd.h>
 #include <semaphore.h>
+#include <string.h>
 
 #define N_PROD 1
 #define N_CON 1

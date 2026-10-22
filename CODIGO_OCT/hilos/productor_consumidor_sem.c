@@ -28,7 +28,7 @@ typedef struct {
 
 
 void *productor(void *p){
-
+    char c = 65 + (rand() % 26);
 }
 
 void *consumidor(void *p){

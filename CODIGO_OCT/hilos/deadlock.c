@@ -1,15 +1,15 @@
 #include <pthread.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 
-static pthread_mutex_t mutex_a =
-    PTHREAD_MUTEX_INITIALIZER;
-
-static pthread_mutex_t mutex_b =
-    PTHREAD_MUTEX_INITIALIZER;
+static pthread_mutex_t mutex_a = PTHREAD_MUTEX_INITIALIZER;
+ 
+static pthread_mutex_t mutex_b = PTHREAD_MUTEX_INITIALIZER;
 
 static void *thread_a(void *argument)
 {
+    // Para evitar warnings si no se utiliza el parametro!
     (void)argument;
 
     pthread_mutex_lock(&mutex_a);
@@ -42,4 +42,29 @@ static void *thread_b(void *argument)
     pthread_mutex_unlock(&mutex_b);
 
     return NULL;
+}
+
+int main(){
+    pthread_t h1, h2;
+
+    if (pthread_create(&h1, 0, thread_a, 0)){
+        puts("Error al crear el hilo1");
+        pthread_mutex_destroy(&mutex_a);
+        pthread_mutex_destroy(&mutex_b);
+
+        return EXIT_FAILURE;
+    }
+
+    if (pthread_create(&h2, 0, thread_b, 0)){
+        puts("Error al crear el hilo2");
+        pthread_mutex_destroy(&mutex_a);
+        pthread_mutex_destroy(&mutex_b);
+
+        return EXIT_FAILURE;
+    }
+
+    pthread_mutex_destroy(&mutex_a);
+    pthread_mutex_destroy(&mutex_b);
+    
+    return EXIT_SUCCESS;
 }

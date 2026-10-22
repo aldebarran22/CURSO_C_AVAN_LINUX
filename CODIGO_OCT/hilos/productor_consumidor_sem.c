@@ -30,7 +30,7 @@ void *productor(void *p){
 
 }
 
-void consumidor(void *p){
+void *consumidor(void *p){
 
 }
 
@@ -41,7 +41,7 @@ int main(){
     }
 
     pthread_t productores[N_PROD];
-    pthread_t consumidores[N_PROD];
+    pthread_t consumidores[N_CON];
 
     // Inicializar la estructura:
     data_t d;
@@ -54,6 +54,28 @@ int main(){
     sem_init(&d.sem_huecos, 0, TAM_BUFFER);
     sem_init(&d.sem_items, 0, 0);
 
+    // Lanzar los hilos:
+    for (int i = 0 ; i < N_PROD ; i++){
+        pthread_create(&productores[i], 0, productor, &d);
+    }
+
+    for (int i = 0 ; i < N_CON ; i++){
+        pthread_create(&consumidores[i], 0, consumidor, &d);
+    }
+
+    // JOIN:
+    for (int i = 0 ; i < N_PROD ; i++){
+        pthread_join(productores[i], 0);
+    }
+
+    for (int i = 0 ; i < N_CON ; i++){
+        pthread_join(consumidores[i], 0);
+    }
+
+    // Liberar recursos:
+    pthread_mutex_destroy(&d.mutex);
+    sem_destroy(&d.sem_huecos);
+    sem_destroy(&d.sem_items);
 
     return 0;
 }

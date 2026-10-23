@@ -55,6 +55,10 @@ int send_all(int fd_client, const void *buffer, size_t length){
     return 0;
 }
 
+void *client_thread(void *p){
+    client_data_t *data = p;
+}
+
 
 
 int main(){
@@ -134,12 +138,29 @@ int main(){
         client_data->client_fd = client_fd;
 
         // Recuperar la IP y el puerto del cliente.
-        
+        if (inet_ntop(AF_INET, &client_address.sin_addr, client_data->client_ip, sizeof(client_data->client_ip)) == NULL){
+            strcpy(client_data->client_ip, "desconocida");
+        }
+        client_data->client_port = (unsigned int) ntohs(client_address.sin_port);
 
-
-        // Crear un client_data_t
-
+        printf("\nNuevo cliente conectado: %s:%u", client_data->client_ip, client_data->client_port);
+       
         // Crear un hilo
+        pthread_t thread;
+        int error = pthread_create(&thread, NULL, client_thread, client_data);
+        if (error){
+            printf("\nError al crear el hilo: %s", strerror(error));
+            close(client_fd);
+            free(client_data);
+            client_data = NULL;
+            continue;
+        }
+
+        error = pthread_detach(thread);
+        if (error) {
+            printf("\nError al detach el hilo: %s", strerror(error));
+        }
+       
     }
 
     close(server_fd);

@@ -12,6 +12,12 @@
 #define BUFFER_SIZE 1024
 #define LISTEN_BACKLOG 10
 
+typedef struct {
+    int client_fd;                      // El socket del cliente
+    char client_ip[INET_ADDRSTRLEN];    // la ip del cliente
+    unsigned int client_port;           // El puerto del cliente
+} client_data_t;
+
 
 int send_all(int fd_client, const void *buffer, size_t length){
     // Convertir el buffer a unsigned char
@@ -105,6 +111,15 @@ int main(){
 
         // Aceptar (esperar) a que se conecteun cliente:
         int client_fd = accept(server_fd, (struct sockaddr *) &client_address, &len_dir_cliente);
+        if (client_fd < 0){
+
+            if (errno == EINTR){
+                continue;
+            }
+
+            perror("accept");
+            break;
+        }
     }
 
     close(server_fd);

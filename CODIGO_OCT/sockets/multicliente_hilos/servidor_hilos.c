@@ -55,8 +55,54 @@ int send_all(int fd_client, const void *buffer, size_t length){
     return 0;
 }
 
+void atender_client(int client_fd, const char *ip, unsigned int port){
+    char buffer[BUFFER_SIZE];
+
+    printf("\nHilo %lu atendiendo a %s:%u\n", (unsigned long)pthread_self(), ip, port);
+
+    ssize_t received = recv(client_fd, buffer, sizeof(buffer) - 1, 0);
+
+    if (received < 0) {
+        perror("recv");
+        return;
+    }
+
+    if (received == 0) {
+        puts("El cliente cerró la conexión sin enviar datos.");
+        return;
+    }
+
+    buffer[received] = '\0';
+    printf("Datos recibidos de %s:%u: %s\n", ip, port, buffer);
+    const char response[] = "Mensaje recibido correctamente ...";
+
+    if (send_all(client_fd, response, sizeof(response) - 1) < 0) {
+        perror("send_all");
+        return;
+    }
+
+    puts("Respuesta enviada al cliente.");
+}
+
 void *client_thread(void *p){
     client_data_t *data = p;
+
+    // Extraer los datos de la estructura dinamica y la liberamos
+    // Copiamos los datos a 3 variables y liberamos:
+    int client_fd = data->client_fd;
+    char ip[INET_ADDRSTRLEN];
+    memcpy(ip, data->client_ip, sizeof(ip));
+
+    unsigned int port = data->client_port;
+
+    free(data);
+    data = NULL;
+
+    atender_client(client_fd, ip, port);
+    close(client_fd);
+
+    printf("\nFinaliza el hilo: %ld con ip:%s:%u", pthread_self(), ip, port);
+    return NULL;
 }
 
 

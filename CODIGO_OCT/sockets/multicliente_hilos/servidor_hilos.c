@@ -10,6 +10,8 @@
 
 #define PUERTO 8080
 #define BUFFER_SIZE 1024
+#define LISTEN_BACKLOG 10
+
 
 int send_all(int fd_client, const void *buffer, size_t length){
     // Convertir el buffer a unsigned char
@@ -50,7 +52,7 @@ int send_all(int fd_client, const void *buffer, size_t length){
 
 int main(){
     int server_fd = -1;
-    int client_fd = -1;
+    
 
     // Crear el socket:
     server_fd = socket(AF_INET, SOCK_STREAM, 0);
@@ -85,7 +87,7 @@ int main(){
         return EXIT_FAILURE;
     }
 
-    if (listen(server_fd, 1) < 0){
+    if (listen(server_fd, LISTEN_BACKLOG) < 0){
         perror("listen");
         close(server_fd);
         return EXIT_FAILURE;
@@ -93,5 +95,19 @@ int main(){
 
     printf("\nServidor escuchando en el puerto: %d\n", PUERTO);
 
+    // El servidor esta funcionando todo el rato:
+    while (1){
+        puts("\nServidor a la espera de clientes ...");
+
+        // Nos hace falta un socket / dir_cliente por cada cliente que se conecte:        
+        struct sockaddr_in client_address;
+        socklen_t len_dir_cliente = sizeof(client_address);
+
+        // Aceptar (esperar) a que se conecteun cliente:
+        int client_fd = accept(server_fd, (struct sockaddr *) &client_address, &len_dir_cliente);
+    }
+
+    close(server_fd);
+    return EXIT_SUCCESS;
 
 }

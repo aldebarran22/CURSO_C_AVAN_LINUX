@@ -163,7 +163,7 @@ int send_all(int fd_client, const void *buffer, size_t length){
 void atender_client(int client_fd, const char *ip, unsigned int port){
     char buffer[BUFFER_SIZE];
 
-    printf("\nHilo %d atendiendo a %s:%u\n", getpid(), ip, port);
+    printf("\nProceso con PID %d atendiendo a %s:%u\n", getpid(), ip, port);
 
     ssize_t received = recv(client_fd, buffer, sizeof(buffer) - 1, 0);
 

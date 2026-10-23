@@ -16,9 +16,13 @@ int send_all(int fd_client, const void *buffer, size_t length){
     const unsigned char *cursor = buffer; // casting implicito
     size_t total = 0; // control del numero de bytes enviados
 
+    // metemos el bucle porque nadie asegura que se vaya a enviar todos los datos
+    // con un unico send, 
     while (total < length){
 
         // ojo con sign, por si devuelve -1 la llamada a send
+        // cursor + total, se intentan enviar los bytes que nos quedan
+        // la primera vez son todos: length
         ssize_t enviados = send(fd_client, cursor + total, length - total, 0);
 
         if (enviados < 0){

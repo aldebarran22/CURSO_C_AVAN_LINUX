@@ -99,6 +99,24 @@ int main(){
     // Recibir la respuesta:
     char buffer[BUFFER_SIZE];
     ssize_t received = recv(socket_fd, buffer, sizeof(buffer)-1, 0);
+
+     if (received < 0){
+        // Se ha producido un error
+        perror("recv");
+        close(socket_fd);      
+        return EXIT_FAILURE;
+
+    } else if (received == 0){
+        // El cliente ha cortado la conexion sin enviar datos
+        puts("el cliente cerro la conexion");
+        close(socket_fd);      
+        return EXIT_FAILURE;
+    }
+
+    buffer[received] = '\0';
+    printf("\nRespuesta del servidor: %s", buffer);
     
+    close(socket_fd);
+    return EXIT_SUCCESS;
 
 }

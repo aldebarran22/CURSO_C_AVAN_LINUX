@@ -48,3 +48,57 @@ int send_all(int fd_client, const void *buffer, size_t length){
 }
 
 
+int main(){
+    int socket_fd = socket(AF_INET, SOCK_STREAM, 0);
+
+    if (socket_fd < 0){
+        perror("socket");
+        return EXIT_FAILURE;
+    }
+
+    // Configurar la dir del servidor con el que vamos a conectar:
+    struct sockaddr_in server_address;
+    memset(&server_address, 0, sizeof(server_address));
+
+    server_address.sin_family = AF_INET;
+    server_address.sin_port = htons(PUERTO);
+
+    // Convertir la IP de texto a binario:
+    int result = inet_pton(AF_INET, SERVER_IP, &server_address.sin_addr);
+
+    if (result == 0){
+        printf("\nDireccion IP no valida: %s", SERVER_IP);
+        close(socket_fd);
+        return EXIT_FAILURE;
+    }
+
+    if  (result < 0){
+        perror("inet_pton");
+        close(socket_fd);
+        return EXIT_FAILURE;
+    }
+
+    // Conectar con el servidor:
+    if (connect(socket_fd, (const struct sockaddr *) &server_address, sizeof(server_address)) < 0){
+        perror("connect");
+        close(socket_fd);
+        return EXIT_FAILURE;
+    }
+
+    printf("\nConectado al servidor: %s:%d", SERVER_IP, PUERTO);
+    char mensaje[] = "mensaje desde el cliente";
+
+    if (send_all(socket_fd, mensaje, sizeof(mensaje)-1) < 0){
+        perror("send_all");
+        close(socket_fd);
+        return EXIT_FAILURE;
+    }
+
+    puts("\nSe ha enviado el mensaje al servidor");
+
+    // Recibir la respuesta:
+    char buffer[BUFFER_SIZE];
+    ssize_t received = recv(socket_fd, buffer, sizeof(buffer)-1, 0);
+    
+
+}

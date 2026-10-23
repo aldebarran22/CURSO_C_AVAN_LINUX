@@ -61,6 +61,70 @@ Además:
 
 */
 
+static void collect_children(int signal_number){
+    // Esta funcion recoge procesos hijos que ya han terminado, para que no se queden
+    // como procesos zombies!
+
+    // Es la funcion manejadora de SIGCHLD
+    // Cuando uno de los procesos hijo termina, el proceso padre recibe SIGCHLD y se ejecuta
+    // collect_children(SIGCHLD);
+
+    // Guardar el numero de error:
+    int saved_errno = errno;
+
+    // Evitar warnning si no se utiliza el parametro:
+    (void) signal_number;
+
+    // waitpid puede modificar errno
+    // -1, cualquier proceso hijo terminado
+    // El param 2, permite recoger el estado de finalizacion del proceso hijo: int status
+    // WNOHANG para que waitpid no  se bloquee si no hay ningun proceso hijo terminando!
+    while (waitpid(-1, NULL, WNOHANG) > 0){}
+
+    // Si devuelve 0, hay procesos hijo pero no han terminado
+
+    // Volver a restaurar el codigo de error!
+    errno = saved_errno;
+}
+
+
+
+static  int configure_sigchld(void){
+    // Asocia la funcion collect_children con la señal: SIGCHLD
+    struct sigaction action;
+
+    // Inicializar a cero la estructura:
+    memset(&action, 0, sizeof(action));
+
+    // Configurar el action:
+    action.sa_handler = collect_children;
+
+    // SA_RESTART: ace reiniciables determinadas llamadas al sistema cuando son interrumpidas por señales, 
+    // aunque no garantiza el reinicio de absolutamente todas las llamadas
+    // SA_NOCLDSTOP: el proceso padre recibe la notificacion que interesa: el fin del proceso hijo
+    action.sa_flags = SA_RESTART | SA_NOCLDSTOP;
+
+    // action.sa_mask: conjunto de señales que se bloquearan mientras se ejecuta la funcion
+    // del manejador!
+
+    // sigemptyset: Hace reiniciables determinadas llamadas al sistema cuando son interrumpidas 
+    // por señales, aunque no garantiza el reinicio de absolutamente todas las llamadas
+    if (sigemptyset(&action.sa_mask) < 0){
+        return -1;
+    }
+
+    // SIGCHLD la señal que queremos configurar
+    // action la configuracionde la señal
+    // NULL indica que no queremos recuperar la configuracion anterior
+    // si valor devuelto es 0, la configuracion es correcta!
+    if (sigaction(SIGCHLD, &action, NULL) < 0){
+        return -1;
+    }
+
+    return 0;
+}
+
+
 int send_all(int fd_client, const void *buffer, size_t length){
     // Convertir el buffer a unsigned char
     const unsigned char *cursor = buffer; // casting implicito

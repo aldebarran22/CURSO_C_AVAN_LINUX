@@ -7,6 +7,7 @@
 #include <string.h>
 #include <sys/socket.h>
 #include <unistd.h>
+#include <threads.h>
 
 #define PUERTO 8080
 #define BUFFER_SIZE 1024
@@ -120,6 +121,25 @@ int main(){
             perror("accept");
             break;
         }
+
+        // Reservar para la estructura del cliente:
+        client_data_t *client_data = malloc(sizeof(*client_data));
+        if (client_data == NULL){
+            perror("malloc");
+            close(client_fd);
+            continue;
+        }
+
+        // Rellenar la estructura:
+        client_data->client_fd = client_fd;
+
+        // Recuperar la IP y el puerto del cliente.
+        
+
+
+        // Crear un client_data_t
+
+        // Crear un hilo
     }
 
     close(server_fd);

@@ -225,7 +225,27 @@ int main(){
         // Devuelve 0 al proceso hijo, y el PID al padre
         pid_t child_pid = fork();
 
+        if (child_pid == 0){
+            // Es el proceso HIJO
+            close(sock); // El hijo cierra el socket del padre, no lo necesita!
+
+            atender_client(sock_client, client_ip, client_port);
+            close(sock_client);
+
+            // Terminamos el proceso hijo:
+            _exit(EXIT_SUCCESS);
+        }
+
+        // Estamos en el proceso PADRE:
+        printf("\nCreado el proceso hijo con PID: %ld", (long) child_pid);
+
+        // El padre no necesita el socket del hijo:
+        close(sock_client);
 
     }
+
+    // el socket del padre!
+    close(sock);
+    return EXIT_SUCCESS;
 
 }

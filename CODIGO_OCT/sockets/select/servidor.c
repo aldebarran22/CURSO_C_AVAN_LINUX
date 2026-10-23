@@ -134,7 +134,10 @@ int main(void)
      */
     fd_set master_set;
 
+    // Inicializar la lista de sockets
     FD_ZERO(&master_set);
+
+    // Añade el descriptor del socket del servidor a la lista:
     FD_SET(server_fd, &master_set);
 
     /*
@@ -179,9 +182,7 @@ int main(void)
          * Se recorren todos los posibles descriptores.
          * ready indica cuántos están preparados.
          */
-        for (int fd = 0;
-             fd <= max_fd && ready > 0;
-             fd++) {
+        for (int fd = 0; fd <= max_fd && ready > 0; fd++) {
             if (!FD_ISSET(fd, &read_set)) {
                 continue;
             }
@@ -256,10 +257,7 @@ int main(void)
                  * maestro para vigilarlo en las próximas
                  * llamadas a select().
                  */
-                FD_SET(
-                    client_fd,
-                    &master_set
-                );
+                FD_SET(client_fd,  &master_set );
 
                 if (client_fd > max_fd) {
                     max_fd = client_fd;
@@ -290,6 +288,7 @@ int main(void)
 
                 close(fd);
                 FD_CLR(fd, &master_set);
+                
             } else if (received == 0) {
                 printf(
                     "El cliente del descriptor %d "

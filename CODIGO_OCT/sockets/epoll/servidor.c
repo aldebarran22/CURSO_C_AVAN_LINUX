@@ -327,9 +327,7 @@ int main(void)
         return EXIT_FAILURE;
     }
 
-    if (add_to_epoll(
-            epoll_fd,
-            server_fd) < 0) {
+    if (add_to_epoll( epoll_fd, server_fd) < 0) {
         perror("epoll_ctl ADD servidor");
         close(epoll_fd);
         close(server_fd);
@@ -345,12 +343,7 @@ int main(void)
     struct epoll_event events[MAX_EVENTS];
 
     while (1) {
-        int event_count = epoll_wait(
-            epoll_fd,
-            events,
-            MAX_EVENTS,
-            -1
-        );
+        int event_count = epoll_wait( epoll_fd, events, MAX_EVENTS,-1);
 
         if (event_count < 0) {
             if (errno == EINTR) {
@@ -362,8 +355,7 @@ int main(void)
         }
 
         for (int i = 0; i < event_count; i++) {
-            int current_fd =
-                events[i].data.fd;
+            int current_fd = events[i].data.fd;
 
             uint32_t current_events =
                 events[i].events;

@@ -1,13 +1,23 @@
 // Servidor multicliente: implementacion con procesos
 
-#include <arpa/inet.h>
-#include <errno.h>
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#include <sys/types.h>
 #include <sys/socket.h>
+#include <sys/wait.h>
+#include <netinet/in.h>
+
+#include <netdb.h>
 #include <unistd.h>
-#include <pthread.h>
+#include <signal.h>
+#include <error.h>
+#include <errno.h>
+#include <arpa/inet.h>
+
 
 #define PUERTO 8080
 #define BUFFER_SIZE 1024
@@ -15,7 +25,7 @@
 
 
 /* 
-Servidor que utilizaprocesos para atender a los clientes
+Servidor que utiliza procesos para atender a los clientes
 Por cada cliente que se conecta se lanza un proceso con fork()
 
 Proceso padre
@@ -33,7 +43,7 @@ El cliente no cambia.
 
 El padre:
 - acepta conexiones;
-- crea un hijo;
+- crea un proceso hijo;
 - cierra su copia de client_fd;
 - vuelve inmediatamente a accept().
 
@@ -50,3 +60,172 @@ Además:
 - hay que controlar los errores de fork().              
 
 */
+
+int send_all(int fd_client, const void *buffer, size_t length){
+    // Convertir el buffer a unsigned char
+    const unsigned char *cursor = buffer; // casting implicito
+    size_t total = 0; // control del numero de bytes enviados
+
+    // metemos el bucle porque nadie asegura que se vaya a enviar todos los datos
+    // con un unico send, 
+    while (total < length){
+
+        // ojo con sign, por si devuelve -1 la llamada a send
+        // cursor + total, se intentan enviar los bytes que nos quedan
+        // la primera vez son todos: length
+        ssize_t enviados = send(fd_client, cursor + total, length - total, 0);
+
+        if (enviados < 0){
+            // por si se produce una señal que interrupe en el envio
+            if (errno == EINTR){
+                continue;
+            }
+
+            return -1; 
+        }
+
+        if (enviados == 0){
+            return -1;
+        }
+
+        // Ya sabemos que hemos enviado datos:
+        total += (size_t) enviados;
+
+    }
+
+    return 0;
+}
+
+void atender_client(int client_fd, const char *ip, unsigned int port){
+    char buffer[BUFFER_SIZE];
+
+    printf("\nHilo %lu atendiendo a %s:%u\n", (unsigned long)pthread_self(), ip, port);
+
+    ssize_t received = recv(client_fd, buffer, sizeof(buffer) - 1, 0);
+
+    if (received < 0) {
+        perror("recv");
+        return;
+    }
+
+    if (received == 0) {
+        puts("El cliente cerró la conexión sin enviar datos.");
+        return;
+    }
+
+    buffer[received] = '\0';
+    printf("Datos recibidos de %s:%u: %s\n", ip, port, buffer);
+    const char response[] = "Mensaje recibido correctamente ...";
+
+    if (send_all(client_fd, response, sizeof(response) - 1) < 0) {
+        perror("send_all");
+        return;
+    }
+
+    puts("Respuesta enviada al cliente.");
+}
+
+
+int main(){
+    int sock, sock_client;
+    struct sockaddr_in dir_Servidor;
+    struct sockaddr_in dir_Cliente;
+    int sin_size;
+    const char* mensaje = "Hello World\n";
+
+    // Evitar problemas con buffers duplicados despues de fork().
+    // La salida se escribe inmediatamente
+    setvbuf(stdout, NULL, _IONBF, 0);
+
+    if (configure_sigchld() < 0){
+        perror("configure_sigchld");
+        return EXIT_FAILURE;
+    }
+
+    // Crear el socket
+    sock = socket(AF_INET, SOCK_STREAM, 0);
+    if (sock == -1){
+        perror("Error al crear el socket");
+        exit(1);
+    }    
+  
+
+    // Reutilizar la direccion:
+    int reuse_address = 1;
+
+    if (setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &reuse_address, sizeof(reuse_address)) < 0) {
+        perror("setsockopt");
+        close(sock);
+        return EXIT_FAILURE;
+    }
+
+    memset(&dir_Servidor, 0, sizeof(dir_Servidor));
+
+    // Configurar la direccion del servidor:
+    dir_Servidor.sin_family = AF_INET;      // Ordenacion de bytes de la maquina
+    dir_Servidor.sin_port = htons(PUERTO);  // Ordenacion de bytes  de la red
+    dir_Servidor.sin_addr.s_addr = INADDR_ANY; // Rellenar con la IP
+    memset(&(dir_Servidor.sin_zero), '\0', 8); // Rellenar con ceros el resto de la estructura
+
+
+    // Hacer el bind:
+    if (bind(sock, (struct sockaddr *)&dir_Servidor, sizeof(struct sockaddr))==-1){
+        perror("Error al hacer bind");
+        close(sock);
+        exit(1);
+    }
+   
+
+    // Configurar listen:
+    if (listen(sock, LISTEN_BACKLOG)==-1){
+        perror("Error al configurar listen");
+        exit(1);
+    }
+   
+
+    printf("\nPID del proceso servidor: %ld\n", (long) getpid());
+
+
+    // Bucle infinito para aceptar conexiones de los clientes: accept()
+    // Sin hilos ni fork, podemos aceptar varios clientes pero siempre uno detras de otro.
+    while (1){
+        // Almacenar el tamaño de la direccion del cliente
+        sin_size = sizeof(struct sockaddr_in);
+
+        puts("\nServidor a la espera de clientes ...");
+        
+        if ((sock_client = accept(sock, (struct sockaddr *) &dir_Cliente, &sin_size))== -1){
+            
+            if (errno == EINTR){
+                continue;
+            }
+            
+            perror("Error al acceptar una conexion de un cliente");
+            exit(1);
+        }
+
+
+        // Capturar la direccion  IP y el puerto del cliente:
+        char client_ip[INET_ADDRSTRLEN];
+
+        // dir IP del cliente:
+        if (inet_ntop(AF_INET, &dir_Cliente.sin_addr, client_ip, sizeof(client_ip))==NULL){
+            strcpy(client_ip, "desconocida");
+        }
+
+        // port del cliente
+        unsigned int client_port = (unsigned int) ntohs(dir_Cliente.sin_port);
+
+
+        // El cliente ha sido aceptado:
+        printf("Nueva conexion establecida desde %s:%u\n", client_ip, client_port);
+
+
+        // Se crea un proceso hijo para atender al cliente: 
+        // Devuelve 0 al proceso hijo, y el PID al padre
+        pid_t child_pid = fork();
+
+
+    }
+
+}

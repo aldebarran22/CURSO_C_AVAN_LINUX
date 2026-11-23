@@ -24,6 +24,12 @@ void recorrerBytes(const void* buffer, int n){
     puts("");
 }
 
+void referencia(void *p){
+    // Primero hay que hacer el casting:
+    //printf("\nReferencia: %d", *p);
+    printf("\nReferencia: %d", *(int*)p);
+}
+
 int main(){
     int x = 100;
     casting(&x); // Enviamos un puntero que no es el esperado!
@@ -34,7 +40,7 @@ int main(){
     puts("");
 
     int num = 123;
-    printf("\nNum: %ld %X\n", num, num);
+    printf("\nNum: %d %X\n", num, num);
     recorrerBytes(&num, sizeof(num));
     puts("");
 

@@ -4,6 +4,9 @@
 // Estados, eventos y transiciones
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
 
 // Definicion de estados
 typedef enum {
@@ -80,20 +83,30 @@ state_t handle_error(fms_t * fms, event_t ev){
     }
 }
 
+event_t generarEvento(){
+    return rand() % EVENT_COUNT;
+}
+
 
 int main(){
+    event_t ev;
+
+    srand(time(NULL));
 
     // Definir un arrays con todas las funciones manejadoras
     state_handle_t handlers[STATE_COUNT] = {
         handle_idle, handle_running, handle_error
     };
 
-    // Definir el estado inicial:
-    state_t st = STATE_ERROR;
+    // Definir máquina de estados:
+    fms_t maquina = {
+        .state = STATE_IDLE
+    };
 
-    for (int i = 0 ; i < 5 ; i++){
-        st = handlers[st]();
-    }
+    while (maquina.state != STATE_ERROR){
+        ev = generarEvento();
+        maquina.state = handlers[maquina.state](&maquina, ev);
+    }    
 
     puts("");
     return 0;

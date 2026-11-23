@@ -34,7 +34,7 @@ int main(){
     puts("");
 
     int num = 123;
-    printf("\nNum: %d %X\n", num, num);
+    printf("\nNum: %ld %X\n", num, num);
     recorrerBytes(&num, sizeof(num));
     puts("");
 

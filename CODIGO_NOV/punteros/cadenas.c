@@ -34,6 +34,7 @@ void restarPunteros(){
 
 int main(){
     
-    cadenas_ok();
+    //cadenas_ok();
+    restarPunteros();
     return 0;
 }

@@ -38,6 +38,12 @@ int* meses(){
     return mes;
 }
 
+int* ejemploMAL(){
+    // MAL; devuelvo la dir. de una var. local
+    int x = 100;
+    return &x;
+}
+
 int main(){
     //operadores();
     int numeros[] = {1,2,3,4,5};
@@ -47,8 +53,10 @@ int main(){
     imprimir_ok(numeros, n);
     puts("");
 
+    /* Ojo, accede a un array definido en local. estaba en la pila
     int *mes = meses();
-    print("\n mes 1: %d", mes[0]);
+    printf("\n mes 1: %d", mes[0]);
     puts("");
+    */
     return 0;
 }

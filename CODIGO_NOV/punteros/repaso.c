@@ -32,6 +32,12 @@ void imprimir_ok(int *ptr, int n){
     }
 }
 
+int* meses(){
+    // MAL; devuelvo la dir. de una var. local
+    int mes[] = {31,28,31,30,31,30,31,31,30,31,30,31};
+    return mes;
+}
+
 int main(){
     //operadores();
     int numeros[] = {1,2,3,4,5};
@@ -39,6 +45,10 @@ int main(){
     imprimir(numeros);
     puts("");
     imprimir_ok(numeros, n);
+    puts("");
+
+    int *mes = meses();
+    print("\n mes 1: %d", mes[0]);
     puts("");
     return 0;
 }

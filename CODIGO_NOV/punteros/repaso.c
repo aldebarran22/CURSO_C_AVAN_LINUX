@@ -44,6 +44,10 @@ int* ejemploMAL(){
     return &x;
 }
 
+void modificarVar(int *num){
+    *num *= 2;
+}
+
 int main(){
     //operadores();
     int numeros[] = {1,2,3,4,5};
@@ -58,5 +62,12 @@ int main(){
     printf("\n mes 1: %d", mes[0]);
     puts("");
     */
+
+    // Llamar a la funcion modificarVar:
+    int x = 100;
+    int nums[] = {1,2,3,4,5};
+
+    modificarVar(&x);
+    modificarVar(&nums);
     return 0;
 }

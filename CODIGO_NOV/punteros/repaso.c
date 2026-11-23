@@ -72,8 +72,16 @@ int main(){
     modificarVar(&nums[0]);
     modificarVar(nums+1);
 
-    printf("\nums: %p", nums);
-    printf("\nums: %p", nums+1);
-    printf("\nums: %p", nums+sizeof(int));
+    printf("\nNums: %p", nums);
+    printf("\nNums+1: %p", nums+1);
+    printf("\nNums+sizeof(int): %p", nums+sizeof(int));
+    puts("");
+
+    char s[10] = "hola que tal";
+    printf("\n dir s: %p", s);
+    printf("\n dir s+1: %p", s+1);
+    printf("\n dir s+5: %p", s+5);
+    puts("");
+
     return 0;
 }

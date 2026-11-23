@@ -68,6 +68,12 @@ int main(){
     int nums[] = {1,2,3,4,5};
 
     modificarVar(&x);
-    modificarVar(&nums);
+    modificarVar(nums); // solo modifica la primera
+    modificarVar(&nums[0]);
+    modificarVar(nums+1);
+
+    printf("\nums: %p", nums);
+    printf("\nums: %p", nums+1);
+    printf("\nums: %p", nums+sizeof(int));
     return 0;
 }

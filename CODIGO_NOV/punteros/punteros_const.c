@@ -20,9 +20,31 @@ void punterosCtes(){
     // p = &y; // ERROR!
 }
 
+void punterosACtes(){
+    const char *mensaje = "hola que tal";
+
+    //mensaje[0] = 'X'; // No puedo modificar el contenido
+    const int x = 100;
+    const int y = 200;
+
+    const int* ptr = &x;
+    printf("\n dir ptr: %p", ptr);
+
+    // Puedo cambiar el puntero:
+    ptr = &y;
+    printf("\n dir ptr: %p", ptr);
+
+    // Pero no podemos cambiar el contenido:
+    // *ptr = 300; // ERROR!
+}
+
 
 int main(){
-    punterosCtes();
+    punterosCtes();    
     puts("");
+
+    punterosACtes();    
+    puts("");
+
     return 0;
 }

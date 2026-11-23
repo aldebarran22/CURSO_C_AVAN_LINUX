@@ -5,6 +5,8 @@
 #define SUM 0
 #define DIF 1
 #define MUL 2
+#define DIV 3
+
 
 // Declarar el prototipo:
 int sum(int, int);
@@ -71,6 +73,14 @@ void definirPtoFunc(){
 
     printf("\nResultado con operar: %d", operar(sum, 1,2));
     printf("\nResultado con operar2: %d", operar2(sum, 1,2));
+
+    operacion_t ptr = seleccionarOp(DIV);
+    if (ptr != NULL){
+        printf("\nResultado mul: %d", ptr(23,45));
+
+    } else {
+        puts("\nOperacion no valida");
+    }
 }
 
 

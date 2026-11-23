@@ -7,6 +7,18 @@ int sum(int, int);
 int dif(int, int);
 int mul(int, int);
 
+typedef int (*operacion_t)(int, int);
+
+
+int operar2(operacion_t operacion, int param1, int param2){
+    return operacion(param1, param2);
+}
+
+
+int operar(int (*operacion)(int, int), int param1, int param2){
+    return operacion(param1, param2);
+}
+
 
 void definirPtoFunc(){
     int (*pFuncion)(int, int);
@@ -16,6 +28,8 @@ void definirPtoFunc(){
 
     pFuncion = mul;
     printf("\nMultiplicar: %d", pFuncion(1,2));
+
+    printf("\nResultado: %d", operar(sum, 1,2));
 }
 
 int main(){

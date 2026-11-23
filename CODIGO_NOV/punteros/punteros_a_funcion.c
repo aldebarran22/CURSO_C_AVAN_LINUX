@@ -160,11 +160,14 @@ void ordenarArrBurbuja(){
 
 
 int main(){
-    printf("\nDir de suma: %p", sum);
-    definirPtoFunc();
-    puts("");
+    //printf("\nDir de suma: %p", sum);
+    //definirPtoFunc();
+    //puts("");
 
-    ordenarArrQSort();
+    //ordenarArrQSort();
+    //puts("");
+
+    ordenarArrBurbuja();
     puts("");
     return 0;
 }

@@ -29,7 +29,8 @@ void definirPtoFunc(){
     pFuncion = mul;
     printf("\nMultiplicar: %d", pFuncion(1,2));
 
-    printf("\nResultado: %d", operar(sum, 1,2));
+    printf("\nResultado con operar: %d", operar(sum, 1,2));
+    printf("\nResultado con operar2: %d", operar2(sum, 1,2));
 }
 
 int main(){

@@ -15,6 +15,7 @@ int dif(int, int);
 int mul(int, int);
 
 typedef int (*operacion_t)(int, int);
+typedef int (*criterio_t)(double, double);
 
 
 int (*seleccionarOp2(int op))(int, int){
@@ -92,6 +93,7 @@ void imprimir(double *v, int n){
 
 int criterio(const void* p1, const void* p2){
     // 0 = iguales, -1 = p1 < p2, +1 p1 > p2
+    // Primero el casting del puntero y despues el contenido
     double n1 = *(double *) p1;
     double n2 = *(double *) p2;
 
@@ -113,6 +115,46 @@ void ordenarArrQSort(){
 
     imprimir(nums, n);
     qsort(nums, n, sizeof(double), criterio);
+    imprimir(nums, n);
+}
+
+int ascendente(double p1, double p2){
+    return p1 > p2;
+}
+
+int descendente(double p1, double p2){
+    return p1 < p2;
+}
+
+void ordenacionBurbuja(double *array, int size, criterio_t criterio){
+	// metodo de ordenacion de la burbuja
+	int i;
+	int j;
+	double aux_elem;
+	
+	for (i = 0; i < size - 1; i++){
+	
+		for (j = i+1; j < size; j++){
+		
+			if (criterio(array[i], array[j])){
+			
+				aux_elem = array[i];
+				array[i] = array[j];
+				array[j] = aux_elem;
+			}
+		}
+	}
+}
+
+void ordenarArrBurbuja(){
+    // Declara y ordena un array con qsort
+    double nums[] = {4.55, -1.56, 9.9, 56.1, -0.89};
+    int n = sizeof(nums) / sizeof(double);
+
+    imprimir(nums, n);
+    ordenacionBurbuja(nums, n, ascendente);
+    imprimir(nums, n);
+    ordenacionBurbuja(nums, n, descendente);
     imprimir(nums, n);
 }
 

@@ -85,7 +85,7 @@ void definirPtoFunc(){
 void imprimir(double *v, int n){
     puts("\nArray:");
     for (int i = 0 ; i < n ; i++){
-        printf("%d\t", v[i]);
+        printf("%g\t", v[i]);
     }
     puts("");
 }

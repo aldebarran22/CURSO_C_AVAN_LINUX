@@ -111,7 +111,9 @@ void ordenarArrQSort(){
     double nums[] = {4.55, -1.56, 9.9, 56.1, -0.89};
     int n = sizeof(nums) / sizeof(double);
 
+    imprimir(nums, n);
     qsort(nums, n, sizeof(double), criterio);
+    imprimir(nums, n);
 }
 
 

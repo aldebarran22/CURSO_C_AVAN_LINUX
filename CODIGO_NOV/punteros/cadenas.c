@@ -55,6 +55,6 @@ int main(){
     //cadenas_ok();
     restarPunteros();
     char s[200] = "hola que tal";
-    contarRepeticiones(s, 'a');
+    printf("\nRepeticiones de a: %d", contarRepeticiones(s, 'a'));
     return 0;
 }

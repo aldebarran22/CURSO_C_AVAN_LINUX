@@ -38,12 +38,26 @@ void punterosACtes(){
     // *ptr = 300; // ERROR!
 }
 
+void punterosCtesACtes(){
+    const int x = 25;
+    const int y = 25;
+
+    // Es cte el puntero y el contenido del puntero: SOLO LECTURA!
+    const int* const p = &x;
+
+    // *p =  0; // Error cambiar el contenido
+    // p = &y; // Error cambiar el puntero.
+}
+
 
 int main(){
     punterosCtes();    
     puts("");
 
     punterosACtes();    
+    puts("");
+
+    punterosCtesACtes();    
     puts("");
 
     return 0;

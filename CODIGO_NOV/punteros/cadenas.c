@@ -14,13 +14,23 @@ void cadenas(){
 }
 
 void cadenas_ok(){
-    char ptr[50];
+    char ptr[50]; // reservando en pila
     const char* mensaje = "hola que tal";
 
     strcpy(ptr, mensaje);
     puts(ptr);
 }
 
+
+void restarPunteros(){
+    const char* mensaje = "hola que tal";
+
+    char *ptr = strchr(mensaje, 't');
+    char *ptr2 = strchr(mensaje, 'a');
+
+    printf("\nresta: %p - %p = %d", ptr2, ptr, ptr2-ptr);
+    puts("");
+}
 
 int main(){
     

@@ -13,10 +13,23 @@ void operadores(){
     int *p = &num;
 
     printf("\n dir: %p - %d", p, *p);
-    printf("\n el puntero: %u bytes, int %u bytes ", sizeof(p), sizeof(*p));
+    printf("\n el puntero: %lu bytes, int %lu bytes ", sizeof(p), sizeof(*p));
 }
 
+
+void imprimir(int *ptr){
+    int n = sizeof(ptr) / sizeof(int);
+    for (int i = 0 ; i < n ; i++){
+        printf("\n %d = %d", i, ptr[i]);
+    }
+}
+
+
+
 int main(){
-    operadores();
+    //operadores();
+    int numeros[] = {1,2,3,4,5};
+    int n = sizeof(numeros) / sizeof(int);
+    imprimir(numeros);
     return 0;
 }

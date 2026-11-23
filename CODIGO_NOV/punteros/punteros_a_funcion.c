@@ -1,6 +1,7 @@
 // Punteros a funcion
 
 #include <stdio.h>
+#include <stdlib.h>
 
 #define SUM 0
 #define DIF 1
@@ -60,8 +61,6 @@ int operar(int (*operacion)(int, int), int param1, int param2){
 }
 
 
-
-
 void definirPtoFunc(){
     int (*pFuncion)(int, int);
     
@@ -83,10 +82,26 @@ void definirPtoFunc(){
     }
 }
 
+int criterio(void* p1, void* p2){
+    // 0 = iguales, -1 = p1 < p2, +1 p1 > p2
+    
+}
+
+void ordenarArrQSort(){
+    // Declara y ordena un array con qsort
+    double nums[] = {4.55, -1.56, 9.9, 56.1, -0.89};
+    int n = sizeof(nums) / sizeof(double);
+
+    qsort(nums, n, sizeof(double), criterio);
+}
+
 
 int main(){
     printf("\nDir de suma: %p", sum);
     definirPtoFunc();
+    puts("");
+
+    ordenarArrQSort();
     puts("");
     return 0;
 }

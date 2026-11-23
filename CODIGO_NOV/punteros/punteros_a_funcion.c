@@ -82,9 +82,28 @@ void definirPtoFunc(){
     }
 }
 
-int criterio(void* p1, void* p2){
+void imprimir(double *v, int n){
+    puts("\nArray:");
+    for (int i = 0 ; i < n ; i++){
+        printf("%d\t", v[i]);
+    }
+    puts("");
+}
+
+int criterio(const void* p1, const void* p2){
     // 0 = iguales, -1 = p1 < p2, +1 p1 > p2
-    
+    double n1 = *(double *) p1;
+    double n2 = *(double *) p2;
+
+    if (n1 == n2){
+        return 0;
+
+    } else if (n1 < n2){
+        return -1;
+
+    } else  {
+        return 1;
+    }
 }
 
 void ordenarArrQSort(){

@@ -57,15 +57,15 @@ state_t handle_running(fms_t * fms, event_t ev){
     // logica de este estado ...
     switch (ev){
         case EVENT_STOP:
-            puts("\nEn RUNNING recive EV STOP");
+            puts("\nEn RUNNING recibe EV STOP");
             return STATE_IDLE;
 
         case EVENT_FAIL:
-            puts("\nEn RUNNING recive EV FAIL");
+            puts("\nEn RUNNING recibe EV FAIL");
             return STATE_ERROR;
 
         default:
-            puts("\nEn RUNNING recive EV START");
+            puts("\nEn RUNNING recibe EV START");
             return STATE_RUNNING;
     }
 
@@ -74,7 +74,7 @@ state_t handle_running(fms_t * fms, event_t ev){
 state_t handle_error(fms_t * fms, event_t ev){
     switch (ev){
         case EVENT_START:
-            puts("\nEn ERROR recive EV START");
+            puts("\nEn ERROR recibe EV START");
             return STATE_RUNNING;
 
         default:

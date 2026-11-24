@@ -25,6 +25,19 @@ void inicializar_v2(int **ptr, int n){
 }
 
 
+void inicializar_v3(int **aux, int n){
+    int *ptr;
+
+    // Crear el array e inicializar
+    ptr = (int *) malloc(sizeof(int) * n);
+
+    for (int i = 0 ; i < n ; i++){
+        ptr[i] = rand() % 100;
+    }
+    *aux = ptr;
+}
+
+
 imprimir();
 liberar(); // libera la memoria
 

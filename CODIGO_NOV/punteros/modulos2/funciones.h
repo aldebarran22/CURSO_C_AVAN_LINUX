@@ -15,10 +15,6 @@
     extern int numFunciones;
 
     // Declarar el prototipo:
-    static int sum(int, int);
-    int dif(int, int);
-    int mul(int, int);
-
     int (*seleccionarOp2(int))(int, int);
     operacion_t seleccionarOp(int op);
 

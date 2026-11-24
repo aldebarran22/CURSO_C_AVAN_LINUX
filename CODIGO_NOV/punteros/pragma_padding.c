@@ -1,6 +1,7 @@
 
 #include <stdio.h>
 #include <stdint.h>
+#include <stddef.h>
 
 
 typedef struct {
@@ -20,6 +21,8 @@ typedef struct {
 int main(){
     printf("\nheader_t ocupa: %lu bytes", sizeof(header_t));
     printf("\nheader2_t ocupa: %lu bytes", sizeof(header2_t));
+    printf("\nOffset type: %zu", offsetof(header_t, byte));
+    printf("\nOffset length: %zu", offsetof(header_t, reg));
     puts("");
     return 0;
 }

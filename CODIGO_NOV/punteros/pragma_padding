@@ -1,0 +1,16 @@
+
+#include <stdio.h>
+#include <stdint.h>
+
+typedef struct {
+    uint8_t byte;
+    uint32_t reg;
+} header_t;
+
+
+
+int main(){
+    printf("\nheader_t ocupa: %u", sizeof(header_t));
+    puts("");
+    return 0;
+}

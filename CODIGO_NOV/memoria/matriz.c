@@ -35,8 +35,16 @@ void imprimir(matriz_t mat){
     }
 }
 
-liberar(){
-    
+void liberar(matriz_t *mat){
+
+    for (int i = 0 ; i < mat->filas ; i++){
+        free(mat->m[i]);
+        mat->m[i]=NULL;
+    }
+
+    free(mat->m);
+    mat->m = NULL;
+    mat->filas = mat->cols = 0;
 }
 
 
@@ -47,7 +55,7 @@ int main(){
 
     inicializar(&matriz);
     imprimir(matriz);
-    liberar();
+    liberar(&matriz);
 
     puts("");
     return 0;

@@ -9,7 +9,13 @@ int main(){
 
     srand(time(NULL));
 
-    ptr = (int *) malloc(sizeof(int) * N);
+    //ptr = (int *) malloc(sizeof(int) * N);
+    ptr = (int *) calloc(N, sizeof(int));
+    for (int i = 0 ; i < N ; i++){
+        printf("%d ", ptr[i]);
+    }
+    puts("");
+
     for (int i = 0 ; i < N ; i++){
         ptr[i] = rand() % 100;
     }

@@ -4,7 +4,27 @@
 
 #define N 10
 
-inicializar();  // Crear el array e inicializar
+int *inicializar(size_t n){
+    // Crear el array e inicializar
+    int* ptr = (int *) malloc(sizeof(int) * n);
+
+    for (int i = 0 ; i < n ; i++){
+        ptr[i] = rand() % 100;
+    }
+    return ptr;
+}  
+
+
+void inicializar_v2(int **ptr, int n){
+    // Crear el array e inicializar
+    *ptr = (int *) malloc(sizeof(int) * n);
+
+    for (int i = 0 ; i < n ; i++){
+        (*ptr)[i] = rand() % 100;
+    }
+}
+
+
 imprimir();
 liberar(); // libera la memoria
 
@@ -13,10 +33,8 @@ int main(){
 
     srand(time(NULL));
 
-    ptr = (int *) malloc(sizeof(int) * N);
-    for (int i = 0 ; i < N ; i++){
-        ptr[i] = rand() % 100;
-    }
+    //ptr = inicializar(N);
+    inicializar_v2(&ptr, N);
 
     for (int i = 0 ; i < N ; i++){
         printf("%d ", ptr[i]);

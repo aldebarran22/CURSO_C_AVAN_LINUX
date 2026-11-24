@@ -11,9 +11,29 @@ typedef struct {
 } matriz_t;
 
 
-inicializar();
+void inicializar(matriz_t *mat){
 
-imprimir();
+    mat->m = malloc(mat->filas * sizeof(int *));
+
+    for (int i = 0 ; i < mat->filas ; i++){
+        mat->m[i] = malloc(mat->cols * sizeof(int));
+
+        for (int j = 0 ; j < mat->cols ; j++){
+            mat->m[i][j] = rand() % 100;
+        }
+    }
+}
+
+void imprimir(matriz_t mat){
+
+    for (int  i = 0 ; i < mat.filas ; i++){
+
+        for (int j = 0 ; j < mat.cols ; j++){
+            printf("%02g\t", mat.m[i][j]);
+        }
+        puts("");
+    }
+}
 
 liberar();
 
@@ -23,8 +43,8 @@ int main(){
 
     matriz_t matriz = {N, N*2, NULL};
 
-    inicializar();
-    imprimir();
+    inicializar(&matriz);
+    imprimir(matriz);
     liberar();
 
     puts("");

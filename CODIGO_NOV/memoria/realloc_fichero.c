@@ -31,6 +31,11 @@ void cargaFichero(const char *path){
         if (longitud > 0 && linea[longitud-1]=='\n'){
             linea[--longitud] = '\0';
         }
+
+        if (longitud == 0){
+            continue;
+        }
+
         puts(linea);
 
         // Comprobar si hay que ampliar el bloque:
@@ -38,7 +43,7 @@ void cargaFichero(const char *path){
             // El nuevo tamaño:
             size_t nueva_capacidad = capacidad * 2;
 
-            char **aux = realloc(lineas, nueva_capacidad);
+            char **aux = realloc(lineas, nueva_capacidad * sizeof(char *));
             if (aux == NULL){
                 perror("realloc");
                 break;
@@ -62,8 +67,7 @@ void cargaFichero(const char *path){
     }
 
     fclose(f);
-    printf("\nFilas : %lu", total);
-
+    
     // Imprimir y liberar todas las filas:
     for (int i = 0 ; i < total ; i++){
         puts(lineas[i]);
@@ -71,6 +75,7 @@ void cargaFichero(const char *path){
         free(lineas[i]);
         lineas[i] = NULL;
     }
+    printf("\n\nFilas : %lu", total);
 
     free(lineas);
     lineas = NULL;

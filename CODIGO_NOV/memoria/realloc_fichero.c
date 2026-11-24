@@ -57,11 +57,22 @@ void cargaFichero(const char *path){
         }
 
         memcpy(lineas[total], linea, longitud+1);
-
+        
         total++; // lleva el numero de lineas procesadas del fichero!
     }
 
     fclose(f);
+
+    // Imprimir y liberar todas las filas:
+    for (int i = 0 ; i < total ; i++){
+        puts(lineas[total]);
+
+        free(lineas[total]);
+        lineas[total] = NULL;
+    }
+
+    free(lineas);
+    lineas = NULL;
 }
 
 

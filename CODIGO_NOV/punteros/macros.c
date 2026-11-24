@@ -4,6 +4,7 @@
 
 #define MENOR(A,B) ((A<B)?(A):(B))
 
+// ((a++<b++)?(a++):(b++))
 
 int main(){
     int a = 1, b = 5;
@@ -14,6 +15,8 @@ int main(){
     printf("\nmenor long: %ld", MENOR(12L,7L));
 
     printf("\na = %d, b = %d", a, b);
+    
+    // Cuidado con los efectos colaterales!
     int menor = MENOR(a++,b++);
     printf("\nmenor: %d, a = %d, b = %d", menor, a, b);
 

@@ -38,7 +38,14 @@ void inicializar_v3(int **aux, int n){
 }
 
 
-imprimir();
+void imprimir(int *ptr, int n){
+    for (int i = 0 ; i < n ; i++){
+        printf("%d ", ptr[i]);
+    }
+    puts("");
+}
+
+
 liberar(); // libera la memoria
 
 int main(){
@@ -47,12 +54,10 @@ int main(){
     srand(time(NULL));
 
     //ptr = inicializar(N);
-    inicializar_v2(&ptr, N);
+    //inicializar_v2(&ptr, N);
+    inicializar_v3(&ptr, N);
 
-    for (int i = 0 ; i < N ; i++){
-        printf("%d ", ptr[i]);
-    }
-    puts("");
+    imprimir(ptr, N);
 
     free(ptr);
     ptr = NULL;

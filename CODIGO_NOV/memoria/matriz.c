@@ -29,13 +29,15 @@ void imprimir(matriz_t mat){
     for (int  i = 0 ; i < mat.filas ; i++){
 
         for (int j = 0 ; j < mat.cols ; j++){
-            printf("%02g\t", mat.m[i][j]);
+            printf("%02d\t", mat.m[i][j]);
         }
         puts("");
     }
 }
 
-liberar();
+liberar(){
+    
+}
 
 
 int main(){

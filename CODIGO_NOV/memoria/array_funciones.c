@@ -53,6 +53,7 @@ void liberar(int **ptr){
     *ptr = NULL;
 }
 
+
 int main(){
     int *ptr = NULL;
 
@@ -67,7 +68,7 @@ int main(){
     printf("\nptr: %p", ptr);
     liberar(&ptr);
     printf("\nptr: %p", ptr);
-    
+
     puts("");
     return 0;
 }

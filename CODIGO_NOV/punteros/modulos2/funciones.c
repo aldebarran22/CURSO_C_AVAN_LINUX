@@ -36,6 +36,8 @@ int (*seleccionarOp2(int op))(int, int){
 }
 
 operacion_t seleccionarOp(int op){
+    printf("\nNumFunciones: %d", numFunciones);
+    
     switch (op)
     {
     case SUM:

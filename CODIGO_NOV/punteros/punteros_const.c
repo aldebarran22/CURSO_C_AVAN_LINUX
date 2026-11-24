@@ -20,6 +20,7 @@ void punterosCtes(){
     // p = &y; // ERROR!
 }
 
+
 void punterosACtes(){
     const char *mensaje = "hola que tal";
 
@@ -37,6 +38,7 @@ void punterosACtes(){
     // Pero no podemos cambiar el contenido:
     // *ptr = 300; // ERROR!
 }
+
 
 void punterosCtesACtes(){
     const int x = 25;

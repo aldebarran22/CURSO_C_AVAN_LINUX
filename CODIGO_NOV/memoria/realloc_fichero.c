@@ -13,6 +13,10 @@ void cargaFichero(const char *path){
 
     char linea[1024];
     while (fgets(linea, sizeof(linea), f)){
+        size_t longitud = strlen(linea);
+        if (longitud > 0 && linea[longitud-1]=='\n'){
+            linea[--longitud] = '\0';
+        }
         puts(linea);
     }
 

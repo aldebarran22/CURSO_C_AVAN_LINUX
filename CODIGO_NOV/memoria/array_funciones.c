@@ -50,6 +50,7 @@ void liberar(int **ptr){
     // libera la memoria, free no necesita doble puntero,
     // se pasa como doble puntero para cambiar el puntero de main
     free(*ptr);
+    
     *ptr = NULL;
 }
 
@@ -67,7 +68,8 @@ int main(){
 
     printf("\nptr: %p", ptr);
     liberar(&ptr);
-    printf("\nptr: %p", ptr);
+    printf("\nptr: %p", ptr);   
+
 
     puts("");
     return 0;

@@ -13,6 +13,10 @@ int main(){
     printf("\nmenor double: %f", MENOR(12.7,6.8));
     printf("\nmenor long: %ld", MENOR(12L,7L));
 
+    printf("\na = %d, b = %d", a, b);
+    int menor = MENOR(a++,b++);
+    printf("\nmenor: %d, a = %d, b = %d", menor, a, b);
+
     puts("");
     return 0;
 }

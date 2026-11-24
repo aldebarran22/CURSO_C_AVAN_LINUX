@@ -65,10 +65,10 @@ void cargaFichero(const char *path){
 
     // Imprimir y liberar todas las filas:
     for (int i = 0 ; i < total ; i++){
-        puts(lineas[total]);
+        puts(lineas[i]);
 
-        free(lineas[total]);
-        lineas[total] = NULL;
+        free(lineas[i]);
+        lineas[i] = NULL;
     }
 
     free(lineas);

@@ -46,7 +46,12 @@ void imprimir(int *ptr, int n){
 }
 
 
-liberar(); // libera la memoria
+void liberar(int **ptr){
+    // libera la memoria, free no necesita doble puntero,
+    // se pasa como doble puntero para cambiar el puntero de main
+    free(*ptr);
+    *ptr = NULL;
+}
 
 int main(){
     int *ptr = NULL;
@@ -59,8 +64,10 @@ int main(){
 
     imprimir(ptr, N);
 
-    free(ptr);
-    ptr = NULL;
-
+    printf("\nptr: %p", ptr);
+    liberar(&ptr);
+    printf("\nptr: %p", ptr);
+    
+    puts("");
     return 0;
 }

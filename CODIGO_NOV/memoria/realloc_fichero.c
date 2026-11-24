@@ -31,7 +31,7 @@ void cargaFichero(const char *path){
         if (longitud > 0 && linea[longitud-1]=='\n'){
             linea[--longitud] = '\0';
         }
-        //puts(linea);
+        puts(linea);
 
         // Comprobar si hay que ampliar el bloque:
         if (total == capacidad){
@@ -62,6 +62,7 @@ void cargaFichero(const char *path){
     }
 
     fclose(f);
+    printf("\nFilas : %lu", total);
 
     // Imprimir y liberar todas las filas:
     for (int i = 0 ; i < total ; i++){

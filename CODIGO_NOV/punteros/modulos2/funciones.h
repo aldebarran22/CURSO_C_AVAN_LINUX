@@ -11,8 +11,11 @@
     #define MUL 2
     #define DIV 3
 
+    // Variable externa:
+    extern int numFunciones;
+
     // Declarar el prototipo:
-    int sum(int, int);
+    static int sum(int, int);
     int dif(int, int);
     int mul(int, int);
 

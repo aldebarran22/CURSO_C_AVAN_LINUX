@@ -3,7 +3,10 @@
 #include <stdio.h>
 #include "funciones.h"
 
-int sum(int a, int b){
+// Inicializar la variable externa
+int numFunciones = 3;
+
+static int sum(int a, int b){
     return a+b;
 }
 

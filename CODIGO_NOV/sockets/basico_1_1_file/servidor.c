@@ -20,7 +20,7 @@ Cliente envía                       Servidor recibe
 #include <sys/socket.h>
 #include <unistd.h>
 
-#define SERVER_PORT 8080
+#define PUERTO 8080
 #define BUFFER_SIZE 1024
 
 
@@ -122,5 +122,19 @@ int main(){
     // de big endian a little endian
     printf("\nCliente conectado: %s %u", client_ip, (unsigned int) ntohs(client_address.sin_port));
 
+    if (received_file(client_fd) < 0){
+        perror("received_file");
+        close(server_fd);
+        close(client_fd);
+        return EXIT_FAILURE;
+
+    } else {
+        puts("Fichero recibido correctamente ...");
+    }
+
+    close(server_fd);
+    close(client_fd);
+
+    return EXIT_SUCCESS;
 }
 

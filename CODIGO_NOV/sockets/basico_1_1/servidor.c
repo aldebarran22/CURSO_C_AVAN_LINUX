@@ -11,7 +11,7 @@
 #define PUERTO 8080
 #define BUFFER_SIZE 1024
 
-int sendall(int client_fd, const void *buffer, size_t length){
+int send_all(int client_fd, const void *buffer, size_t length){
     // Para recorrer los bytes:
     const unsigned char* cursor = buffer; // casting implicito
     size_t total = 0;

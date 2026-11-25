@@ -9,8 +9,8 @@ después pasar a la siguiente:
 
 COMPILACION:
 gcc -std=c11 -Wall -Wextra -Wpedantic \
--g3 -O0 -fno-omit-frame-pointer errores_memoria2.c \
--o errores_memoria2
+-g3 -O0 -fno-omit-frame-pointer detectar_errores.c \
+-o detectar_errores
 
 parametros:
 -std=c11
@@ -43,6 +43,14 @@ valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes \
 gcc -std=c11 -g \
 -fsanitize=address,undefined \
 -fno-omit-frame-pointer \
-errores_memoria2.c -o errores_memoria2
+detectar_errores.c -o detectar_errores
 
 */
+
+
+
+
+int main(){
+
+    return 0;
+}

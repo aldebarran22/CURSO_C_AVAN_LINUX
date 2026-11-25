@@ -163,6 +163,21 @@ static void test_fallo_realloc(){
 
     // Ampliacion del bloque con realloc, una cantidad muy grande
     // OJO asignar el resultado de realloc a otro puntero auxiliar
+    /*
+    int *aux = realloc(numeros, 100000000000ULL * sizeof(int));
+    if (aux == NULL){
+        free(numeros);
+        numeros = NULL;
+        perror("Fallo con realloc");
+        return;
+
+    } else {
+        numeros = aux;
+    }
+    
+    */
+
+
     numeros = realloc(numeros, 100000000000ULL * sizeof(int));
     if (numeros == NULL){
         perror("Fallo con realloc");

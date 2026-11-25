@@ -190,7 +190,9 @@ static void test_fallo_realloc(){
 }
 */
 
+/*
 static void test_overflow_string(void){
+    // valgrind (invalid write) y -fsanitize=address
     char *s = malloc(sizeof(char) * 5);
 
     if (s == NULL){
@@ -203,6 +205,13 @@ static void test_overflow_string(void){
 
     free(s);
     s = NULL;
+}*/
+
+static void test_free_var_en_stack(){
+    int numero = 100;
+
+    int *p = &numero;
+    free(p);
 }
 
 int main(){
@@ -218,7 +227,8 @@ int main(){
     //test_laguna_memoria();
     //test_fallo_realloc();
 
-    test_overflow_string();
+    //test_overflow_string();
+    test_free_var_en_stack();
 
 
     return 0;

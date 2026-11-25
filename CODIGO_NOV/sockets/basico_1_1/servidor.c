@@ -11,6 +11,36 @@
 #define PUERTO 8080
 #define BUFFER_SIZE 1024
 
+int sendall(int client_fd, const void *buffer, size_t length){
+    // Para recorrer los bytes:
+    const unsigned char* cursor = buffer; // casting implicito
+    size_t total = 0;
+
+    while (total < length){
+
+        // Devuelve cuantos bytes realmente se han enviado
+        ssize_t enviados = send(client_fd, cursor + total, length-total, 0 );
+
+        if (enviados < 0){
+            // Si se ha producido una señal que corte el envio:
+            if (errno == EINTR){
+                // Reintenta enviar de nuevo
+                continue;
+            }
+
+            return -1;
+        } 
+
+        if (enviados == 0){
+            return -1;
+        }
+
+        // Hemos conseguido enviar:
+        total += (size_t) enviados;
+    }
+    return 0;
+}
+
 
 int main(){
     int server_fd = -1;
@@ -111,5 +141,4 @@ int main(){
             return EXIT_FAILURE;
         }
     }
-
 }

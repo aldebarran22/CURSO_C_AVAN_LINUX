@@ -6,6 +6,8 @@
 #include <stdlib.h>
 #include <sys/socket.h>
 
+#define HOST "www.microsoft.com"
+
 static void print_hostent(
     const struct hostent *host)
 {
@@ -95,7 +97,7 @@ static void print_hostent(
 int main(int argc, char *argv[])
 {
    
-    const char *host_name = "www.google.com";
+    const char *host_name = HOST;
 
     struct hostent *host =
         gethostbyname(host_name);

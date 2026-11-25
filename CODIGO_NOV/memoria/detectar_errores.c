@@ -45,6 +45,11 @@ gcc -std=c11 -g \
 -fno-omit-frame-pointer \
 detectar_errores.c -o detectar_errores
 
+
+gcc -std=c11 -g \
+-fsanitize=leak \
+-fno-omit-frame-pointer \
+detectar_errores.c -o detectar_errores
 */
 
 /*
@@ -142,7 +147,7 @@ static void test_overflow_en_stack(){
 }*/
 
 
-/*
+
 static void test_laguna_memoria(void){
     // valgrind y -fsanitize=address
     int* numeros = calloc(sizeof(int), 10);
@@ -151,7 +156,7 @@ static void test_laguna_memoria(void){
         perror("calloc");
         return;
     }
-}*/
+}
 
 /*
 static void test_fallo_realloc(){
@@ -215,6 +220,7 @@ static void test_free_var_en_stack(){
     free(p);
 }*/
 
+/*
 static void test_acceso_no_init(void){
     // valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./detectar_errores
     int* numeros = malloc(sizeof(int)* 10);
@@ -228,7 +234,7 @@ static void test_acceso_no_init(void){
 
     printf("\nPos: 1 %d", numeros[1]);
 
-}
+}*/
 
 int main(){
 
@@ -240,13 +246,13 @@ int main(){
     //test_underflow_en_heap();
     //test_overflow_en_stack();
 
-    //test_laguna_memoria();
+    test_laguna_memoria();
     //test_fallo_realloc();
 
     //test_overflow_string();
     //test_free_var_en_stack();
 
-    test_acceso_no_init();
+    //test_acceso_no_init();
 
     return 0;
 }

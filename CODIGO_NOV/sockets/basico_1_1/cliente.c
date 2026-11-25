@@ -71,13 +71,39 @@ int main(){
         return EXIT_FAILURE;
     }
 
-    if (connect(socket_fd, &server_address, sizeof(server_address)) < 0){
+    if (connect(socket_fd, (const struct sockaddr *) &server_address, sizeof(server_address)) < 0){
         perror("connect");
         close(socket_fd);
         return EXIT_FAILURE;
     }
 
     printf("\nConectado con el servidor: %s %d", SERVER_IP, PUERTO);
+    const char mensaje[] = "mensaje desde el cliente";
 
+    if (send_all(socket_fd, mensaje, sizeof(mensaje)-1) < 0){
+        perror("send_all");
+        close(socket_fd);
+        return EXIT_FAILURE;
+    }
+
+    puts("\nSe ha enviado un mensaje al servidor");
+
+    char respuesta[BUFFER_SIZE];
+    ssize_t received = recv(socket_fd, respuesta, sizeof(respuesta)-1, 0);
+    if (received < 0){
+        perror("recv");
+        close(socket_fd);
+        return EXIT_FAILURE;
+
+    } else if (received == 0){
+        puts("\nSe ha cerrado la conexion");
+        close(socket_fd);
+        return EXIT_FAILURE;
+
+    } 
+    respuesta[received] = '\0';
+    printf("\nMensaje recibido del servidor: %s", respuesta);        
     
+    close(socket_fd);
+    return EXIT_SUCCESS;
 }

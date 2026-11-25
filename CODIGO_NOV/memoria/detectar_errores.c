@@ -207,11 +207,26 @@ static void test_overflow_string(void){
     s = NULL;
 }*/
 
+/*
 static void test_free_var_en_stack(){
     int numero = 100;
 
     int *p = &numero;
     free(p);
+}*/
+
+static void test_acceso_no_init(void){
+    int* numeros = malloc(sizeof(int)* 10);
+
+    if (numeros == NULL){
+        perror("malloc");
+        return;
+    }
+
+    numeros[0] = 999;
+
+    printf("\nPos: 1 %d", numeros[1]);
+
 }
 
 int main(){
@@ -228,8 +243,9 @@ int main(){
     //test_fallo_realloc();
 
     //test_overflow_string();
-    test_free_var_en_stack();
+    //test_free_var_en_stack();
 
+    test_acceso_no_init();
 
     return 0;
 }

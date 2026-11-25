@@ -92,6 +92,7 @@ static void test_acceso_dir_local(){
 
 /*
 static void test_overflow_en_heap(){
+    // Se detecta con gcc -fsanitize=address
     int* numeros = calloc(sizeof(int), 10);
 
     if (numeros == NULL){
@@ -108,7 +109,9 @@ static void test_overflow_en_heap(){
     numeros = NULL;
 }*/
 
+/*
 static void test_underflow_en_heap(){
+    // Se detecta con gcc -fsanitize=address
     int* numeros = calloc(sizeof(int), 10);
 
     if (numeros == NULL){
@@ -117,12 +120,19 @@ static void test_underflow_en_heap(){
     }
 
     for (int i = 0 ; i < 10 ; i++){
-        printf("\ndir: %p - pos: %d", (numeros+i), i);
+        printf("\ndir: %p - pos: %d", (void*)(numeros+i), i);
     }
 
     printf("\nPosicion -1: %d", numeros[-1]);
     free(numeros);
     numeros = NULL;
+}
+*/
+
+static void test_overflow_en_stack(){
+    int numeros[] = {1,2,3,4,5};
+
+    printf("\nPosicion 10: %d", numeros[10]);
 }
 
 int main(){
@@ -132,7 +142,9 @@ int main(){
     //test_acceso_dir_local();
 
     //test_overflow_en_heap();
-    test_underflow_en_heap();
-    
+    //test_underflow_en_heap();
+    test_overflow_en_stack();
+
+
     return 0;
 }

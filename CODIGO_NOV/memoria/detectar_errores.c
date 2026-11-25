@@ -62,9 +62,23 @@ static void test_doble_free(void){
     free(numeros);
 }
 
+static void test_acceso_despues_de_free(void){
+    int* numeros = malloc(sizeof(int) * 10);
+
+    if (numeros == NULL){
+        perror("malloc");
+        return;
+    }
+
+    free(numeros);
+    printf("\nnumeros: %d", *numeros);
+}
+
 
 int main(){
 
-    test_doble_free();
+    //test_doble_free();
+    test_acceso_despues_de_free();
+
     return 0;
 }

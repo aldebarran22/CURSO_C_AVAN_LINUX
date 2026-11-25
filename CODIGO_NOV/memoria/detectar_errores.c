@@ -37,7 +37,7 @@ parametros:
 
 VALGRIND:
 valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes \
-./errores_memoria2
+./detectar_errores
 
 
 gcc -std=c11 -g \
@@ -90,6 +90,7 @@ static void test_acceso_dir_local(){
 }
 */
 
+/*
 static void test_overflow_en_heap(){
     int* numeros = calloc(sizeof(int), 10);
 
@@ -98,7 +99,28 @@ static void test_overflow_en_heap(){
         return;
     }
 
+    for (int i = 0 ; i < 10 ; i++){
+        printf("\ndir: %p - pos: %d", (numeros+i), i);
+    }
+
     printf("\nPosicion 15: %d", numeros[15]);
+    free(numeros);
+    numeros = NULL;
+}*/
+
+static void test_underflow_en_heap(){
+    int* numeros = calloc(sizeof(int), 10);
+
+    if (numeros == NULL){
+        perror("calloc");
+        return;
+    }
+
+    for (int i = 0 ; i < 10 ; i++){
+        printf("\ndir: %p - pos: %d", (numeros+i), i);
+    }
+
+    printf("\nPosicion -1: %d", numeros[-1]);
     free(numeros);
     numeros = NULL;
 }
@@ -109,7 +131,8 @@ int main(){
     //test_acceso_despues_de_free();
     //test_acceso_dir_local();
 
-    test_overflow_en_heap();
-
+    //test_overflow_en_heap();
+    test_underflow_en_heap();
+    
     return 0;
 }

@@ -107,7 +107,15 @@ int received_file(int client_fd){
     // Recibir el nombre
     // Recibir num bytes del fichero
     // El contenido del fichero
+    char file_name[BUFFER_SIZE];
 
+    if (receive_file_name(client_fd, file_name, sizeof(file_name)) < 0){
+        return -1;
+    }
+
+    printf("\nNombre del fichero: %s", file_name);
+
+    return 1;
 }
 
 

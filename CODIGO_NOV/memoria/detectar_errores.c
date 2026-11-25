@@ -57,6 +57,8 @@ static void test_doble_free(void){
     }
 
     free(numeros);
+    // numeros = NULL; // Buena práctica, poner los punteros a NULL despues de liberar
+    // free sobre un puntero a null no tiene efecto ni error!
     free(numeros);
 }
 

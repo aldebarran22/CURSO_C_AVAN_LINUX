@@ -51,6 +51,66 @@ static int recv_all(int socket_fd, void* buffer, size_t length){
 
 }
 
+static int receive_file_name(int socket_fd, char* file_name, int file_name_size){
+
+    uint32_t network_name_length;
+
+    if (file_name == NULL || file_name_size == 0){
+        fprintf(stderr, "Nombre del fichero o size vacios ...");
+        return -1;
+    }
+
+    // Primero recibimos el size del nombre del fichero:
+    int resul = recv_all(socket_fd, &network_name_length, sizeof(network_name_length));
+    if (resul < 0){
+        perror("recv longitud del nombre");
+        return -1;
+    }
+
+    if (resul == 0){
+        fprintf(stderr, "\nProbablemente el cliente cerro la conexion antes de enviar el size del nombre\n");
+        return -1;
+    }
+
+    // Se ha recibido la longitud del nombre y hay que ordenarlo segun los bytes de la maquina
+    uint32_t name_length = ntohl((uint32_t) network_name_length);
+
+
+    if (name_length == 0){
+        fprintf(stderr, "Se ha recibido una longitud vacia");
+        return -1;
+    }
+
+    // Si la longitud esta bien, tenemos que recibir el nombre del fichero:
+   
+
+    resul = recv_all(socket_fd, file_name, (size_t) name_length);
+    if (resul < 0){
+        perror("recv nombre del fichero");
+        return -1;
+    }
+
+    if (resul == 0){
+        fprintf(stderr, "\nProbablemente el cliente cerro la conexion antes de enviar el path del fichero\n");
+        return -1;
+    } 
+
+    // Tenemos el nombre del fichero:
+    file_name[name_length] = '\0';
+
+    return 0;
+}
+
+
+int received_file(int client_fd){
+    // Recibir el num char del nombre
+    // Recibir el nombre
+    // Recibir num bytes del fichero
+    // El contenido del fichero
+
+}
+
+
 int main(){
     int server_fd = -1;
     int client_fd = -1;

@@ -76,7 +76,9 @@ static void test_acceso_despues_de_free(void){
     printf("\nnumeros: %d", *numeros);
 }*/
 
+/*
 static int* getPunteroLocal(){
+    // Se define en la pila, al terminar la funcion se destruye la var.local
     int numero = 0;
     return &numero;
 }
@@ -86,13 +88,28 @@ static void test_acceso_dir_local(){
 
      printf("\nnumero: %d", *ptr);
 }
+*/
 
+static void test_overflow_en_heap(){
+    int* numeros = calloc(sizeof(int), 10);
+
+    if (numeros == NULL){
+        perror("calloc");
+        return;
+    }
+
+    printf("\nPosicion 15: %d", numeros[15]);
+    free(numeros);
+    numeros = NULL;
+}
 
 int main(){
 
     //test_doble_free();
     //test_acceso_despues_de_free();
-    test_acceso_dir_local();
+    //test_acceso_dir_local();
+
+    test_overflow_en_heap();
 
     return 0;
 }

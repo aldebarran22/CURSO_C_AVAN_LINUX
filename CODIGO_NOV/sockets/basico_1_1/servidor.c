@@ -83,5 +83,33 @@ int main(){
     // de big endian a little endian
     printf("\nCliente conectado: %s %u", client_ip, (unsigned int) ntohs(client_address.sin_port));
 
+    char buffer[BUFFER_SIZE];
+
+    ssize_t received = recv(client_fd, buffer, sizeof(buffer)-1, 0);
+
+    if (received < 0){
+        // Se ha producido un error:
+        perror("recv");
+        close(server_fd);
+        close(client_fd);
+        return EXIT_FAILURE;
+
+    } else if (received == 0){
+        // El cliente ha cerrado la conexion sin enviar datos
+        puts("El cliente cerro la conexion");
+
+    } else {
+        // Se han recibido datos:
+        buffer[received]='\0';
+        printf("\nSe ha recibido el mensaje: %s", buffer);
+
+        const char mensaje[] = "Mensaje recibido";
+        if (send_all(client_fd, mensaje, sizeof(mensaje)-1) < 0){
+            perror("sendall");
+            close(client_fd);
+            close(server_fd);
+            return EXIT_FAILURE;
+        }
+    }
 
 }

@@ -153,7 +153,9 @@ static void test_laguna_memoria(void){
     }
 }*/
 
+/*
 static void test_fallo_realloc(){
+    // valgrind y -fsanitize=address
     int* numeros = malloc(sizeof(int)* 10);
 
     if (numeros == NULL){
@@ -163,19 +165,18 @@ static void test_fallo_realloc(){
 
     // Ampliacion del bloque con realloc, una cantidad muy grande
     // OJO asignar el resultado de realloc a otro puntero auxiliar
-    /*
-    int *aux = realloc(numeros, 100000000000ULL * sizeof(int));
-    if (aux == NULL){
-        free(numeros);
-        numeros = NULL;
-        perror("Fallo con realloc");
-        return;
-
-    } else {
-        numeros = aux;
-    }
     
-    */
+    //int *aux = realloc(numeros, 100000000000ULL * sizeof(int));
+    //if (aux == NULL){
+    //    free(numeros);
+    //    numeros = NULL;
+    //    perror("Fallo con realloc");
+    //    return;
+
+    //} else {
+    //    numeros = aux;
+    //}    
+    
 
 
     numeros = realloc(numeros, 100000000000ULL * sizeof(int));
@@ -186,6 +187,22 @@ static void test_fallo_realloc(){
 
     free(numeros);
     numeros = NULL;
+}
+*/
+
+static void test_overflow_string(void){
+    char *s = malloc(sizeof(char) * 5);
+
+    if (s == NULL){
+        perror("Fallo con malloc");
+        return;
+    }
+
+    strcpy(s, "Hola que tal");
+    puts(s);
+
+    free(s);
+    s = NULL;
 }
 
 int main(){
@@ -199,7 +216,9 @@ int main(){
     //test_overflow_en_stack();
 
     //test_laguna_memoria();
-    test_fallo_realloc();
+    //test_fallo_realloc();
+
+    test_overflow_string();
 
 
     return 0;

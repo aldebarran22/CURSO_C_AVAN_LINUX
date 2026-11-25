@@ -216,6 +216,7 @@ static void test_free_var_en_stack(){
 }*/
 
 static void test_acceso_no_init(void){
+    // valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./detectar_errores
     int* numeros = malloc(sizeof(int)* 10);
 
     if (numeros == NULL){

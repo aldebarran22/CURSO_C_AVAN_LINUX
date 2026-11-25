@@ -47,10 +47,22 @@ detectar_errores.c -o detectar_errores
 
 */
 
+static void test_doble_free(void){
+    // Liberar dos veces el mismo puntero:
+    int* numeros = malloc(sizeof(int) * 10);
 
+    if (numeros == NULL){
+        perror("malloc");
+        return;
+    }
+
+    free(numeros);
+    free(numeros);
+}
 
 
 int main(){
 
+    test_doble_free();
     return 0;
 }

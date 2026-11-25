@@ -129,14 +129,27 @@ static void test_underflow_en_heap(){
 }
 */
 
+/*
 static void test_overflow_en_stack(){
+    // Se detecta con gcc -fsanitize=address
     int numeros[] = {1,2,3,4,5};
 
     for (int i = 0 ; i < 5 ; i++){
         printf("\ndir: %p - pos: %d", (void*)(numeros+i), i);
     }
 
-    printf("\nPosicion 10: %d", numeros[10]);
+    printf("\nPosicion 5: %d", numeros[5]);
+}*/
+
+
+static void test_laguna_memoria(void){
+    // valgrind
+    int* numeros = calloc(sizeof(int), 10);
+
+    if (numeros == NULL){
+        perror("calloc");
+        return;
+    }
 }
 
 int main(){
@@ -147,7 +160,9 @@ int main(){
 
     //test_overflow_en_heap();
     //test_underflow_en_heap();
-    test_overflow_en_stack();
+    //test_overflow_en_stack();
+
+    test_laguna_memoria();
 
 
     return 0;

@@ -132,6 +132,10 @@ static void test_underflow_en_heap(){
 static void test_overflow_en_stack(){
     int numeros[] = {1,2,3,4,5};
 
+    for (int i = 0 ; i < 5 ; i++){
+        printf("\ndir: %p - pos: %d", (void*)(numeros+i), i);
+    }
+
     printf("\nPosicion 10: %d", numeros[10]);
 }
 

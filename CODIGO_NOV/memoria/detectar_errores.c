@@ -63,6 +63,7 @@ static void test_doble_free(void){
     free(numeros);
 }*/
 
+/*
 static void test_acceso_despues_de_free(void){
     int* numeros = calloc(sizeof(int), 10);
 
@@ -73,13 +74,25 @@ static void test_acceso_despues_de_free(void){
 
     free(numeros);
     printf("\nnumeros: %d", *numeros);
+}*/
+
+static int* getPunteroLocal(){
+    int numero = 0;
+    return &numero;
+}
+
+static void test_acceso_dir_local(){
+    int *ptr = getPunteroLocal();
+
+     printf("\nnumero: %d", *ptr);
 }
 
 
 int main(){
 
     //test_doble_free();
-    test_acceso_despues_de_free();
+    //test_acceso_despues_de_free();
+    test_acceso_dir_local();
 
     return 0;
 }

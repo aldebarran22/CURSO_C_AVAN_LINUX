@@ -142,14 +142,35 @@ static void test_overflow_en_stack(){
 }*/
 
 
+/*
 static void test_laguna_memoria(void){
-    // valgrind
+    // valgrind y -fsanitize=address
     int* numeros = calloc(sizeof(int), 10);
 
     if (numeros == NULL){
         perror("calloc");
         return;
     }
+}*/
+
+static void test_fallo_realloc(){
+    int* numeros = malloc(sizeof(int)* 10);
+
+    if (numeros == NULL){
+        perror("malloc");
+        return;
+    }
+
+    // Ampliacion del bloque con realloc, una cantidad muy grande
+    // OJO asignar el resultado de realloc a otro puntero auxiliar
+    numeros = realloc(numeros, 1000000000ULL * sizeof(int));
+    if (numeros == NULL){
+        perror("Fallo con realloc");
+        return;
+    }
+
+    free(numeros);
+    numeros = NULL;
 }
 
 int main(){
@@ -162,7 +183,8 @@ int main(){
     //test_underflow_en_heap();
     //test_overflow_en_stack();
 
-    test_laguna_memoria();
+    //test_laguna_memoria();
+    test_fallo_realloc();
 
 
     return 0;

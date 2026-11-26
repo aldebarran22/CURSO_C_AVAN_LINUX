@@ -4,7 +4,7 @@
 
 gcc -std=c11 -Wall -Wextra -Wpedantic \
     -fsanitize=thread \
-    condicion_carrera.c -o condicion_carrera -pthread
+    hilos_mutex_RC.c -o hilos_mutex_RC -pthread
 
 */
 

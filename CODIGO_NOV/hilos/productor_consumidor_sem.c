@@ -10,7 +10,7 @@
 #define NUM_PROD 1
 #define NUM_CON 1
 #define TAM_BUFFER 6
-#define NUM_MUESTRAS 30
+#define NUM_MUESTRAS 10
 
 typedef struct {
     char buffer[TAM_BUFFER+1];
@@ -32,7 +32,7 @@ void *productor(void *p){
     for (int i = 0 ; i < d->num_muestras_p ; i++){
         // generar un char aleatorio
         c = 65 + rand() % 26;
-        printf("\nP: %ld genera %c", pthread_self(), c);
+        printf("\nP: %ld genera %c\n", pthread_self(), c);
 
         // comprobar si hay huecos
         sem_wait(&d->sem_huecos);
@@ -51,7 +51,7 @@ void *productor(void *p){
         // avisar que hay un item nuevo
         sem_post(&d->sem_items);
 
-        sleep(rand() % 3 + 1);
+        sleep(rand() % 2 + 1);
     }
     return NULL;
 }
@@ -77,12 +77,12 @@ void *consumidor(void *p){
         pthread_mutex_unlock(&d->mutex);
 
         // procesar el item:
-        printf("\nC: %ld procesa %c", pthread_self(), c);
+        printf("\nC: %ld procesa %c\n", pthread_self(), c);
 
         // avisar que hay un hueco nuevo
         sem_post(&d->sem_huecos);
 
-        sleep(rand() % 2 + 1);
+        sleep(rand() % 4 + 1);
     }
 
     return NULL;

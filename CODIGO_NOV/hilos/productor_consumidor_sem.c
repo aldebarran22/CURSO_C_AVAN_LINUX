@@ -32,13 +32,14 @@ void *productor(void *p){
     for (int i = 0 ; i < d->num_muestras_p ; i++){
         // generar un char aleatorio
         c = 65 + rand() % 26;
-        printf("\nP: %ld genera %c\n", pthread_self(), c);
+        //printf("\nP: %ld genera %c\n", pthread_self(), c);
 
         // comprobar si hay huecos
         sem_wait(&d->sem_huecos);
 
         // comprobar el mutex
         pthread_mutex_lock(&d->mutex);
+        printf("\nP: %ld genera %c\n", pthread_self(), c);
 
         // colocar el char en el buffer, incrementar indice
         d->buffer[d->index_p] = c;
@@ -72,12 +73,14 @@ void *consumidor(void *p){
         c = d->buffer[d->index_c];
         d->buffer[d->index_c] = '-';
         d->index_c = (d->index_c + 1) % TAM_BUFFER;
+
+        printf("\nC: %ld procesa %c\n", pthread_self(), c);
         
         // liberar el mutex
         pthread_mutex_unlock(&d->mutex);
 
         // procesar el item:
-        printf("\nC: %ld procesa %c\n", pthread_self(), c);
+        //printf("\nC: %ld procesa %c\n", pthread_self(), c);
 
         // avisar que hay un hueco nuevo
         sem_post(&d->sem_huecos);

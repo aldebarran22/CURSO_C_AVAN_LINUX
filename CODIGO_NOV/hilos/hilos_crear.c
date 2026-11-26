@@ -60,6 +60,8 @@ int main(){
     pthread_join(idM, 0);
     pthread_join(idA, 0);
 
-     puts("\nTermina main ...");
+    printf("\nResultado aleatorios: %d", d.resul);
+
+    puts("\nTermina main ...");
     return EXIT_SUCCESS;
 }

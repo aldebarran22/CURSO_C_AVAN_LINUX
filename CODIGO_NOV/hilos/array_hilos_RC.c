@@ -1,5 +1,13 @@
 // Definir array de hilos y generar una condicion de carrera
 
+/*
+Compilar:
+gcc -std=c11 -Wall -Wextra -Wpedantic
+-fsanitize=thread
+array_hilos_RC.c -o array_hilos_RC
+
+*/
+
 
 #include <pthread.h>
 #include <stdio.h>

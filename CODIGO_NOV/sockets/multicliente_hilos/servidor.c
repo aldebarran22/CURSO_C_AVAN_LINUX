@@ -7,9 +7,18 @@
 #include <string.h>
 #include <sys/socket.h>
 #include <unistd.h>
+#include <threads.h>
 
 #define PUERTO 8080
 #define BUFFER_SIZE 1024
+#define BACKLOG 4
+
+typedef struct {
+    int client_fd;                      // El socket del cliente
+    char client_ip[INET_ADDRSTRLEN];    // la ip del cliente
+    unsigned int client_port;           // El puerto del cliente
+} client_data_t;
+
 
 int send_all(int client_fd, const void *buffer, size_t length){
     // Para recorrer los bytes:
@@ -83,7 +92,7 @@ int main(){
         return EXIT_FAILURE;
     }
 
-    if (listen(server_fd, 1) < 0){
+    if (listen(server_fd, BACKLOG) < 0){
         perror("listen");
         close(server_fd);
         return EXIT_FAILURE;
@@ -91,54 +100,70 @@ int main(){
 
     printf("\nSocket escuchando en el puerto: %d", PUERTO);
 
-    // Direccion del cliente:
-    struct sockaddr_in client_address;
-    socklen_t len_dir_cliente = sizeof(client_address);
+    // Bucle principal del servidor para atender multiples clientes:
+    while (1){
+        puts("\nServidor a la espera de clientes");
 
-    client_fd = accept(server_fd, (struct sockaddr *) &client_address, &len_dir_cliente);
-    if (client_fd < 1){
-        perror("accept");
-        close(server_fd);
-        return EXIT_FAILURE;
-    }
+        // Direccion del cliente:
+        struct sockaddr_in client_address;
+        socklen_t len_dir_cliente = sizeof(client_address);
 
-    // Convertir la dir IP del cliente de binario a texto:
-    char client_ip[INET_ADDRSTRLEN];
+        // Aceptar a un nuevo cliente:
+        client_fd = accept(server_fd, (struct sockaddr *) &client_address, &len_dir_cliente);        
+        if (client_fd < 1){
 
-    if (inet_ntop(AF_INET, &client_address.sin_addr, client_ip, sizeof(client_ip)) == NULL){
-        strcpy(client_ip, "IP desconocida");
-    }
+            if (errno == EINTR){
+                continue;
+            }
 
-    // El puerto viene en formato de la red y se convierte al host:
-    // de big endian a little endian
-    printf("\nCliente conectado: %s %u", client_ip, (unsigned int) ntohs(client_address.sin_port));
+            perror("accept");
+            break;            
+        }
 
-    char buffer[BUFFER_SIZE];
+        // Reservar memoria para el cliente conectado:
 
-    ssize_t received = recv(client_fd, buffer, sizeof(buffer)-1, 0);
 
-    if (received < 0){
-        // Se ha producido un error:
-        perror("recv");
-        close(server_fd);
-        close(client_fd);
-        return EXIT_FAILURE;
 
-    } else if (received == 0){
-        // El cliente ha cerrado la conexion sin enviar datos
-        puts("El cliente cerro la conexion");
+        // Convertir la dir IP del cliente de binario a texto:
+        char client_ip[INET_ADDRSTRLEN];
 
-    } else {
-        // Se han recibido datos:
-        buffer[received]='\0';
-        printf("\nSe ha recibido el mensaje: %s", buffer);
+        if (inet_ntop(AF_INET, &client_address.sin_addr, client_ip, sizeof(client_ip)) == NULL){
+            strcpy(client_ip, "IP desconocida");
+        }
 
-        const char mensaje[] = "Mensaje recibido";
-        if (send_all(client_fd, mensaje, sizeof(mensaje)-1) < 0){
-            perror("sendall");
-            close(client_fd);
+        // El puerto viene en formato de la red y se convierte al host:
+        // de big endian a little endian
+        printf("\nCliente conectado: %s %u", client_ip, (unsigned int) ntohs(client_address.sin_port));
+
+        char buffer[BUFFER_SIZE];
+
+        ssize_t received = recv(client_fd, buffer, sizeof(buffer)-1, 0);
+
+        if (received < 0){
+            // Se ha producido un error:
+            perror("recv");
             close(server_fd);
+            close(client_fd);
             return EXIT_FAILURE;
+
+        } else if (received == 0){
+            // El cliente ha cerrado la conexion sin enviar datos
+            puts("El cliente cerro la conexion");
+
+        } else {
+            // Se han recibido datos:
+            buffer[received]='\0';
+            printf("\nSe ha recibido el mensaje: %s", buffer);
+
+            const char mensaje[] = "Mensaje recibido";
+            if (send_all(client_fd, mensaje, sizeof(mensaje)-1) < 0){
+                perror("sendall");
+                close(client_fd);
+                close(server_fd);
+                return EXIT_FAILURE;
+            }
         }
     }
+    
+    close(server_fd);
 }

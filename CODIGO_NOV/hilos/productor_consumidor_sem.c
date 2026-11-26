@@ -39,12 +39,11 @@ void *productor(void *p){
 
         // comprobar el mutex
         pthread_mutex_lock(&d->mutex);
-        printf("\nP: %ld genera %c\n", pthread_self(), c);
-
+        
         // colocar el char en el buffer, incrementar indice
         d->buffer[d->index_p] = c;
         d->index_p = (d->index_p + 1) % TAM_BUFFER;
-        puts(d->buffer);
+        printf("\nPRODUCTOR: %ld GENERA %c BUFFER: %s\n", pthread_self(), c, d->buffer);
 
         // liberar el mutex
         pthread_mutex_unlock(&d->mutex);
@@ -75,8 +74,7 @@ void *consumidor(void *p){
         d->buffer[d->index_c] = '-';
         d->index_c = (d->index_c + 1) % TAM_BUFFER;
 
-        puts(d->buffer);
-        printf("\nC: %ld procesa %c\n", pthread_self(), c);
+        printf("\nCONSUMIDOR: %ld PROCESA %c BUFFER: %s\n", pthread_self(), c, d->buffer);
         
         // liberar el mutex
         pthread_mutex_unlock(&d->mutex);

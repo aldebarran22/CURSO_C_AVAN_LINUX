@@ -90,10 +90,10 @@ int main(){
     //pthread_join(idA2, (void **) &resultado);
 
     printf("\nResultado aleatorios: %d", d.resul);
-    printf("\nResultado aleatorios2: %d", *resultado);
+    //printf("\nResultado aleatorios2: %d", *resultado);
 
-    free(resultado);
-    resultado = NULL;
+    //free(resultado);
+    //resultado = NULL;
 
     puts("\nTermina main ...");
     return EXIT_SUCCESS;

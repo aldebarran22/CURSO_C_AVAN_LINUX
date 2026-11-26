@@ -61,9 +61,11 @@ void *aleatorios2(void *p){
 int main(){
     pthread_t idM;
     pthread_t idA;
+    pthread_t idA2;
 
     int num = 8;
     datos_t d = {10, 0};
+    int *resultado; // Para recuperar el resultado de join
 
     // Crear los hilos:
     if (pthread_create(&idM, 0, mensajes, &num)){
@@ -77,11 +79,21 @@ int main(){
         return EXIT_FAILURE;
     }
 
+    if (pthread_create(&idA2, 0, aleatorios2, &num)){
+        puts("\nError  al crear el hilo Aleatorios2");
+        return EXIT_FAILURE;
+    }
+
     // Esperamos a que terminen los hilos:
     pthread_join(idM, 0);    
     pthread_join(idA, 0);
+    pthread_join(idA2, (void **) &resultado);
 
     printf("\nResultado aleatorios: %d", d.resul);
+    printf("\nResultado aleatorios2: %d", *resultado);
+
+    free(resultado);
+    resultado = NULL;
 
     puts("\nTermina main ...");
     return EXIT_SUCCESS;

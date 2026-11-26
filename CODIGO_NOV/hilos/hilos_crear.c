@@ -23,6 +23,7 @@ void *mensajes(void *p){
 }
 
 void *aleatorios(void *p){
+    // Devuelve el resultado (la suma) a traves de un campo de la estructura!
     datos_t *d = p;
     int num;
 
@@ -35,6 +36,26 @@ void *aleatorios(void *p){
     }
 
     puts("\nTermina el hilo aleatorio ...");
+}
+
+void *aleatorios2(void *p){
+    // Devuelve  el resultado en return
+    int *n = p;
+    int suma = 0, num;
+    int *resul = NULL;
+
+    for (int i = 0 ; i <  *n ; i++){
+        num = rand() % 100;
+        suma += num;
+
+        printf("\nAleatorio: %d = %d", (i+1), num);
+        sleep(rand() % 3);
+    }
+
+    // Ya tenemos el resultado en suma:
+    resul = malloc(sizeof(int));
+    *resul = suma;
+    return (void *) resul;
 }
 
 int main(){
@@ -50,13 +71,14 @@ int main(){
         return EXIT_FAILURE;
     }
 
+
     if (pthread_create(&idA, 0, aleatorios, &d)){
         puts("\nError  al crear el hilo Aleatorios");
         return EXIT_FAILURE;
     }
 
     // Esperamos a que terminen los hilos:
-    pthread_join(idM, 0);
+    pthread_join(idM, 0);    
     pthread_join(idA, 0);
 
     printf("\nResultado aleatorios: %d", d.resul);

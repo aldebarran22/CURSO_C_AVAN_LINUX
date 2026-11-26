@@ -8,7 +8,7 @@
 #include <semaphore.h>
 
 #define NUM_PROD 1
-#define NUM_CON 1
+#define NUM_CON 2
 #define TAM_BUFFER 6
 #define NUM_MUESTRAS 10
 

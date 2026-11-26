@@ -6,6 +6,11 @@
 /*
 
 gcc -std=c11 -g -O0 deadlock.c -o deadlock -pthread
+
+gcc -std=c11 -Wall -Wextra -Wpedantic \
+-fsanitize=thread \
+deadlock.c -o deadlock
+
 valgrind --tool=helgrind ./deadlock
 
 */

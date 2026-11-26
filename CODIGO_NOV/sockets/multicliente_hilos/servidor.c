@@ -7,7 +7,7 @@
 #include <string.h>
 #include <sys/socket.h>
 #include <unistd.h>
-#include <threads.h>
+#include <pthread.h>
 
 #define PUERTO 8080
 #define BUFFER_SIZE 1024
@@ -52,7 +52,35 @@ int send_all(int client_fd, const void *buffer, size_t length){
 
 
 void *client_handler(void *p){
+    /*
+        char buffer[BUFFER_SIZE];
 
+        ssize_t received = recv(client_fd, buffer, sizeof(buffer)-1, 0);
+
+        if (received < 0){
+            // Se ha producido un error:
+            perror("recv");
+            close(server_fd);
+            close(client_fd);
+            return EXIT_FAILURE;
+
+        } else if (received == 0){
+            // El cliente ha cerrado la conexion sin enviar datos
+            puts("El cliente cerro la conexion");
+
+        } else {
+            // Se han recibido datos:
+            buffer[received]='\0';
+            printf("\nSe ha recibido el mensaje: %s", buffer);
+
+            const char mensaje[] = "Mensaje recibido";
+            if (send_all(client_fd, mensaje, sizeof(mensaje)-1) < 0){
+                perror("sendall");
+                close(client_fd);
+                close(server_fd);
+                return EXIT_FAILURE;
+            }
+        }*/
 
     return NULL;
 }
@@ -163,37 +191,7 @@ int main(){
         error = pthread_detach(hilo);
         if (error){
             puts("\nError al desconectar el hilo del cliente");
-        }
-
-        /*
-        char buffer[BUFFER_SIZE];
-
-        ssize_t received = recv(client_fd, buffer, sizeof(buffer)-1, 0);
-
-        if (received < 0){
-            // Se ha producido un error:
-            perror("recv");
-            close(server_fd);
-            close(client_fd);
-            return EXIT_FAILURE;
-
-        } else if (received == 0){
-            // El cliente ha cerrado la conexion sin enviar datos
-            puts("El cliente cerro la conexion");
-
-        } else {
-            // Se han recibido datos:
-            buffer[received]='\0';
-            printf("\nSe ha recibido el mensaje: %s", buffer);
-
-            const char mensaje[] = "Mensaje recibido";
-            if (send_all(client_fd, mensaje, sizeof(mensaje)-1) < 0){
-                perror("sendall");
-                close(client_fd);
-                close(server_fd);
-                return EXIT_FAILURE;
-            }
-        }*/
+        }        
     }
     
     close(server_fd);

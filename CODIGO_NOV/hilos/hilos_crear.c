@@ -16,7 +16,7 @@ void *mensajes(void *p){
 
     for (int i = 0 ; i <  *n ; i++){
         printf("\nid = %ld, mensaje: %d", pthread_self(), (i+1));
-        usleep(1000);
+        sleep(1);
     }
 
     puts("\nTermina el hilo mensajes ...");
@@ -31,11 +31,10 @@ void *aleatorios(void *p){
         d->resul += num;
 
         printf("\nAleatorio: %d = %d", (i+1), num);
-        usleep(rand() % 1500);
+        sleep(rand() % 3);
     }
 
-     puts("\nTermina el hilo aleatorio ...");
-
+    puts("\nTermina el hilo aleatorio ...");
 }
 
 int main(){

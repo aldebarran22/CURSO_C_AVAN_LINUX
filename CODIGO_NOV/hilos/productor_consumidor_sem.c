@@ -26,13 +26,32 @@ typedef struct {
 } data_t;
 
 void *productor(void *p){
+    char c;
+    data_t *d = p;
 
-    // generar un char aleatorio
-    // comprobar si hay huecos
-    // comprobar el mutex
-    // colocar el char en el buffer, incrementar indice
-    // liberar el mutex
-    // avisar que hay un item nuevo
+    for (int i = 0 ; i < d->num_muestras_p ; i++){
+        // generar un char aleatorio
+        c = 65 + rand() % 26;
+        printf("\nP: %ld genera %c", pthread_self(), c);
+
+        // comprobar si hay huecos
+        sem_wait(&d->sem_huecos);
+
+        // comprobar el mutex
+        pthread_mutex_lock(&d->mutex);
+
+        // colocar el char en el buffer, incrementar indice
+        d->buffer[d->index_p] = c;
+        d->index_p = (d->index_p + 1) % TAM_BUFFER;
+        puts(d->buffer);
+
+        // liberar el mutex
+        pthread_mutex_unlock(&d->mutex);
+
+        // avisar que hay un item nuevo
+        sem_post(&d->sem_items);
+    }
+    return NULL;
 }
 
 void *consumidor(void *p){

@@ -52,7 +52,8 @@ void *productor(void *p){
         // avisar que hay un item nuevo
         sem_post(&d->sem_items);
 
-        sleep(rand() % 2 + 1);
+        //sleep(rand() % 2 + 1);
+        sleep(1);
     }
     return NULL;
 }
@@ -85,7 +86,8 @@ void *consumidor(void *p){
         // avisar que hay un hueco nuevo
         sem_post(&d->sem_huecos);
 
-        sleep(rand() % 4 + 1);
+        //sleep(rand() % 4 + 1);
+        sleep(5);
     }
 
     return NULL;

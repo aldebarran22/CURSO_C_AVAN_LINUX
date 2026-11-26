@@ -16,7 +16,7 @@ void *worker(void *p){
     // Evitamos los warnings por no usar el parámetro
     (void) p;
 
-    for (int i = 0 ; i < THREAD_COUNT ; i++){
+    for (int i = 0 ; i < IT ; i++){
         contador++;
     }    
 

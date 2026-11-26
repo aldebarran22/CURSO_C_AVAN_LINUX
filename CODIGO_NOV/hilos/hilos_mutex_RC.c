@@ -98,7 +98,7 @@ int main(){
     printf("\ncontador_mtx: %d", contador_mtx);
     puts("");
 
-    pthread_mutex_detroy(&mutex);
+    pthread_mutex_destroy(&mutex);
 
     return 0;
 }

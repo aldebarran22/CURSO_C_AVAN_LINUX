@@ -65,7 +65,7 @@ int main(){
 
     int num = 8;
     datos_t d = {10, 0};
-    int *resultado; // Para recuperar el resultado de join
+    int *resultado = NULL; // Para recuperar el resultado de join
 
     // Crear los hilos:
     if (pthread_create(&idM, 0, mensajes, &num)){
@@ -85,9 +85,9 @@ int main(){
     }
 
     // Esperamos a que terminen los hilos:
-    pthread_join(idM, 0);    
-    pthread_join(idA, 0);
-    pthread_join(idA2, (void **) &resultado);
+    //pthread_join(idM, 0);    
+    //pthread_join(idA, 0);
+    //pthread_join(idA2, (void **) &resultado);
 
     printf("\nResultado aleatorios: %d", d.resul);
     printf("\nResultado aleatorios2: %d", *resultado);

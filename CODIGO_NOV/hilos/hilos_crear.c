@@ -13,11 +13,28 @@ typedef struct {
 
 void *mensajes(void *p){
     int *n = p;
+
+    for (int i = 0 ; i <  *n ; i++){
+        printf("\nid = %ld, mensaje: %d", pthread_self(), (i+1));
+        usleep(500);
+    }
+
+    puts("\nTermina el hilo mensajes ...");
 }
 
 void *aleatorios(void *p){
     datos_t *d = p;
+    int num;
 
+    for (int i = 0 ; i < d->n ; i++){
+        num = rand() % 100;
+        d->resul += num;
+
+        printf("\nAleatorio: %d = %d", (i+1), num);
+        usleep(rand() % 500);
+    }
+
+     puts("\nTermina el hilo aleatorio ...");
 
 }
 

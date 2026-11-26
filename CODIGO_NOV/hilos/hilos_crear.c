@@ -48,8 +48,8 @@ void *aleatorios2(void *p){
         num = rand() % 100;
         suma += num;
 
-        printf("\nAleatorio: %d = %d", (i+1), num);
-        sleep(rand() % 3);
+        printf("\nAleatorio2: %d = %d", (i+1), num);
+        sleep(rand() % 2);
     }
 
     // Ya tenemos el resultado en suma:

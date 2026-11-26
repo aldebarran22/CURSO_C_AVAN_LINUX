@@ -2,12 +2,10 @@
 
 /*
 Compilar:
-gcc -std=c11 -Wall -Wextra -Wpedantic
--fsanitize=thread
+gcc -std=c11 -Wall -Wextra -Wpedantic \
+-fsanitize=thread \
 array_hilos_RC.c -o array_hilos_RC
-
 */
-
 
 #include <pthread.h>
 #include <stdio.h>
@@ -22,7 +20,7 @@ static int contador = 0;
 
 void *worker(void *p){
     // Evitamos los warnings por no usar el parámetro
-    (void) p;
+    //(void) p;
 
     for (int i = 0 ; i < IT ; i++){
         contador++;

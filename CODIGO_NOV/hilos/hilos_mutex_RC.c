@@ -37,6 +37,23 @@ void *restar(void *p){
     return NULL;
 }
 
+void *sumar2(void *p){
+
+    (void)p;
+    for (int i = 0 ; i < N_ITER ; i++){
+        contador_mtx++;
+    }
+    return NULL;
+}
+
+void *restar2(void *p){
+    (void)p;
+    for (int i = 0 ; i < N_ITER ; i++){
+        contador_mtx--;
+    }
+    return NULL;
+}
+
 int main(){
     pthread_t id1;
     pthread_t id2;
@@ -54,5 +71,26 @@ int main(){
         puts("\nError  al crear el hilo 2");
         return EXIT_FAILURE;
     }
+
+     if (pthread_create(&id3, 0, sumar2, 0)){
+        puts("\nError  al crear el hilo 3");
+        return EXIT_FAILURE;
+    }
+
+     // Crear los hilos:
+    if (pthread_create(&id4, 0, restar2, 0)){
+        puts("\nError  al crear el hilo 4");
+        return EXIT_FAILURE;
+    }
+
+    pthread_join(id1, 0);
+    pthread_join(id2, 0);
+    pthread_join(id3, 0);
+    pthread_join(id4, 0);
+
+    printf("\ncontador: %d", contador);
+    printf("\ncontador_mtx: %d", contador_mtx);
+    puts("");
+
     return 0;
 }

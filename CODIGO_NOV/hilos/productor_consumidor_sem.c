@@ -75,6 +75,7 @@ void *consumidor(void *p){
         d->buffer[d->index_c] = '-';
         d->index_c = (d->index_c + 1) % TAM_BUFFER;
 
+        puts(d->buffer);
         printf("\nC: %ld procesa %c\n", pthread_self(), c);
         
         // liberar el mutex

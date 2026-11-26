@@ -27,10 +27,21 @@ typedef struct {
 
 void *productor(void *p){
 
+    // generar un char aleatorio
+    // comprobar si hay huecos
+    // comprobar el mutex
+    // colocar el char en el buffer, incrementar indice
+    // liberar el mutex
+    // avisar que hay un item nuevo
 }
 
 void *consumidor(void *p){
 
+    // comprobar si hay items
+    // comprobar el mutex
+    // quitar el char del buffer, incrementar indice
+    // liberar el mutex
+    // avisar que hay un hueco nuevo
 }
 
 int main(){

@@ -51,6 +51,13 @@ int send_all(int client_fd, const void *buffer, size_t length){
 }
 
 
+void *client_handler(void *p){
+
+
+    return NULL;
+}
+
+
 int main(){
     int server_fd = -1;
     int client_fd = -1;
@@ -121,20 +128,44 @@ int main(){
         }
 
         // Reservar memoria para el cliente conectado:
-
-
-
-        // Convertir la dir IP del cliente de binario a texto:
-        char client_ip[INET_ADDRSTRLEN];
-
-        if (inet_ntop(AF_INET, &client_address.sin_addr, client_ip, sizeof(client_ip)) == NULL){
-            strcpy(client_ip, "IP desconocida");
+        client_data_t *client_data = malloc(sizeof(client_data_t));
+        if (client_data == NULL){
+            perror("malloc");
+            close(client_fd);
+            continue;
         }
+
+        // Rellenar la estructura del cliente:
+        client_data->client_fd = client_fd; // Copiar el socket
+
+        // Convertir la dir IP del cliente de binario a texto:        
+        if (inet_ntop(AF_INET, &client_address.sin_addr, client_data->client_ip, sizeof(client_data->client_ip)) == NULL){
+            strcpy(client_data->client_ip, "IP desconocida");
+        }
+        client_data->client_port = (unsigned int) ntohs(client_address.sin_port);
 
         // El puerto viene en formato de la red y se convierte al host:
         // de big endian a little endian
-        printf("\nCliente conectado: %s %u", client_ip, (unsigned int) ntohs(client_address.sin_port));
+        printf("\nCliente conectado: %s %u", client_data->client_ip, client_data->client_port);
 
+        // Crear el hilo:
+        pthread_t hilo;
+        int error = pthread_create(&hilo, 0, client_handler, client_data);
+        if (error){
+            printf("\nError al lanzar el hilo del cliente");
+            close(client_fd);
+            free(client_data);
+            client_data = NULL;
+            continue;
+        }
+
+        // Desconectar el hilo:
+        error = pthread_detach(hilo);
+        if (error){
+            puts("\nError al desconectar el hilo del cliente");
+        }
+
+        /*
         char buffer[BUFFER_SIZE];
 
         ssize_t received = recv(client_fd, buffer, sizeof(buffer)-1, 0);
@@ -162,8 +193,9 @@ int main(){
                 close(server_fd);
                 return EXIT_FAILURE;
             }
-        }
+        }*/
     }
     
     close(server_fd);
+    return EXIT_SUCCESS;
 }

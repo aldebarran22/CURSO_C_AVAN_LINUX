@@ -1,0 +1,58 @@
+// Hilos que modifican dos contadores: uno protegido con un mutex y otro no (RC)
+
+/*
+
+gcc -std=c11 -Wall -Wextra -Wpedantic \
+    -fsanitize=thread \
+    condicion_carrera.c -o condicion_carrera -pthread
+
+*/
+
+#include <pthread.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+#define N_ITER 10000000
+
+int contador=0;
+int contador_mtx = 0;
+
+pthread_mutex_t mutex;
+
+
+void *sumar(void *p){
+
+    (void)p;
+    for (int i = 0 ; i < N_ITER ; i++){
+        contador++;
+    }
+    return NULL;
+}
+
+void *restar(void *p){
+    (void)p;
+    for (int i = 0 ; i < N_ITER ; i++){
+        contador--;
+    }
+    return NULL;
+}
+
+int main(){
+    pthread_t id1;
+    pthread_t id2;
+    pthread_t id3;
+    pthread_t id4;
+   
+    // Crear los hilos:
+    if (pthread_create(&id1, 0, sumar, 0)){
+        puts("\nError  al crear el hilo 1");
+        return EXIT_FAILURE;
+    }
+
+     // Crear los hilos:
+    if (pthread_create(&id2, 0, restar, 0)){
+        puts("\nError  al crear el hilo 2");
+        return EXIT_FAILURE;
+    }
+    return 0;
+}

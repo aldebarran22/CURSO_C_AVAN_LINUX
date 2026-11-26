@@ -41,7 +41,9 @@ void *sumar2(void *p){
 
     (void)p;
     for (int i = 0 ; i < N_ITER ; i++){
+        pthread_mutex_lock(&mutex);
         contador_mtx++;
+        pthread_mutex_unlock(&mutex);
     }
     return NULL;
 }
@@ -49,7 +51,9 @@ void *sumar2(void *p){
 void *restar2(void *p){
     (void)p;
     for (int i = 0 ; i < N_ITER ; i++){
+        pthread_mutex_lock(&mutex);
         contador_mtx--;
+        pthread_mutex_unlock(&mutex);
     }
     return NULL;
 }
@@ -59,6 +63,8 @@ int main(){
     pthread_t id2;
     pthread_t id3;
     pthread_t id4;
+
+    pthread_mutex_init(&mutex, 0);
    
     // Crear los hilos:
     if (pthread_create(&id1, 0, sumar, 0)){
@@ -91,6 +97,8 @@ int main(){
     printf("\ncontador: %d", contador);
     printf("\ncontador_mtx: %d", contador_mtx);
     puts("");
+
+    pthread_mutex_detroy(&mutex);
 
     return 0;
 }

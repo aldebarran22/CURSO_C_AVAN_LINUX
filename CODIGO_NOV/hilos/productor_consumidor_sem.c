@@ -7,8 +7,8 @@
 #include <unistd.h>
 #include <semaphore.h>
 
-#define NUM_PROD 2
-#define NUM_CON 2
+#define NUM_PROD 1
+#define NUM_CON 1
 #define TAM_BUFFER 6
 #define NUM_MUESTRAS 30
 
@@ -50,17 +50,42 @@ void *productor(void *p){
 
         // avisar que hay un item nuevo
         sem_post(&d->sem_items);
+
+        sleep(rand() % 3 + 1);
     }
     return NULL;
 }
 
 void *consumidor(void *p){
+    char c;
+    data_t *d = p;
 
-    // comprobar si hay items
-    // comprobar el mutex
-    // quitar el char del buffer, incrementar indice
-    // liberar el mutex
-    // avisar que hay un hueco nuevo
+    for (int i = 0 ; i < d->num_muestras_c ; i++){
+    
+        // comprobar si hay items
+        sem_wait(&d->sem_items);
+
+        // comprobar el mutex
+        pthread_mutex_lock(&d->mutex);
+
+        // quitar el char del buffer, incrementar indice
+        c = d->buffer[d->index_c];
+        d->buffer[d->index_c] = '-';
+        d->index_c = (d->index_c + 1) % TAM_BUFFER;
+        
+        // liberar el mutex
+        pthread_mutex_unlock(&d->mutex);
+
+        // procesar el item:
+        printf("\nC: %ld procesa %c", pthread_self(), c);
+
+        // avisar que hay un hueco nuevo
+        sem_post(&d->sem_huecos);
+
+        sleep(rand() % 2 + 1);
+    }
+
+    return NULL;
 }
 
 int main(){

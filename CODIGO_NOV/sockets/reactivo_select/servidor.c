@@ -37,7 +37,7 @@ static int send_all(int socket_fd, const void *buffer, size_t length){
     return 0;
 }
 
-int aceptar_cliente(struct sockaddr_in *client_address){
+int aceptar_cliente(struct sockaddr_in *client_address, int server_fd){
 
 }
 
@@ -146,7 +146,7 @@ int main(){
                 struct sockaddr_in client_address;
 
                 // Se va a conectar un cliente y tenemos que aceptarlo!
-                int client_fd = aceptar_cliente(&client_address);
+                int client_fd = aceptar_cliente(&client_address, server_fd);
 
                 // Evaluar client_fd
             }

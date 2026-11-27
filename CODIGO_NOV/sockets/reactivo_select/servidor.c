@@ -72,6 +72,14 @@ int aceptar_cliente(struct sockaddr_in *client_address, int server_fd){
     return client_fd;
 }
 
+static void cerrar_conexiones_clientes(fd_set *master_set, int server_fd, int max_fd){
+    for (int fd = 0; fd <= max_fd; fd++) {
+        if (fd != server_fd && FD_ISSET(fd, master_set)) {
+            close(fd);
+        }
+    }
+}
+
 
 int main(){
   // Crear el socket:
@@ -211,6 +219,7 @@ int main(){
                 // El nuevo socket se carga en la lista master,
                 // y en la proxima llamada a select  se chequea si esta activo
                 FD_SET(client_fd, &master);
+
                 // Actualizar el fd maximo
                 if (client_fd > max_fd){
                     max_fd = client_fd;
@@ -219,12 +228,62 @@ int main(){
                 continue;
             }
 
-            
+            // Si no es el servidor, será un cliente que envia datos o cierra
+            // la conexión:
+            char buffer[BUFFER_SIZE];
+
+            // Recibir informacion del cliente:
+            ssize_t received = recv(fd, buffer, sizeof(buffer)-1, 0);
+
+            if (received < 0){
+                // Error:
+
+                if (errno == EINTR){
+                    continue;
+                }
+
+                perror("recv");
+
+                // Cerrar el socket y quitarlo de la lista:
+                close(fd);
+                FD_CLR(fd, &master);
+
+            } else if (received == 0){
+                // Cliente desconectado:
+                printf("\nCliente desconectado con descriptor: %d", fd);
+
+                  // Cerrar el socket y quitarlo de la lista:
+                close(fd);
+                FD_CLR(fd, &master);
+
+            } else {
+                // Se han recibido datos;
+                buffer[received] = '\0';
+                printf("\nMensaje recibido de: %d -> %s", fd, buffer);
+
+                // Respuesta al cliente:
+                if (send_all(fd, buffer, sizeof(buffer)) < 0){
+                    perror("send_all");
+
+                    close(fd);
+                    FD_CLR(fd, &master);
+                }
+            }
+
+            // Comprobar el maximo:
+            // Si el descriptor que hemos cerrado es el maximo y no esta
+            // en la lista master:
+            if (fd == max_fd && !FD_ISSET(fd, &master)){
+                while (max_fd >= 0 && !FD_ISSET(max_fd, &master)){
+                    max_fd--;
+                }
+            }
             
         }
     }
 
-    // Cerrar las conexiones de los clientes
+    // Cerrar las conexiones de los clientes:
+    cerrar_conexiones_clientes(&master, server_fd, max_fd);
 
     close(server_fd);
     return EXIT_FAILURE;

@@ -13,12 +13,6 @@
 #define BUFFER_SIZE 1024
 #define BACKLOG 4
 
-typedef struct {
-    int client_fd;                      // El socket del cliente
-    char client_ip[INET_ADDRSTRLEN];    // la ip del cliente
-    unsigned int client_port;           // El puerto del cliente
-} client_data_t;
-
 
 int send_all(int client_fd, const void *buffer, size_t length){
     // Para recorrer los bytes:
@@ -171,43 +165,24 @@ int main(){
             break;            
         }
 
-        // Reservar memoria para el cliente conectado:
-        client_data_t *client_data = malloc(sizeof(client_data_t));
-        if (client_data == NULL){
-            perror("malloc");
-            close(client_fd);
-            continue;
-        }
-
-        // Rellenar la estructura del cliente:
-        client_data->client_fd = client_fd; // Copiar el socket
+       
+        char client_ip[INET_ADDRSTRLEN];
 
         // Convertir la dir IP del cliente de binario a texto:        
-        if (inet_ntop(AF_INET, &client_address.sin_addr, client_data->client_ip, sizeof(client_data->client_ip)) == NULL){
-            strcpy(client_data->client_ip, "IP desconocida");
+        if (inet_ntop(AF_INET, &client_address.sin_addr, client_ip, sizeof(client_ip)) == NULL){
+            strcpy(client_ip, "IP desconocida");
         }
-        client_data->client_port = (unsigned int) ntohs(client_address.sin_port);
+        unsigned int client_port = (unsigned int) ntohs(client_address.sin_port);
 
         // El puerto viene en formato de la red y se convierte al host:
         // de big endian a little endian
-        printf("\nCliente conectado: %s %u", client_data->client_ip, client_data->client_port);
+        printf("\nCliente conectado: %s %u", client_ip, client_port);
 
-        // Crear el hilo:
-        pthread_t hilo;
-        int error = pthread_create(&hilo, 0, client_handler, client_data);
-        if (error){
-            printf("\nError al lanzar el hilo del cliente");
-            close(client_fd);
-            free(client_data);
-            client_data = NULL;
-            continue;
-        }
-
-        // Desconectar el hilo:
-        error = pthread_detach(hilo);
-        if (error){
-            puts("\nError al desconectar el hilo del cliente");
-        }        
+        // Crear el proceso hijo:
+        // El proceso padre recibe el pid del proceso hijo
+        // El proceso hijo recibe un 0
+        puts("\nCrear el proceso hijo para atender al cliente");
+        
     }
     
     close(server_fd);

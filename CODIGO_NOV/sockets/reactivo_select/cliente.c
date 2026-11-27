@@ -8,7 +8,7 @@
 #include <unistd.h>
 
 #define SERVER_IP "127.0.0.1"
-#define SERVER_PORT 3490
+#define SERVER_PORT 8080
 #define BUFFER_SIZE 1024
 
 static int send_all(int socket_fd, const void *buffer, size_t length){
@@ -99,7 +99,7 @@ int main(void){
 
     printf("Respuesta del servidor: %s\n", buffer);
     while (1);
-    
+
     close(socket_fd);
     return EXIT_SUCCESS;
 }

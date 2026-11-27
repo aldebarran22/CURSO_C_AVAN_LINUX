@@ -81,7 +81,7 @@ int main(void)
     );
 
     if (result == 0) {
-        fprintf(stderr, "El cliente cerró la conexión\n");
+        fprintf(stderr, "El cliente cerro la conexion\n");
         close(client_fd);
         close(server_fd);
         return EXIT_FAILURE;

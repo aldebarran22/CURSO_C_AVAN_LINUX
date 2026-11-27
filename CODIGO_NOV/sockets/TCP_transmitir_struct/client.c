@@ -33,7 +33,7 @@ int main(void)
     );
 
     if (result != 1) {
-        fprintf(stderr, "Dirección IP no válida\n");
+        fprintf(stderr, "Direccion IP no valida\n");
         close(socket_fd);
         return EXIT_FAILURE;
     }

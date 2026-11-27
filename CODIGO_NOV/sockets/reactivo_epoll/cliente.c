@@ -178,8 +178,7 @@ int main(void)
             break;
         }
 
-        size_t message_length =
-            strlen(message);
+        size_t message_length = strlen(message);
 
         /*
          * Eliminamos el salto de línea introducido

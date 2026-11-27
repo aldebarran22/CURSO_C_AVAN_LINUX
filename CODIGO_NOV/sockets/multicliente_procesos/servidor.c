@@ -75,27 +75,6 @@ void atender_client(int client_fd, const char *ip, unsigned int port){
 }
 
 
-void *client_handler(void *p){
-    client_data_t *data = p;
-
-     // Extraer los datos de la estructura dinamica y la liberamos
-    // Copiamos los datos a 3 variables y liberamos:
-    int client_fd = data->client_fd;
-    char ip[INET_ADDRSTRLEN];
-    memcpy(ip, data->client_ip, sizeof(ip));
-    unsigned int port = data->client_port;
-
-    free(data);
-    data = NULL;
-
-    atender_client(client_fd, ip, port);
-    close(client_fd);
-
-    printf("\nFinaliza el hilo: %ld con ip:%s:%u", pthread_self(), ip, port);
-    return NULL;
-}
-
-
 int main(){
     int server_fd = -1;
     int client_fd = -1;

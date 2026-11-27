@@ -20,7 +20,16 @@ typedef struct {
 
 static void get_datos_cliente(int client_fd, client_data_t *client_data, struct sockaddr_in client_address){
     
+    // El descriptor del socket del cliente
     client_data->client_fd = client_fd;
+
+    // El puerto del cliente:
+    client_data->port_client = (unsigned int) ntohs(client_address.sin_port);
+
+    // La direccion IP del cliente:
+    if (inet_ntop(AF_INET, &client_address.sin_addr, client_data->client_ip, sizeof(client_data->client_ip))==NULL){
+        strcpy(client_data->client_ip, "desconocida");        
+    }
 }
 
 

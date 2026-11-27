@@ -13,6 +13,23 @@
 #define MAX_EVENTS 32
 #define BUFFER_SIZE 1024
 
+static int set_nonblocking(int sock_descriptor){
+    // Poner el socket en modo no bloqueante
+    // Primero recuperar los flags: F_GETFL
+    int flags = fcntl(sock_descriptor, F_GETFL, 0);
+
+    if (flags < 0) {
+        return -1;
+    }
+
+    // Poner el socket en modo no bloqueante! or a nivel de bits
+    // Establecer los flags de estado: F_SETFL
+    if (fcntl(sock_descriptor, F_SETFL, flags | O_NONBLOCK) < 0) {
+        return -1;
+    }
+
+    return 0;
+}
 
 static int add_to_epoll(int epoll_fd, int sock_descriptor){
     // Añade un descriptor del socket a la lista y configura el tipo de evento:
@@ -93,10 +110,8 @@ static void accept_clients(int server_fd,int epoll_fd){
     }
 }
 
-static void attend_client(
-    int epoll_fd,
-    int client_fd)
-{
+static void attend_client(int epoll_fd, int client_fd){
+
     char buffer[BUFFER_SIZE];
 
     while (1) {
@@ -154,11 +169,7 @@ static void attend_client(
         }
 
         if (received == 0) {
-            close_client(
-                epoll_fd,
-                client_fd
-            );
-
+            close_client(epoll_fd,client_fd);
             return;
         }
 
@@ -176,12 +187,7 @@ static void attend_client(
         }
 
         perror("recv");
-
-        close_client(
-            epoll_fd,
-            client_fd
-        );
-
+        close_client(epoll_fd, client_fd);
         return;
     }
 }

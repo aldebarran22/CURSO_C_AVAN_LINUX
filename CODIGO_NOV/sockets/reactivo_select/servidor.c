@@ -11,6 +11,19 @@
 #define BACKLOG 4
 #define BUFFER_SIZE 1024
 
+
+typedef struct {
+    char client_ip[INET_ADDRSTRLEN];
+    unsigned int port_client;
+    int client_fd;
+} client_data_t;
+
+static void get_datos_cliente(int client_fd, client_data_t *client_data, struct sockaddr_in client_address){
+    
+    client_data->client_fd = client_fd;
+}
+
+
 static int send_all(int socket_fd, const void *buffer, size_t length){
     const unsigned char *cursor = buffer;
     size_t total_sent = 0;
@@ -157,8 +170,35 @@ int main(){
                 // Se va a conectar un cliente y tenemos que aceptarlo!
                 int client_fd = aceptar_cliente(&client_address, server_fd);
 
-                // Evaluar client_fd
+                // Evaluar client_fd con error:
+                if (client_fd < 0){
+                    if (errno == EINTR){
+                        // No aceptamos al cliente
+                        continue;
+                    }
+
+                    perror("accept");
+                    continue;
+                }
+
+                // Comprobar si el descriptor del cliente ha superado
+                // el maximo:
+                if (client_fd >= FD_SETSIZE){
+                    fprintf(stderr, "Cliente rechazado fd=%d supera FD_SETSIZE", client_fd);                
+                    close(client_fd);
+                    continue;
+                }    
+
+                // Recuperar los datos del cliente:
+                client_data_t data_client;
+                get_datos_cliente(client_fd, &data_client, client_address);
+
+                // Imprimir los datos del cliente:
+
+
             }
+
+            
         }
     }
 

@@ -222,12 +222,12 @@ int main(void)
 
     // Por ejemplo, si va a leer datos y todavia no hay datos NO
     // se queda esperando, retorna inmediatamente!
-    /*
+    
     if (set_nonblocking(server_fd) < 0) {
         perror("set_nonblocking servidor");
         close(server_fd);
         return EXIT_FAILURE;
-    }*/
+    }
 
     struct sockaddr_in server_address;
 

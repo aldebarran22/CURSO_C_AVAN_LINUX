@@ -206,6 +206,8 @@ int main(void)
         message[message_length] = '\n';
         message_length++;
 
+        printf("\nSe va a enviar este mensaje al servidor: %s\n", message);
+
         if (send_all(
                 socket_fd,
                 message,

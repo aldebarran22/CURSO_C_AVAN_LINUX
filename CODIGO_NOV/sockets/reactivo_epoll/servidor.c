@@ -14,18 +14,15 @@
 #define BUFFER_SIZE 1024
 
 
-static int add_to_epoll(int epoll_fd, int file_descriptor){
+static int add_to_epoll(int epoll_fd, int sock_descriptor){
+    // Añade un descriptor del socket a la lista y configura el tipo de evento:
     struct epoll_event event;
     memset(&event, 0, sizeof(event));
 
     event.events = EPOLLIN;
-    event.data.fd = file_descriptor;
+    event.data.fd = sock_descriptor;
 
-    if (epoll_ctl(
-            epoll_fd,
-            EPOLL_CTL_ADD,
-            file_descriptor,
-            &event) < 0) {
+    if (epoll_ctl( epoll_fd,EPOLL_CTL_ADD, sock_descriptor, &event) < 0) {
         return -1;
     }
     return 0;
@@ -102,5 +99,13 @@ int main(void)
         return EXIT_FAILURE;
     }
 
+    if (add_to_epoll(epoll_fd, server_fd) < 0){
+        perror("epoll_ctl add server");
+        close(epoll_fd);
+        close(server_fd);
+        return EXIT_FAILURE;
+    }
+
+    
 
 }

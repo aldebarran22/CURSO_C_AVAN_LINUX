@@ -28,6 +28,20 @@ static int add_to_epoll(int epoll_fd, int sock_descriptor){
     return 0;
 }
 
+static void close_client(int epoll_fd,int client_fd){
+    if (epoll_ctl(
+            epoll_fd,
+            EPOLL_CTL_DEL,
+            client_fd,
+            NULL) < 0) {
+        perror("epoll_ctl DEL");
+    }
+
+    close(client_fd);
+    printf("Cliente desconectado. Descriptor: %d\n", client_fd);
+}
+
+
 static void accept_clients(int server_fd,int epoll_fd){
 
     while (1) {
@@ -196,7 +210,24 @@ int main(void)
                 continue;
             }
 
+            // Comprobar si un cliente se ha desconectado, o hay algun error:
+            if (current_events & EPOLLERR != 0 ||
+                current_events & EPOLLHUP != 0 ||
+                current_events & EPOLLRDHUP != 0){
+                    close_client(epoll_fd, current_fd);
+            }
+
+
+            // Cuando el evento sea POLLIN se atiende al cliente:
+            if (current_events & EPOLLIN){
+                attend_client(epoll_fd, current_fd);
+            }
 
         }
     }
+
+    close(epoll_fd);
+    close(server_fd);
+
+    return EXIT_SUCCESS;
 }

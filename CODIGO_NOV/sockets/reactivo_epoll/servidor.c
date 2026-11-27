@@ -46,6 +46,7 @@ static int add_to_epoll(int epoll_fd, int sock_descriptor){
 }
 
 static void close_client(int epoll_fd,int client_fd){
+    printf("\nCerrando la conexion del cliente: %d\n", client_fd);
     if (epoll_ctl(
             epoll_fd,
             EPOLL_CTL_DEL,

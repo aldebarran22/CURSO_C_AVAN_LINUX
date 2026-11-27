@@ -98,6 +98,8 @@ int main(void){
     buffer[received] = '\0';
 
     printf("Respuesta del servidor: %s\n", buffer);
+    while (1);
+    
     close(socket_fd);
     return EXIT_SUCCESS;
 }

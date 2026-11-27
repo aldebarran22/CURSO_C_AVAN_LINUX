@@ -161,7 +161,27 @@ int main(){
         // El proceso padre recibe el pid del proceso hijo
         // El proceso hijo recibe un 0
         puts("\nCrear el proceso hijo para atender al cliente");
+        pid_t pid = fork();
         
+        if (pid == 0){
+            // Es el proceso hijo, es el que atiende al cliente:
+            // El proceso no necesita el socket del servidor:
+            close(server_fd);
+
+            // El proceso hijo atiende al cliente:
+            atender_client(client_fd, client_ip, client_port);
+            close(client_fd);
+
+            // Terminar el proceso hijo:
+            _exit(EXIT_SUCCESS);
+
+
+        } else {
+            printf("\nSe ha creado un proceso hijo con el PID: %ld", pid);
+
+            // El proceso padre no necesita el socket del hijo, lo cierra:
+            close(client_fd);
+        }
     }
     
     close(server_fd);

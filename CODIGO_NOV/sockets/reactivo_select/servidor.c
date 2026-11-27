@@ -203,10 +203,23 @@ int main(){
                 get_datos_cliente(client_fd, &data_client, client_address);
 
                 // Imprimir los datos del cliente:
+                printf("\nCliente conectado IP:%s:%u fd:%d", 
+                    data_client.client_ip, 
+                    data_client.port_client, 
+                    data_client.client_fd);
 
+                // El nuevo socket se carga en la lista master,
+                // y en la proxima llamada a select  se chequea si esta activo
+                FD_SET(client_fd, &master);
+                // Actualizar el fd maximo
+                if (client_fd > max_fd){
+                    max_fd = client_fd;
+                }
 
+                continue;
             }
 
+            
             
         }
     }

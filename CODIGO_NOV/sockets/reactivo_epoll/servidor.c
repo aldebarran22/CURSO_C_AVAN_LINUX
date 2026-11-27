@@ -13,13 +13,27 @@
 #define MAX_EVENTS 32
 #define BUFFER_SIZE 1024
 
+
+static int add_to_epoll(int epoll_fd, int file_descriptor){
+    struct epoll_event event;
+    memset(&event, 0, sizeof(event));
+
+    event.events = EPOLLIN;
+    event.data.fd = file_descriptor;
+
+    if (epoll_ctl(
+            epoll_fd,
+            EPOLL_CTL_ADD,
+            file_descriptor,
+            &event) < 0) {
+        return -1;
+    }
+    return 0;
+}
+
 int main(void)
 {
-    int server_fd = socket(
-        AF_INET,
-        SOCK_STREAM,
-        0
-    );
+    int server_fd = socket(AF_INET,SOCK_STREAM,  0);
 
     if (server_fd < 0) {
         perror("socket");
@@ -56,18 +70,11 @@ int main(void)
 
     struct sockaddr_in server_address;
 
-    memset(
-        &server_address,
-        0,
-        sizeof(server_address)
-    );
+    memset(&server_address,   0,   sizeof(server_address));
 
     server_address.sin_family = AF_INET;
-    server_address.sin_port =
-        htons(SERVER_PORT);
-
-    server_address.sin_addr.s_addr =
-        htonl(INADDR_ANY);
+    server_address.sin_port = htons(SERVER_PORT);
+    server_address.sin_addr.s_addr = htonl(INADDR_ANY);
 
     if (bind(
             server_fd,
@@ -85,4 +92,15 @@ int main(void)
         close(server_fd);
         return EXIT_FAILURE;
     }
+
+    // Crear la lista de descriptores con epoll:
+    int epoll_fd = epoll_create1(EPOLL_CLOEXEC);
+
+    if (epoll_fd < 0){
+        perror("epoll_create1");
+        close(server_fd);
+        return EXIT_FAILURE;
+    }
+
+
 }

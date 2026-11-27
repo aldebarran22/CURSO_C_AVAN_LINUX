@@ -71,34 +71,39 @@ int main(void){
     }
 
     printf("Conectado al servidor %s:%d\n", SERVER_IP, SERVER_PORT);
-    const char message[] = "Hola desde el cliente";
+    char message[200];
 
-    if (send_all(socket_fd, message, sizeof(message) - 1) < 0) {
-        perror("send");
-        close(socket_fd);
-        return EXIT_FAILURE;
+    for (int i = 0 ; i < 10 ; i++){
+        sleep(2);
+        
+        sprintf(message, "Cliente - mensaje: %d", (i+1));
+
+        if (send_all(socket_fd, message, sizeof(message) - 1) < 0) {
+            perror("send");
+            close(socket_fd);
+            return EXIT_FAILURE;
+        }
+
+        printf("Mensaje enviado: %s\n", message);
+        char buffer[BUFFER_SIZE];
+        ssize_t received = recv(socket_fd, buffer, sizeof(buffer) - 1, 0);
+
+        if (received < 0) {
+            perror("recv");
+            close(socket_fd);
+            return EXIT_FAILURE;
+        }
+
+        if (received == 0) {
+            puts("El servidor cerró la conexión sin enviar una respuesta.");
+            close(socket_fd);
+            return EXIT_SUCCESS;
+        }
+
+        buffer[received] = '\0';
+
+        printf("Respuesta del servidor: %s\n", buffer);
     }
-
-    printf("Mensaje enviado: %s\n", message);
-    char buffer[BUFFER_SIZE];
-    ssize_t received = recv(socket_fd, buffer, sizeof(buffer) - 1, 0);
-
-    if (received < 0) {
-        perror("recv");
-        close(socket_fd);
-        return EXIT_FAILURE;
-    }
-
-    if (received == 0) {
-        puts("El servidor cerró la conexión sin enviar una respuesta.");
-        close(socket_fd);
-        return EXIT_SUCCESS;
-    }
-
-    buffer[received] = '\0';
-
-    printf("Respuesta del servidor: %s\n", buffer);
-    while (1);
 
     close(socket_fd);
     return EXIT_SUCCESS;

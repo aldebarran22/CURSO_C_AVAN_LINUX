@@ -20,7 +20,6 @@
 #define BACKLOG 4
 
 
-
 /* 
 Servidor que utiliza procesos para atender a los clientes
 Por cada cliente que se conecta se lanza un proceso con fork()

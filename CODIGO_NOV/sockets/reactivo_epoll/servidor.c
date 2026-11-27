@@ -28,6 +28,78 @@ static int add_to_epoll(int epoll_fd, int sock_descriptor){
     return 0;
 }
 
+static void accept_clients(
+    int server_fd,
+    int epoll_fd)
+{
+    while (1) {
+        struct sockaddr_in client_address;
+
+        socklen_t client_address_length =
+            sizeof(client_address);
+
+        int client_fd = accept(
+            server_fd,
+            (struct sockaddr *)&client_address,
+            &client_address_length
+        );
+
+        if (client_fd < 0) {
+            // Se interrupio antes de aceptar la conexion:
+            if (errno == EINTR) {
+                continue;
+            }
+
+            // Se ha  vaciado la cola de conexiones pendientes
+            if (errno == EAGAIN ||
+                errno == EWOULDBLOCK) {
+                break;
+            }
+
+            perror("accept");
+            break;
+        }
+
+        if (set_nonblocking(client_fd) < 0) {
+            perror("set_nonblocking cliente");
+            close(client_fd);
+            continue;
+        }
+
+        if (add_to_epoll(
+                epoll_fd,
+                client_fd) < 0) {
+            perror("epoll_ctl ADD cliente");
+            close(client_fd);
+            continue;
+        }
+
+        char client_ip[INET_ADDRSTRLEN];
+
+        if (inet_ntop(
+                AF_INET,
+                &client_address.sin_addr,
+                client_ip,
+                sizeof(client_ip)) == NULL) {
+            strcpy(client_ip, "desconocida");
+        }
+
+        unsigned int client_port =
+            (unsigned int)ntohs(
+                client_address.sin_port
+            );
+
+        printf(
+            "Cliente conectado desde %s:%u. "
+            "Descriptor: %d\n",
+            client_ip,
+            client_port,
+            client_fd
+        );
+    }
+}
+
+
 int main(void)
 {
     int server_fd = socket(AF_INET,SOCK_STREAM,  0);
@@ -106,6 +178,44 @@ int main(void)
         return EXIT_FAILURE;
     }
 
-    
+    printf("\nepoll creado, puerto del servidor: %d\n", SERVER_PORT);
 
+    // Definir el array de eventos:
+    struct epoll_event events[MAX_EVENTS];
+
+    while (1){
+        // Esperar a que se produzcan eventos: nuevas conexiones, envio de datos,
+        // desconexiones:
+        // Devuelve el numero de eventos que se han producido:
+        int event_count = epoll_wait(epoll_fd, events, MAX_EVENTS, -1);
+
+        if (event_count < 0){
+            if (errno == EINTR){
+                continue;
+            }
+
+            perror("epoll_wait");
+            break;
+        }
+
+        // Si hay eventos, se procesan:
+        // event_count nos indica cuantos eventos se han producido
+        for (int i = 0 ; i < event_count ; i++){
+
+            // Recuperar el fd del evento:
+            int current_fd = events[i].data.fd;
+
+            // Recuperar el evento:
+            uint32_t current_events = events[i].events;
+
+            // Comprobar si el evento viene del descriptor del servidor:
+            if (current_fd == server_fd){
+                // Aceptar un nuevo cliente:
+                accept_clients(server_fd, epoll_fd);
+                continue;
+            }
+
+
+        }
+    }
 }

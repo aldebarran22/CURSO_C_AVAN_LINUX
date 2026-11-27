@@ -81,6 +81,17 @@ int main(){
         return EXIT_FAILURE;
     }
 
-    printf("\nSocket escuchando en el puerto: %d", PUERTO);
+    printf("\nSocket escuchando en el puerto: %d, descriptor: %d", PUERTO, server_fd);
 
+    // Select marca el limite de los descriptores con la macro FD_SETSIZE
+    // Todos los descriptores deben ser menores que: FD_SETSIZE
+    // Validar el descriptor del socket del servidor:
+    if (server_fd >= FD_SETSIZE){
+        fprintf(stderr, "El descriptor del servidor es >= FD_SETSIZE: %d\n", server_fd);
+
+        close(server_fd);
+        return EXIT_FAILURE;
+    }
+
+    
 }

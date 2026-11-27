@@ -38,7 +38,16 @@ static int send_all(int socket_fd, const void *buffer, size_t length){
 }
 
 int aceptar_cliente(struct sockaddr_in *client_address, int server_fd){
+    // Aceptar un cliente, recupera los datos de la direccion y
+    // devuelve el client_fd (socket del cliente)
 
+    // Guardar el tamaño de la struct
+    socklen_t client_address_length = sizeof(client_address);
+
+    // Intentamos aceptar al cliente:
+    int client_fd = accept(server_fd, (struct sockaddr *)&client_address, &client_address_length);
+   
+    return client_fd;
 }
 
 

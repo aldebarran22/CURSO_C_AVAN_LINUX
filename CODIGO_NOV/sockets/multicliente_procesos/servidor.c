@@ -48,7 +48,7 @@ int send_all(int client_fd, const void *buffer, size_t length){
 void atender_client(int client_fd, const char *ip, unsigned int port){
     char buffer[BUFFER_SIZE];
 
-    printf("\nProceso con PID: %ld atendiendo a %s:%u\n", getpid(), ip, port);
+    printf("\nProceso con PID: %d atendiendo a %s:%u\n", getpid(), ip, port);
 
     ssize_t received = recv(client_fd, buffer, sizeof(buffer) - 1, 0);
 
@@ -177,7 +177,7 @@ int main(){
 
 
         } else {
-            printf("\nSe ha creado un proceso hijo con el PID: %ld", pid);
+            printf("\nSe ha creado un proceso hijo con el PID: %d", pid);
 
             // El proceso padre no necesita el socket del hijo, lo cierra:
             close(client_fd);

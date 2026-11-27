@@ -28,21 +28,14 @@ static int add_to_epoll(int epoll_fd, int sock_descriptor){
     return 0;
 }
 
-static void accept_clients(
-    int server_fd,
-    int epoll_fd)
-{
+static void accept_clients(int server_fd,int epoll_fd){
+
     while (1) {
         struct sockaddr_in client_address;
 
-        socklen_t client_address_length =
-            sizeof(client_address);
+        socklen_t client_address_length = sizeof(client_address);
 
-        int client_fd = accept(
-            server_fd,
-            (struct sockaddr *)&client_address,
-            &client_address_length
-        );
+        int client_fd = accept(server_fd,(struct sockaddr *)&client_address, &client_address_length);
 
         if (client_fd < 0) {
             // Se interrupio antes de aceptar la conexion:
@@ -66,9 +59,7 @@ static void accept_clients(
             continue;
         }
 
-        if (add_to_epoll(
-                epoll_fd,
-                client_fd) < 0) {
+        if (add_to_epoll(epoll_fd,client_fd) < 0) {
             perror("epoll_ctl ADD cliente");
             close(client_fd);
             continue;
@@ -84,18 +75,8 @@ static void accept_clients(
             strcpy(client_ip, "desconocida");
         }
 
-        unsigned int client_port =
-            (unsigned int)ntohs(
-                client_address.sin_port
-            );
-
-        printf(
-            "Cliente conectado desde %s:%u. "
-            "Descriptor: %d\n",
-            client_ip,
-            client_port,
-            client_fd
-        );
+        unsigned int client_port = (unsigned int)ntohs(client_address.sin_port);
+        printf("Cliente conectado desde %s:%u. Descriptor: %d\n", client_ip, client_port,client_fd);
     }
 }
 

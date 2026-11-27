@@ -41,7 +41,6 @@ static void close_client(int epoll_fd,int client_fd){
     printf("Cliente desconectado. Descriptor: %d\n", client_fd);
 }
 
-
 static void accept_clients(int server_fd,int epoll_fd){
 
     while (1) {
@@ -94,6 +93,98 @@ static void accept_clients(int server_fd,int epoll_fd){
     }
 }
 
+static void attend_client(
+    int epoll_fd,
+    int client_fd)
+{
+    char buffer[BUFFER_SIZE];
+
+    while (1) {
+        ssize_t received = recv(
+            client_fd,
+            buffer,
+            sizeof(buffer) - 1,
+            0
+        );
+
+        if (received > 0) {
+            buffer[received] = '\0';
+
+            printf(
+                "Descriptor %d envía: %s\n",
+                client_fd,
+                buffer
+            );
+
+            const char response[] =
+                "Mensaje recibido correctamente\n";
+
+            ssize_t sent = send(
+                client_fd,
+                response,
+                sizeof(response) - 1,
+                MSG_NOSIGNAL
+            );
+
+            if (sent < 0) {
+                if (errno == EINTR) {
+                    continue;
+                }
+
+                if (errno == EAGAIN ||
+                    errno == EWOULDBLOCK) {
+                    /*
+                     * El búfer de envío está lleno.
+                     * Una versión más avanzada registraría
+                     * temporalmente EPOLLOUT.
+                     */
+                    return;
+                }
+
+                perror("send");
+                close_client(
+                    epoll_fd,
+                    client_fd
+                );
+
+                return;
+            }
+
+            continue;
+        }
+
+        if (received == 0) {
+            close_client(
+                epoll_fd,
+                client_fd
+            );
+
+            return;
+        }
+
+        if (errno == EINTR) {
+            continue;
+        }
+
+        if (errno == EAGAIN ||
+            errno == EWOULDBLOCK) {
+            /*
+             * Se han consumido todos los datos
+             * disponibles actualmente.
+             */
+            return;
+        }
+
+        perror("recv");
+
+        close_client(
+            epoll_fd,
+            client_fd
+        );
+
+        return;
+    }
+}
 
 int main(void)
 {

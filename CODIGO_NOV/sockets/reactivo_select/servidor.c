@@ -37,6 +37,11 @@ static int send_all(int socket_fd, const void *buffer, size_t length){
     return 0;
 }
 
+int aceptar_cliente(struct sockaddr_in *client_address){
+
+}
+
+
 int main(){
   // Crear el socket:
     int server_fd = socket(AF_INET, SOCK_STREAM, 0);
@@ -81,7 +86,7 @@ int main(){
         return EXIT_FAILURE;
     }
 
-    printf("\nSocket escuchando en el puerto: %d, descriptor: %d", PUERTO, server_fd);
+    printf("\nSocket escuchando en el puerto: %d, descriptor: %d\n\n", PUERTO, server_fd);
 
     // Select marca el limite de los descriptores con la macro FD_SETSIZE
     // Todos los descriptores deben ser menores que: FD_SETSIZE
@@ -93,5 +98,63 @@ int main(){
         return EXIT_FAILURE;
     }
 
-    
+    // master almacena todos los descriptores que queremos monitorizar:
+    fd_set master;
+
+    // Inicializar la la lista:
+    FD_ZERO(&master);
+
+    // Añadir el socket del servidor a la lista: master:
+    FD_SET(server_fd, &master);
+
+    // El descriptor mas alto  hasta este momento:
+    int max_fd = server_fd;
+
+    // Bucle infinito del servidor:
+    while (1){
+
+        // Hacemos una copia de master, porque la llamada a seelect modifica
+        // el conjunto maestro
+        fd_set read_set = master;
+
+        int ready = select(max_fd+1, &read_set, NULL, NULL, NULL);
+        if (ready < 0){
+            if (errno == EINTR){
+                continue;
+            }
+
+            perror("select");
+            break;
+        }
+
+        printf("\nNum. descriptores preparados: %d", ready);
+
+        // Se recorren los posibles descriptores
+        // El numero de descriptores preparados es el valor de ready
+        for (int fd = 0 ; fd <= max_fd && ready > 0 ; fd++){
+
+            if (!FD_ISSET(fd, &read_set)){
+                // Si el descriptor actual no ha producido evento (no esta en la lista)
+                // pasamos al siguiente!
+                continue;
+            }
+
+            ready--;
+
+            // Comprobar si el descriptor es el del servidor:
+            if (fd == server_fd){
+                struct sockaddr_in client_address;
+
+                // Se va a conectar un cliente y tenemos que aceptarlo!
+                int client_fd = aceptar_cliente(&client_address);
+
+                // Evaluar client_fd
+            }
+        }
+    }
+
+    // Cerrar las conexiones de los clientes
+
+    close(server_fd);
+    return EXIT_FAILURE;
 }
